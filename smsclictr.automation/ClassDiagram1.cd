@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="smsclictr.automation.CCMSoftwareDistribution">
+    <Position X="5" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>TYIAAAAJAAAAgAABEBAgAAwAEAAAEAKAAAggAASAAAA=</HashCode>
+      <FileName>CCMSoftwareDistribution.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="smsclictr.automation.CCMSetup">
+    <Position X="11.75" Y="0.5" Width="2.75" />
+    <NestedTypes>
+      <Enum Name="smsclictr.automation.CCMSetup.SC_MANAGER_ACCESS" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>CCMSetup.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="smsclictr.automation.CCMSetup.SC_SERVICE_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>CCMSetup.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="smsclictr.automation.CCMSetup.SC_START_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>CCMSetup.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="smsclictr.automation.CCMSetup.SC_ERROR_CONTROL" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>CCMSetup.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Struct Name="smsclictr.automation.CCMSetup.NETRESOURCE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>CCMSetup.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AACAAAgAAARACACAAIAAAAgAAAAAARBAIACAEABQDAA=</HashCode>
+      <FileName>CCMSetup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="smsclictr.automation.WMIComputerSystem">
+    <Position X="8.5" Y="0.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>FAgAAEAAAAIAIAIAGAAgAQgAAEAQDAAACAooAABAGAg=</HashCode>
+      <FileName>ComputerSystem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="smsclictr.automation.SMSSchedules">
+    <Position X="5" Y="5.75" Width="3.25" />
+    <NestedTypes>
+      <Class Name="smsclictr.automation.SMSSchedules.SMS_ST_NonRecurring" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Schedules.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="smsclictr.automation.SMSSchedules.SMS_ST_RecurInterval" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Schedules.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="smsclictr.automation.SMSSchedules.SMS_ST_RecurWeekly" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Schedules.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="smsclictr.automation.SMSSchedules.SMS_ST_RecurMonthlyByDate" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Schedules.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="smsclictr.automation.SMSSchedules.SMS_ST_RecurMonthlyByWeekday" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Schedules.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>zAAEgoFIGBAArAIAQGaCPA0AQAhAgG/AkwDSwICRAFg=</HashCode>
+      <FileName>Schedules.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="smsclictr.automation.SMSClient">
+    <Position X="0.75" Y="0.5" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>ECkqAAlFgKIAYIFHq4iAFqjQgEKBAAjgCRwEAIaCcCg=</HashCode>
+      <FileName>SMSClient.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="smsclictr.automation.SMSComponents">
+    <Position X="8.5" Y="12.25" Width="5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAEAAAAAEgBAACEgAIAgAAAKAABAACACAEAA=</HashCode>
+      <FileName>SMSComponents.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="smsclictr.automation.WindowsInstaller">
+    <Position X="14.75" Y="0.5" Width="3.25" />
+    <NestedTypes>
+      <Enum Name="smsclictr.automation.WindowsInstaller.reinstallMode" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>WindowsInstaller.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAgAAABAAACAAAAMAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WindowsInstaller.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="smsclictr.automation.WMIFileIO">
+    <Position X="8.5" Y="6.25" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAIAEAAAAAAAAAAAAACIAAgAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>WMIFileIO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="smsclictr.automation.WMIProvider">
+    <Position X="0.75" Y="15" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAACAAgAIgAAIBAAAMAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>WMIProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="smsclictr.automation.WMIRegistry">
+    <Position X="8.5" Y="8.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABgAAACAAAQAAAEBCgBAAAEAAAAACAAAAAAAAA=</HashCode>
+      <FileName>WMIRegistry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="smsclictr.automation.WMIService">
+    <Position X="11.75" Y="5.25" Width="2.75" />
+    <NestedTypes>
+      <Struct Name="smsclictr.automation.WMIService.TokPriv1Luid" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>WMIService.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAACAAGAAMIAqAAAgAAAAiEBAAAEIDAAAAAEA=</HashCode>
+      <FileName>WMIService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="smsclictr.automation.WOL">
+    <Position X="14.75" Y="3.5" Width="1.5" />
+    <NestedTypes>
+      <Class Name="smsclictr.automation.WOL.WOLClass" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>WOL.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>WOL.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="smsclictr.automation.XML">
+    <Position X="14.75" Y="5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAEAAACAAAA=</HashCode>
+      <FileName>XML.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="smsclictr.automation.DDRFile">
+    <Position X="13.75" Y="10.5" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="smsclictr.automation.DDRFile.DDRPropertyFlagsEnum">
+        <TypeIdentifier>
+          <NewMemberFileName>DDRGen.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAgAACAABBACAAAAQAIQRACAAAAABAAAAAAA=</HashCode>
+      <FileName>DDRGen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="smsclictr.automation.SCCMDCM">
+    <Position X="14.75" Y="6.5" Width="2.75" />
+    <NestedTypes>
+      <Class Name="smsclictr.automation.SCCMDCM.ConfigItem" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DCM.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAgAAAAAAEABAAAAAAAAEAA=</HashCode>
+      <FileName>DCM.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>
