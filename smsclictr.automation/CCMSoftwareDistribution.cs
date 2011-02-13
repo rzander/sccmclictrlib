@@ -1191,7 +1191,14 @@ namespace smsclictr.automation
                 EnumerationOptions oEnumOpt = new EnumerationOptions();
                 oEnumOpt.ReturnImmediately = true;
                 oEnumOpt.Rewindable = false;
-                return oProv.ExecuteQuery("SELECT * FROM CCM_ExecutionRequest where State = 'ReportStatusAtReboot'", oEnumOpt);
+                if (isSCCMClient)
+                {
+                    return oProv.ExecuteQuery("SELECT * FROM CCM_ExecutionRequestEx where State = 'ReportStatusAtReboot'", oEnumOpt);
+                }
+                else
+                {
+                    return oProv.ExecuteQuery("SELECT * FROM CCM_ExecutionRequest where State = 'ReportStatusAtReboot'", oEnumOpt);
+                }
             }
         }
 
