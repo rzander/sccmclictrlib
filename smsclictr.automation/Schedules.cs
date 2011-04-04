@@ -872,6 +872,49 @@ namespace smsclictr.automation
         /// </example>
         public void UpdatesSourceScan()
         {
+            UpdatesSourceScan(false);
+        }
+
+        /// <summary>
+        /// Initiate a Updates Source Scan Cycle
+        /// </summary>
+        /// <example>
+        /// C#:
+        /// <code>
+        /// using System;
+        /// using System.Collections.Generic;
+        /// using System.Text;
+        /// using smsclictr.automation;
+        /// using System.Management;
+        /// 
+        /// namespace ConsoleApplication1
+        /// {
+        ///    class Program
+        ///      {
+        ///         static void Main(string[] args)
+        ///             {
+        ///                SMSClient oClient = new SMSClient("workstation01");
+        ///                oClient.Schedules.UpdatesSourceScan();
+        ///             }
+        ///       }
+        /// }
+        /// </code>
+        /// PowerShell:
+        /// <para>(copy smsclictr.automation.dll to the %HOMEDRIVE%\%HOMEPATH% Folder of the current User)</para>
+        /// <code>
+        /// [void][System.Reflection.Assembly]::LoadFile("$HOME\smsclictr.automation.dll")
+        /// $SMSClient = New-Object -TypeName smsclictr.automation.SMSClient("workstation01")
+        /// $SMSClient.Schedules.UpdatesSourceScan()
+        /// </code>
+        /// </example>
+        public void UpdatesSourceScan(bool enforce)
+        {
+            //Delete LastScanToolHistory
+            if (enforce)
+            {
+                oWMIProvider.DeleteQueryResults(@"root\ccm\scanagent","SELECT * FROM CCM_ScanToolHistory");
+            }
+
             RunScheduleID("{00000000-0000-0000-0000-000000000113}");
         }
 

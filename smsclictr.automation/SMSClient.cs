@@ -1633,6 +1633,7 @@ namespace smsclictr.automation
                     oWMIProvider.DeleteQueryResults(@"root\ccm\Policy", "SELECT * FROM CCM_SoftwareDistribution");
                     oWMIProvider.DeleteQueryResults(@"root\ccm\Policy", "SELECT * FROM CCM_Scheduler_ScheduledMessage");
                     oWMIProvider.DeleteQueryResults(@"root\ccm\Scheduler", "SELECT * FROM CCM_Scheduler_History");
+                    oWMIProvider.DeleteQueryResults(@"root\ccm\Scanagent", "SELECT * FROM CCM_ScanToolHistory");
 
                     /*oWMIProvider.DeleteQueryResults(@"root\ccm\Policy\Machine\ActualConfig", "SELECT * FROM CCM_SoftwareDistribution");
                     oWMIProvider.DeleteQueryResults(@"root\ccm\Policy\Machine\RequestedConfig", "SELECT * FROM CCM_SoftwareDistribution");
