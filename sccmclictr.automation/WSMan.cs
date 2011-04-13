@@ -44,7 +44,10 @@ namespace sccmclictr.automation
 
                 foreach (PSObject obj in results)
                 {
-                    stringBuilder.AppendLine(obj.ToString());
+                    if (obj != null)
+                    {
+                        stringBuilder.AppendLine(obj.ToString());
+                    }
                 }
             }
 

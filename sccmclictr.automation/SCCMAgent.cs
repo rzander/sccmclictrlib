@@ -56,16 +56,7 @@ namespace sccmclictr.automation
         /// <param name="hostname">target computername</param>
         public SCCMAgent(string hostname)
         {
-            connect(hostname, null, null, 5985, false);
-        }
-
-        /// <summary>
-        /// Connect to a remote SCCM Agent by using WSMan
-        /// </summary>
-        /// <param name="hostname">target computername</param>
-        public SCCMAgent(string hostname, Boolean doNotConnect)
-        {
-            connect(hostname, null, null, 5985, doNotConnect);
+            initialize(hostname, null, null, 5985);
         }
 
         /// <summary>
@@ -76,7 +67,7 @@ namespace sccmclictr.automation
         /// <param name="password">password for the connection</param>
         public SCCMAgent(string hostname, string username, string password)
         {
-            connect(hostname, username, password, 5985, false);
+            initialize(hostname, username, password, 5985);
         }
 
         /// <summary>
@@ -86,10 +77,9 @@ namespace sccmclictr.automation
         /// <param name="username">username for the connection</param>
         /// <param name="password">password for the connection</param>
         /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
-        /// <param name="doNotConnect">Only prepare the connection, connection must be initialized with 'reconnect'</param>
-        public SCCMAgent(string hostname, string username, string password, int wsManPort, Boolean doNotConnect)
+        public SCCMAgent(string hostname, string username, string password, int wsManPort)
         {
-            connect(hostname, username, password, wsManPort, doNotConnect);
+            initialize(hostname, username, password, wsManPort);
         }
 
         /// <summary>
@@ -100,7 +90,7 @@ namespace sccmclictr.automation
         /// <param name="password">password for the connection</param>
         /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
         /// <param name="doNotConnect">Only prepare the connection, connection must be initialized with 'reconnect'</param>
-        protected void connect(string hostname, string username, string password, int wsManPort, Boolean doNotConnect)
+        protected void initialize(string hostname, string username, string password, int wsManPort)
         {
             Hostname = hostname;
             Username = username;
@@ -122,38 +112,9 @@ namespace sccmclictr.automation
                 connectionInfo = new WSManConnectionInfo(new Uri(string.Format("http://{0}:{1}/wsman", hostname, wsManPort)), "http://schemas.microsoft.com/powershell/Microsoft.PowerShell", psc);
             }
 
+            //Default Settings
             connectionInfo.AuthenticationMechanism = AuthenticationMechanism.Default;
             connectionInfo.ProxyAuthentication = AuthenticationMechanism.Negotiate;
-
-            //Do not connect if the doNotConnect flag is set...
-            if (!doNotConnect)
-            {
-                //...otherweise connect.
-                Runspace RemoteRunspace = null;
-                
-                //suppress exceptions
-                try
-                {
-                    WSMan.openRunspace(connectionInfo, ref RemoteRunspace);
-                }
-                catch(Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-
-                //Check if connection was successful...
-                if (RemoteRunspace.RunspaceStateInfo.State == RunspaceState.Opened)
-                {
-                    //Yes, return Runspace
-                    remoteRunspace = RemoteRunspace;
-                }
-                else
-                {
-                    //No, throw an execption...
-                    throw new Exception("Unable to connect");
-                }
-
-            }
 
             oAgentProperties = new agentProperties(remoteRunspace);
 
@@ -163,7 +124,7 @@ namespace sccmclictr.automation
         /// Re-Connect to a predefined connection
         /// </summary>
         /// <param name="ConnectionInfo">WSManConnectionInfo</param>
-        public void reconnect()
+        public void connect()
         {
             Runspace RemoteRunspace = null;
 
