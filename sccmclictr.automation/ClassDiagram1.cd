@@ -3,7 +3,7 @@
   <Class Name="sccmclictr.automation.SCCMAgent">
     <Position X="2.25" Y="0.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAEAAQAAAAAAAACgRAAQAAAAAAAEAACABAAAEAAAAA=</HashCode>
+      <HashCode>AAAEAAQAAAAAAAACgREBQAAAAAAAEAACABAAAEAAAAA=</HashCode>
       <FileName>SCCMAgent.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -17,7 +17,7 @@
   <Class Name="sccmclictr.automation.agentProperties">
     <Position X="4.5" Y="0.5" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAwAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAEAAAQAAAAAAQAAgQAEAABAAAAAAAAACwAAAAAAAAA=</HashCode>
       <FileName>AgentProperties.cs</FileName>
     </TypeIdentifier>
   </Class>

@@ -33,11 +33,17 @@ namespace sccmclictr.automation
         /// <summary>
         /// Return the full SCCM Agent ClientVersion
         /// </summary>
+        /// <example>
+        /// PowerShell Code:
+        /// <code>
+        /// (Get-Wmiobject -class SMS_Client -namespace 'ROOT\\CCM').ClientVersion
+        /// </code>
+        /// </example>
         public string ClientVersion
         {
-            get 
+            get
             {
-                return WSMan.RunPSScript("(Get-Wmiobject -class SMS_Client -namespace 'ROOT\\CCM').ClientVersion", remoteRunspace).Trim();
+                return WSMan.RunPSScript(Properties.Resources.ClientVersion, remoteRunspace).Trim();
             }
         }
 
@@ -46,7 +52,7 @@ namespace sccmclictr.automation
         /// </summary>
         public Boolean AllowLocalAdminOverride
         {
-            get 
+            get
             {
                 return Boolean.Parse(WSMan.RunPSScript("(Get-Wmiobject -class SMS_Client -namespace 'ROOT\\CCM').AllowLocalAdminOverride", remoteRunspace));
             }
@@ -63,7 +69,7 @@ namespace sccmclictr.automation
         /// </summary>
         public Boolean EnableAutoAssignment
         {
-            get 
+            get
             {
                 return Boolean.Parse(WSMan.RunPSScript("(Get-Wmiobject -class SMS_Client -namespace 'ROOT\\CCM').EnableAutoAssignment", remoteRunspace));
             }
@@ -74,13 +80,13 @@ namespace sccmclictr.automation
                 "$a.Put()", remoteRunspace);
             }
         }
-        
+
         /// <summary>
         /// Get the Agent GUID
         /// </summary>
         public string ClientId
         {
-            get 
+            get
             {
                 return WSMan.RunPSScript("(Get-Wmiobject -class CCM_Client -namespace 'ROOT\\CCM').ClientId", remoteRunspace).Trim();
             }
@@ -118,7 +124,7 @@ namespace sccmclictr.automation
                 return WSMan.RunPSScript("(Get-Wmiobject -class CCM_Client -namespace 'ROOT\\CCM').ClientVersion", remoteRunspace).Trim();
             }
         }
-        
+
         /// <summary>
         /// Get the Client Type
         /// </summary>
@@ -129,7 +135,7 @@ namespace sccmclictr.automation
                 return UInt32.Parse(WSMan.RunPSScript("(Get-Wmiobject -class SMS_Client -namespace 'ROOT\\CCM').ClientType", remoteRunspace));
             }
         }
-        
+
         /// <summary>
         /// Return the number of days where the system is up and running
         /// </summary>
