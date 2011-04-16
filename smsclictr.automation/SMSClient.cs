@@ -2502,6 +2502,16 @@ namespace smsclictr.automation
             { }
         }
 
+        /// <summary>
+        /// Delete Pending Site Assignment
+        /// </summary>
+        public void DeletePendingSiteAssignment()
+        {
+            WMIProvider oProv = new WMIProvider(oWMIProvider.mScope.Clone());
+            oProv.mScope.Path.NamespacePath = @"ROOT\CCM";
+            oProv.DeleteQueryResults("SELECT * FROM SMS_PendingSiteAssignment");
+        }
+
         #endregion
 
         /// <summary>
