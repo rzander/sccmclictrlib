@@ -29,7 +29,13 @@ namespace sccmclictr.automation
             remoteRunspace.Open();
         }
 
-        internal static string RunPSScript(string scriptText, Runspace remoteRunspace)
+        /// <summary>
+        /// Run a PSScript
+        /// </summary>
+        /// <param name="scriptText"></param>
+        /// <param name="remoteRunspace"></param>
+        /// <returns></returns>
+        internal static Collection<PSObject> RunPSScript(string scriptText, Runspace remoteRunspace)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -40,16 +46,30 @@ namespace sccmclictr.automation
                 powershell.Invoke();
                 Collection<PSObject> results = powershell.Invoke();
 
-                //remoteRunspace.Close();
+                return results;
+            }
+        }
 
-                foreach (PSObject obj in results)
+        /// <summary>
+        /// Run a PSScript and return the result as string
+        /// </summary>
+        /// <param name="scriptText"></param>
+        /// <param name="remoteRunspace"></param>
+        /// <returns></returns>
+        internal static string RunPSScriptAsString(string scriptText, Runspace remoteRunspace)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            Collection<PSObject> results = RunPSScript(scriptText, remoteRunspace);
+
+            foreach (PSObject obj in results)
+            {
+                if (obj != null)
                 {
-                    if (obj != null)
-                    {
-                        stringBuilder.AppendLine(obj.ToString());
-                    }
+                    stringBuilder.AppendLine(obj.ToString());
                 }
             }
+
 
             return stringBuilder.ToString();
         }
@@ -80,12 +100,12 @@ namespace sccmclictr.automation
             remoteRunspace.Open();
         }
 
-        private static string RunScript(string scriptText, string servername, string username, string password)
+        private static string RunScriptAsString(string scriptText, string servername, string username, string password)
         {
-            return RunScript(scriptText, servername, username, password, 5985);
+            return RunScriptAsString(scriptText, servername, username, password, 5985);
         }
 
-        private static string RunScript(string scriptText, string servername, string username, string password, int port)
+        private static string RunScriptAsString(string scriptText, string servername, string username, string password, int port)
         {
             Runspace remoteRunspace = null;
 

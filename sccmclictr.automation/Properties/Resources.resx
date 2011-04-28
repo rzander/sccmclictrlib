@@ -117,8 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ClientVersion" xml:space="preserve">
-    <value>(Get-Wmiobject -class SMS_Client -namespace 'ROOT\\CCM').ClientVersion</value>
+  <data name="SMS_Client" xml:space="preserve">
+    <value>(Get-Wmiobject -class SMS_Client -namespace 'ROOT\CCM')</value>
     <comment>Get the SCCMAgent Version</comment>
   </data>
 </root>

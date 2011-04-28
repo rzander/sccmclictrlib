@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
+using System.Diagnostics;
 
 namespace sccmclictr.automation
 {
@@ -29,6 +30,11 @@ namespace sccmclictr.automation
         private agentProperties oAgentProperties;
         
         public WSManConnectionInfo ConnectionInfo { get { return connectionInfo; } }
+
+        /// <summary>
+        /// TraceSource for all PowerShell Command
+        /// </summary>
+        public TraceSource PSCode {get; set; }
 
         /// <summary>
         /// True = Session to remote Host is Open
@@ -97,6 +103,9 @@ namespace sccmclictr.automation
             Password = password;
             WSManPort = wsManPort;
 
+            PSCode = new TraceSource("PSCode");
+            PSCode.Switch.Level = SourceLevels.All;
+
             if (string.IsNullOrEmpty(username))
             {
                 connectionInfo = new WSManConnectionInfo(new Uri(string.Format("http://{0}:{1}/wsman", hostname, wsManPort)));
@@ -116,8 +125,7 @@ namespace sccmclictr.automation
             connectionInfo.AuthenticationMechanism = AuthenticationMechanism.Default;
             connectionInfo.ProxyAuthentication = AuthenticationMechanism.Negotiate;
 
-            oAgentProperties = new agentProperties(remoteRunspace);
-
+            oAgentProperties = new agentProperties(remoteRunspace, PSCode);
         }
 
         /// <summary>
