@@ -748,6 +748,14 @@ namespace smsclictr.automation
         }
 
         /// <summary>
+        /// NAP Compliance Interval Enforcement
+        /// </summary>
+        public void NAPComplianceEnforcement()
+        {
+            RunScheduleID("{00000000-0000-0000-0000-000000000071}");
+        }
+
+        /// <summary>
         /// Initiate a Software Update Evaluation cycle
         /// </summary>
         /// <example>
