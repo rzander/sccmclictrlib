@@ -14,6 +14,10 @@ using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Diagnostics;
 
+using System.Management.Automation;
+using System.Management.Automation.Runspaces;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace sccmclictr.automation
 {
@@ -62,6 +66,11 @@ namespace sccmclictr.automation
         /// Cached Copy of the SMS_Client ManagementObject
         /// </summary>
         internal ManagementObject cSMS_ClientCached;
+
+        /// <summary>
+        /// Cached Copy of the CCM_Client ManagementObject
+        /// </summary>
+        internal ManagementObject cCCM_ClientCached;
 
         /// <summary>
         /// Get the SMS_Client ManagementObject
@@ -114,6 +123,57 @@ namespace sccmclictr.automation
                 
                 //update TimeStamp in cache
                 updateTimeStamp("cSMS_Client");
+            }
+        }
+
+        private ManagementObject cCCM_Client
+        {
+            get
+            {
+                try
+                {
+                    //Check if SMS_Client is cached?
+                    if (!isCached("cCCM_Client", cacheAge))
+                    {
+                        //Clear the cached Object
+                        cCCM_ClientCached = null;
+                    }
+
+                    if (cCCM_ClientCached == null)
+                    {
+                        //Call the PSScript to get the SMS_Client Object
+#if DEBUG
+                        tsPSCode.TraceInformation(Properties.Resources.CCM_Client);
+#endif
+
+                        foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.CCM_Client, remoteRunspace))
+                        {
+                            //Store the Object in cache
+                            cCCM_Client = obj.BaseObject as ManagementObject;
+                        }
+
+                        Trace.WriteLineIf(debugLevel.TraceVerbose, @"Cache WMI Object 'CCM_Client' from root\ccm.");
+                    }
+                    else
+                    {
+                        Trace.WriteLineIf(debugLevel.TraceVerbose, @"return WMI Object 'CCM_Client' from cache.");
+                    }
+                }
+                catch (Exception ex)
+                {
+#if DEBUG
+                    Trace.TraceError("get cCCM_Client: " + ex.Message);
+#endif
+                }
+                //return the cached Object
+                return cCCM_ClientCached;
+            }
+            set
+            {
+                cCCM_ClientCached = value;
+
+                //update TimeStamp in cache
+                updateTimeStamp("cCCM_Client");
             }
         }
 
@@ -330,40 +390,126 @@ namespace sccmclictr.automation
             }
         }
 
-//****** Functions below are not up to date ! *************
-
         /// <summary>
-        /// Get the Agent GUID
+        /// Return the SCCM Agent GUID
+        /// Note: This Value will be cached. To get the uncached Version call the 'Initialize' Method from the SCCMAgent Class
         /// </summary>
+        /// <example>
+        /// PowerShell Code:
+        /// <code>
+        /// (Get-Wmiobject -class CCM_Client -namespace 'ROOT\CCM').ClientId
+        /// </code>
+        /// </example>
         public string ClientId
         {
             get
             {
-                return WSMan.RunPSScriptAsString("(Get-Wmiobject -class CCM_Client -namespace 'ROOT\\CCM').ClientId", remoteRunspace).Trim();
+                if (!isCached("cClientId", cacheAge))
+                {
+                    cClientId = "";
+                }
+
+
+                if (string.IsNullOrEmpty(cClientId))
+                {
+                    cClientId = cCCM_Client.Properties["ClientId"].Value.ToString();
+                    updateTimeStamp("cClientId");
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ClientId:" + cClientId);
+                }
+                else
+                {
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ClientId from cache:" + cClientId);
+                }
+
+                //Trace the PowerShell Command
+                tsPSCode.TraceInformation(Properties.Resources.CCM_Client + ".ClientId");
+
+                //Return result
+                return cClientId;
+
             }
         }
 
         /// <summary>
-        /// Get the previous Agent GUID
+        /// Return the previous SCCM Agent GUID
+        /// Note: This Value will be cached. To get the uncached Version call the 'Initialize' Method from the SCCMAgent Class
         /// </summary>
+        /// <example>
+        /// PowerShell Code:
+        /// <code>
+        /// (Get-Wmiobject -class CCM_Client -namespace 'ROOT\CCM').PreviousClientId
+        /// </code>
+        /// </example>
         public string PreviousClientId
         {
             get
             {
-                return WSMan.RunPSScriptAsString("(Get-Wmiobject -class CCM_Client -namespace 'ROOT\\CCM').PreviousClientId", remoteRunspace).Trim();
+                if (!isCached("cPreviousClientId", cacheAge))
+                {
+                    cPreviousClientId = "";
+                }
+
+
+                if (string.IsNullOrEmpty(cPreviousClientId))
+                {
+                    cPreviousClientId = cCCM_Client.Properties["PreviousClientId"].Value.ToString();
+                    updateTimeStamp("cPreviousClientId");
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get PreviousClientId:" + cPreviousClientId);
+                }
+                else
+                {
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get PreviousClientId from cache:" + cPreviousClientId);
+                }
+
+                //Trace the PowerShell Command
+                tsPSCode.TraceInformation(Properties.Resources.CCM_Client + ".PreviousClientId");
+
+                //Return result
+                return cPreviousClientId;
             }
         }
 
         /// <summary>
-        /// Get last Agent GUID change date as string
+        /// Return the SCCM Agent GUID creation/change date as string
+        /// Note: This Value will be cached. To get the uncached Version call the 'Initialize' Method from the SCCMAgent Class
         /// </summary>
+        /// <example>
+        /// PowerShell Code:
+        /// <code>
+        /// (Get-Wmiobject -class CCM_Client -namespace 'ROOT\CCM').ClientIdChangeDate
+        /// </code>
+        /// </example>
         public string ClientIdChangeDate
         {
             get
             {
-                return WSMan.RunPSScriptAsString("(Get-Wmiobject -class CCM_Client -namespace 'ROOT\\CCM').ClientIdChangeDate", remoteRunspace).Trim();
+                if (!isCached("cClientIdChangeDate", cacheAge))
+                {
+                    cClientIdChangeDate = "";
+                }
+
+
+                if (string.IsNullOrEmpty(cClientIdChangeDate))
+                {
+                    cClientIdChangeDate= cCCM_Client.Properties["ClientIdChangeDate"].Value.ToString();
+                    updateTimeStamp("cClientIdChangeDate");
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ClientIdChangeDate:" + cClientIdChangeDate);
+                }
+                else
+                {
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ClientIdChangeDate from cache:" + cClientIdChangeDate);
+                }
+
+                //Trace the PowerShell Command
+                tsPSCode.TraceInformation(Properties.Resources.CCM_Client + ".ClientIdChangeDate");
+
+                //Return result
+                return cClientIdChangeDate;
+
             }
         }
+
+
 
         /// <summary>
         /// Get the Client Version (SCCM2007 = 2.50); This function seems to be obsolete!!!
@@ -372,21 +518,73 @@ namespace sccmclictr.automation
         {
             get
             {
-                return WSMan.RunPSScriptAsString("(Get-Wmiobject -class CCM_Client -namespace 'ROOT\\CCM').ClientVersion", remoteRunspace).Trim();
+                if (!isCached("cClientVersionEx", cacheAge))
+                {
+                    cClientVersionEx = "";
+                }
+
+
+                if (string.IsNullOrEmpty(cClientVersionEx))
+                {
+                    cClientVersionEx = cCCM_Client.Properties["ClientVersion"].Value.ToString();
+                    updateTimeStamp("cClientVersionEx");
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ClientVersion:" + cClientVersionEx);
+                }
+                else
+                {
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ClientVersion from cache:" + cClientVersionEx);
+                }
+
+                //Trace the PowerShell Command
+                tsPSCode.TraceInformation(Properties.Resources.CCM_Client + ".ClientVersion");
+
+                //Return result
+                return cClientVersionEx;
+                //return WSMan.RunPSScriptAsString("(Get-Wmiobject -class CCM_Client -namespace 'ROOT\\CCM').ClientVersion", remoteRunspace).Trim();
             }
         }
 
         /// <summary>
-        /// Get the Client Type
+        /// Return the SCCM Client Type
+        /// Note: This Value will be cached. To get the uncached Version call the 'Initialize' Method from the SCCMAgent Class
         /// </summary>
+        /// <example>
+        /// PowerShell Code:
+        /// <code>
+        /// (Get-Wmiobject -class SMS_Client -namespace 'ROOT\CCM').ClientType
+        /// </code>
+        /// </example>
         public UInt32 ClientType
         {
             get
             {
-                return UInt32.Parse(WSMan.RunPSScriptAsString("(Get-Wmiobject -class SMS_Client -namespace 'ROOT\\CCM').ClientType", remoteRunspace));
+                if (!isCached("cClientType", cacheAge))
+                {
+                    cClientType = 0;
+                }
+
+
+                if (cClientType == 0)
+                {
+                    cClientType = uint.Parse(cSMS_Client.Properties["ClientType"].Value.ToString());
+                    updateTimeStamp("cClientType");
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ClientType:" + cClientType.ToString());
+                }
+                else
+                {
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ClientType from cache:" + cClientType.ToString());
+                }
+
+                //Trace the PowerShell Command
+                tsPSCode.TraceInformation(Properties.Resources.SMS_Client + ".ClientType");
+
+                //Return result
+                return cClientType;
+
             }
         }
 
+//****** Functions below are not up to date ! *************
         /// <summary>
         /// Return the number of days where the system is up and running
         /// </summary>
@@ -397,6 +595,42 @@ namespace sccmclictr.automation
                 return WSMan.RunPSScriptAsString("$wmi = Get-WmiObject -Class Win32_OperatingSystem \n$a = New-TimeSpan $wmi.ConvertToDateTime($wmi.LastBootUpTime) $(Get-Date) \n$a.Days", remoteRunspace).Trim();
 
             }
+        }
+
+        public void test()
+        {
+            using (PowerShell powershell = PowerShell.Create())
+            {
+
+                powershell.Runspace = remoteRunspace;
+                string sQuery = "$query = 'SELECT * FROM __InstanceModificationEvent WITHIN 10 WHERE TargetInstance ISA \"Win32_Service\"';" +
+                    "Register-WmiEvent -Query $query \"WMI.Service.Stopped\" -Forward";
+
+
+                powershell.AddScript(sQuery);
+
+                /*Pipeline pipe = powershell.Runspace.CreatePipeline();
+                pipe.Commands.AddScript(sQuery);
+                //pipe.Input.Write()
+                pipe.Input.Close();
+                pipe.InvokeAsync();
+                pipe.Output.ToString(); */
+                powershell.BeginInvoke().AsyncWaitHandle.WaitOne();
+                IAsyncResult async = powershell.BeginInvoke();
+                foreach (PSObject result in powershell.EndInvoke(async))
+                {
+
+                    powershell.Runspace.Events.ReceivedEvents.ToString();
+
+                    Console.WriteLine(result.ToString());
+
+                }
+
+
+                Collection<PSObject> results = powershell.Invoke();
+
+            }
+
         }
 
 //**********************************************************

@@ -61,6 +61,15 @@ namespace sccmclictr.automation.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Get-Wmiobject -class CCM_Client -namespace &apos;ROOT\CCM&apos;).
+        /// </summary>
+        internal static string CCM_Client {
+            get {
+                return ResourceManager.GetString("CCM_Client", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to (Get-Wmiobject -class SMS_Client -namespace &apos;ROOT\CCM&apos;).
         /// </summary>
         internal static string SMS_Client {
