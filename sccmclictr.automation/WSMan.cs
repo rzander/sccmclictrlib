@@ -37,8 +37,6 @@ namespace sccmclictr.automation
         /// <returns></returns>
         internal static Collection<PSObject> RunPSScript(string scriptText, Runspace remoteRunspace)
         {
-            StringBuilder stringBuilder = new StringBuilder();
-
             using (PowerShell powershell = PowerShell.Create())
             {
                 powershell.Runspace = remoteRunspace;

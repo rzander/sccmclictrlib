@@ -61,6 +61,9 @@ namespace sccmclictr.automation
         internal string cClientVersionEx;
         internal UInt32 cClientType;
         internal string cLastRebootDays;
+        internal string cADSiteName;
+        internal string cCommunicationMode;
+        internal string cCertKeyType;
 
         /// <summary>
         /// Cached Copy of the SMS_Client ManagementObject
@@ -71,6 +74,8 @@ namespace sccmclictr.automation
         /// Cached Copy of the CCM_Client ManagementObject
         /// </summary>
         internal ManagementObject cCCM_ClientCached;
+
+        internal object cClientCOMPropertiesCached;
 
         /// <summary>
         /// Get the SMS_Client ManagementObject
@@ -509,8 +514,6 @@ namespace sccmclictr.automation
             }
         }
 
-
-
         /// <summary>
         /// Get the Client Version (SCCM2007 = 2.50); This function seems to be obsolete!!!
         /// </summary>
@@ -584,6 +587,183 @@ namespace sccmclictr.automation
             }
         }
 
+        /// <summary>
+        /// Return the ActiveDirectory Site-Name (if exist).
+        /// Note: This Value will be cached. To get the uncached Version call the 'Initialize' Method from the SCCMAgent Class
+        /// </summary>
+        /// <example>
+        /// PowerShell Code:
+        /// <code>
+        /// $a=New-Object -comObject 'CPAPPLET.CPAppletMgr';($a.GetClientProperties() | Where-Object { $_.Name -eq 'ADSiteName' }).Value
+        /// </code>
+        /// </example>
+        public string ADSiteName
+        {
+            get
+            {
+                if (!isCached("cADSiteName", cacheAge))
+                {
+                    cADSiteName = "";
+                }
+
+                if (string.IsNullOrEmpty(cADSiteName))
+                {
+                    foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.ADSiteName, remoteRunspace))
+                    {
+                        //Store the Object in cache
+                        if (obj != null)
+                        {
+                            try
+                            {
+                                cADSiteName = obj.BaseObject.ToString();
+                            }
+                            catch
+                            {
+                                cADSiteName = "";
+                            }
+                        }
+                        else
+                        {
+                            cADSiteName = "";
+                        }
+                    }
+                    if(!string.IsNullOrEmpty(cADSiteName))
+                    {
+                        updateTimeStamp("cADSiteName");
+                    }
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ADSiteName:" + cADSiteName);
+                }
+                else
+                {
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ADSiteName from cache:" + cADSiteName);
+                }
+
+                //Trace the PowerShell Command
+                tsPSCode.TraceInformation(Properties.Resources.ADSiteName);
+
+                //Return result
+                return cADSiteName;
+            }
+        }
+
+        /// <summary>
+        /// Return the Agent CommunicationMode (if exist).
+        /// Note: This Value will be cached. To get the uncached Version call the 'Initialize' Method from the SCCMAgent Class
+        /// </summary>
+        /// <example>
+        /// PowerShell Code:
+        /// <code>
+        /// $a=New-Object -comObject 'CPAPPLET.CPAppletMgr';($a.GetClientProperties() | Where-Object { $_.Name -eq 'CommunicationMode' }).Value
+        /// </code>
+        /// </example>
+        public string CommunicationMode
+        {
+            get
+            {
+                if (!isCached("cCommunicationMode", cacheAge))
+                {
+                    cCommunicationMode = "";
+                }
+
+                if (string.IsNullOrEmpty(cCommunicationMode))
+                {
+                    foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.CommunicationMode, remoteRunspace))
+                    {
+                        //Store the Object in cache
+                        if (obj != null)
+                        {
+                            try
+                            {
+                                cCommunicationMode = obj.BaseObject.ToString();
+                            }
+                            catch
+                            {
+                                cCommunicationMode = "";
+                            }
+                        }
+                        else
+                        {
+                            cCommunicationMode = "";
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(cCommunicationMode))
+                    {
+                        updateTimeStamp("cCommunicationMode");
+                    }
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get CommunicationMode:" + cCommunicationMode);
+                }
+                else
+                {
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get CommunicationMode from cache:" + cCommunicationMode);
+                }
+
+                //Trace the PowerShell Command
+                tsPSCode.TraceInformation(Properties.Resources.CommunicationMode);
+
+                //Return result
+                return cCommunicationMode;
+            }
+        }
+
+        /// <summary>
+        /// Return the Agent CertKeyType (if exist).
+        /// Note: This Value will be cached. To get the uncached Version call the 'Initialize' Method from the SCCMAgent Class
+        /// </summary>
+        /// <example>
+        /// PowerShell Code:
+        /// <code>
+        /// $a=New-Object -comObject 'CPAPPLET.CPAppletMgr';($a.GetClientProperties() | Where-Object { $_.Name -eq 'CertKeyType' }).Value
+        /// </code>
+        /// </example>
+        public string CertKeyType
+        {
+            get
+            {
+                if (!isCached("cCertKeyType", cacheAge))
+                {
+                    cCertKeyType = "";
+                }
+
+                if (string.IsNullOrEmpty(cCertKeyType))
+                {
+                    foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.CertKeyType, remoteRunspace))
+                    {
+                        //Store the Object in cache
+                        if (obj != null)
+                        {
+                            try
+                            {
+                                cCertKeyType = obj.BaseObject.ToString();
+                            }
+                            catch
+                            {
+                                cCertKeyType = "";
+                            }
+                        }
+                        else
+                        {
+                            cCertKeyType = "";
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(cCertKeyType))
+                    {
+                        updateTimeStamp("cCertKeyType");
+                    }
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get CertKeyType:" + cCertKeyType);
+                }
+                else
+                {
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get CertKeyType from cache:" + cCertKeyType);
+                }
+
+                //Trace the PowerShell Command
+                tsPSCode.TraceInformation(Properties.Resources.CertKeyType);
+
+                //Return result
+                return cCertKeyType;
+            }
+        }
+
 //****** Functions below are not up to date ! *************
         /// <summary>
         /// Return the number of days where the system is up and running
@@ -603,8 +783,12 @@ namespace sccmclictr.automation
             {
 
                 powershell.Runspace = remoteRunspace;
+                /*string sQuery = "$query = 'SELECT * FROM __InstanceModificationEvent WITHIN 10 WHERE TargetInstance ISA \"Win32_Service\"';" +
+                    "Register-WmiEvent -Query $query \"WMI.Service.Stopped\" -Forward"; */
+
                 string sQuery = "$query = 'SELECT * FROM __InstanceModificationEvent WITHIN 10 WHERE TargetInstance ISA \"Win32_Service\"';" +
-                    "Register-WmiEvent -Query $query \"WMI.Service.Stopped\" -Forward";
+                    "Register-WmiEvent -Query $query LocalCatchEvent -action {new-event CatchEvent -messageData $event.SourceEventArgs.NewEvent.TargetInstance};" +
+                    "Register-EngineEvent CatchEvent -Forward";
 
 
                 powershell.AddScript(sQuery);
@@ -615,8 +799,9 @@ namespace sccmclictr.automation
                 pipe.Input.Close();
                 pipe.InvokeAsync();
                 pipe.Output.ToString(); */
-                powershell.BeginInvoke().AsyncWaitHandle.WaitOne();
+
                 IAsyncResult async = powershell.BeginInvoke();
+
                 foreach (PSObject result in powershell.EndInvoke(async))
                 {
 

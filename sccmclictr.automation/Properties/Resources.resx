@@ -117,9 +117,21 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ADSiteName" xml:space="preserve">
+    <value>$a=New-Object -comObject 'CPAPPLET.CPAppletMgr';($a.GetClientProperties() | Where-Object { $_.Name -eq 'ADSiteName' }).Value</value>
+    <comment>Get SCCM Client Property ADSiteName</comment>
+  </data>
   <data name="CCM_Client" xml:space="preserve">
     <value>(Get-Wmiobject -class CCM_Client -namespace 'ROOT\CCM')</value>
     <comment>Get the CCM_Client Class</comment>
+  </data>
+  <data name="CertKeyType" xml:space="preserve">
+    <value>$a=New-Object -comObject 'CPAPPLET.CPAppletMgr';($a.GetClientProperties() | Where-Object { $_.Name -eq 'CertKeyType' }).Value</value>
+    <comment>Get SCCM Client Property CertKeyType</comment>
+  </data>
+  <data name="CommunicationMode" xml:space="preserve">
+    <value>$a=New-Object -comObject 'CPAPPLET.CPAppletMgr';($a.GetClientProperties() | Where-Object { $_.Name -eq 'CommunicationMode' }).Value</value>
+    <comment>Get SCCM Client Property CommunicationMode</comment>
   </data>
   <data name="SMS_Client" xml:space="preserve">
     <value>(Get-Wmiobject -class SMS_Client -namespace 'ROOT\CCM')</value>

@@ -61,11 +61,38 @@ namespace sccmclictr.automation.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to $a=New-Object -comObject &apos;CPAPPLET.CPAppletMgr&apos;;($a.GetClientProperties() | Where-Object { $_.Name -eq &apos;ADSiteName&apos; }).Value.
+        /// </summary>
+        internal static string ADSiteName {
+            get {
+                return ResourceManager.GetString("ADSiteName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to (Get-Wmiobject -class CCM_Client -namespace &apos;ROOT\CCM&apos;).
         /// </summary>
         internal static string CCM_Client {
             get {
                 return ResourceManager.GetString("CCM_Client", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $a=New-Object -comObject &apos;CPAPPLET.CPAppletMgr&apos;;($a.GetClientProperties() | Where-Object { $_.Name -eq &apos;CertKeyType&apos; }).Value.
+        /// </summary>
+        internal static string CertKeyType {
+            get {
+                return ResourceManager.GetString("CertKeyType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $a=New-Object -comObject &apos;CPAPPLET.CPAppletMgr&apos;;($a.GetClientProperties() | Where-Object { $_.Name -eq &apos;CommunicationMode&apos; }).Value.
+        /// </summary>
+        internal static string CommunicationMode {
+            get {
+                return ResourceManager.GetString("CommunicationMode", resourceCulture);
             }
         }
         

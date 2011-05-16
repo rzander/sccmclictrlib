@@ -151,6 +151,8 @@ namespace sccmclictr.automation
             {
                 //Yes, return Runspace
                 remoteRunspace = RemoteRunspace;
+
+                oAgentProperties = new agentProperties(remoteRunspace, PSCode);
             }
             else
             {
