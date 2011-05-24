@@ -70,6 +70,24 @@ namespace sccmclictr.automation.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Get-Wmiobject -class CCM_ClientAgentSettings -namespace &apos;ROOT\CCM\ClientSDK&apos;).BrandingTitle.
+        /// </summary>
+        internal static string BrandingTitle {
+            get {
+                return ResourceManager.GetString("BrandingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get-WmiObject -Class CCM_Application -Namespace &quot;root\ccm\clientsdk&quot;.
+        /// </summary>
+        internal static string CCM_Application {
+            get {
+                return ResourceManager.GetString("CCM_Application", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to (Get-Wmiobject -class CCM_Client -namespace &apos;ROOT\CCM&apos;).
         /// </summary>
         internal static string CCM_Client {
@@ -88,11 +106,47 @@ namespace sccmclictr.automation.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to $a=[wmiclass]&quot;root\ccm\clientsdk:CCM_SoftwareCatalogUtilities&quot;;$a.GetDeviceID().ClientID.
+        /// </summary>
+        internal static string ClientId {
+            get {
+                return ResourceManager.GetString("ClientId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $a=[wmiclass]&quot;root\ccm\clientsdk:CCM_SoftwareCatalogUtilities&quot;;$a.GetClientVersion().ClientVersion.
+        /// </summary>
+        internal static string ClientVersion {
+            get {
+                return ResourceManager.GetString("ClientVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to $a=New-Object -comObject &apos;CPAPPLET.CPAppletMgr&apos;;($a.GetClientProperties() | Where-Object { $_.Name -eq &apos;CommunicationMode&apos; }).Value.
         /// </summary>
         internal static string CommunicationMode {
             get {
                 return ResourceManager.GetString("CommunicationMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $a=[wmiclass]&quot;root\ccm\clientsdk:CCM_ClientInternalUtilities&quot;;$a.AreMultiUsersLoggedOn().MultiUsersLoggedOn.
+        /// </summary>
+        internal static string MultiUsersLoggedOn {
+            get {
+                return ResourceManager.GetString("MultiUsersLoggedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $a=[wmiclass]&quot;root\ccm\clientsdk:CCM_ClientUtilities&quot;;$a.DetermineIfRebootPending().
+        /// </summary>
+        internal static string RebootPending {
+            get {
+                return ResourceManager.GetString("RebootPending", resourceCulture);
             }
         }
         

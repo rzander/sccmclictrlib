@@ -3,22 +3,32 @@
   <Class Name="sccmclictr.automation.SCCMAgent">
     <Position X="2.25" Y="0.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAEAAQAAAAAAAACgREBQAAAAAAAEAACABAAAEAAAAA=</HashCode>
+      <HashCode>AAAEAAQAIAAAAAACgREBQAAAAAAAEAACABAQAEACAAA=</HashCode>
       <FileName>SCCMAgent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="sccmclictr.automation.WSMan">
     <Position X="0.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAgAAAAAEAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <HashCode>ACAAAAAAAAAAAAoAAAAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
       <FileName>WSMan.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="sccmclictr.automation.agentProperties">
     <Position X="4.5" Y="0.5" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
     <TypeIdentifier>
-      <HashCode>AAEAAAQAAAAAAQAAgQAEAABAAAAAAAAACwAAAAAAAAA=</HashCode>
+      <HashCode>AIsFAAwEQggAYQAghQMsjhBgCAAAAAA8CyAIDABMACA=</HashCode>
       <FileName>AgentProperties.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sccmclictr.automation.softwareDistribution">
+    <Position X="7.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQEQgAAAAAAAAAAgAAAAAAAAAAgAAAAAABAACA=</HashCode>
+      <FileName>SoftwareDistribution.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

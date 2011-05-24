@@ -65,6 +65,13 @@ namespace sccmclictr.automation
         internal string cCommunicationMode;
         internal string cCertKeyType;
 
+        internal Boolean cMultiUsersLoggedOn;
+        internal string cBrandingTitle;
+        internal Boolean cRebootPending;
+        internal Boolean cIsHardRebootPending;
+        internal Boolean cInGracePeriod;
+        internal DateTime cRebootDeadline;
+
         /// <summary>
         /// Cached Copy of the SMS_Client ManagementObject
         /// </summary>
@@ -75,7 +82,6 @@ namespace sccmclictr.automation
         /// </summary>
         internal ManagementObject cCCM_ClientCached;
 
-        internal object cClientCOMPropertiesCached;
 
         /// <summary>
         /// Get the SMS_Client ManagementObject
@@ -251,7 +257,7 @@ namespace sccmclictr.automation
         /// <example>
         /// PowerShell Code:
         /// <code>
-        /// (Get-Wmiobject -class SMS_Client -namespace 'ROOT\CCM').ClientVersion
+        /// $a=[wmiclass]"root\ccm\clientsdk:CCM_SoftwareCatalogUtilities";$a.GetClientVersion().ClientVersion
         /// </code>
         /// </example>
         public string ClientVersion
@@ -263,11 +269,31 @@ namespace sccmclictr.automation
                     cClientVersion = "";
                 }
 
-                
                 if (string.IsNullOrEmpty(cClientVersion))
                 {
-                    cClientVersion = cSMS_Client.Properties["ClientVersion"].Value.ToString();
-                    updateTimeStamp("cClientVersion");
+                    foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.ClientVersion, remoteRunspace))
+                    {
+                        //Store the Object in cache
+                        if (obj != null)
+                        {
+                            try
+                            {
+                                cClientVersion = obj.BaseObject.ToString();
+                            }
+                            catch
+                            {
+                                cClientVersion = "";
+                            }
+                        }
+                        else
+                        {
+                            cClientVersion = "";
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(cClientVersion))
+                    {
+                        updateTimeStamp("cClientVersion");
+                    }
                     System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ClientVersion:" + cClientVersion);
                 }
                 else
@@ -276,7 +302,7 @@ namespace sccmclictr.automation
                 }
 
                 //Trace the PowerShell Command
-                tsPSCode.TraceInformation(Properties.Resources.SMS_Client+".ClientVersion");
+                tsPSCode.TraceInformation(Properties.Resources.ClientVersion);
 
                 //Return result
                 return cClientVersion;
@@ -414,11 +440,31 @@ namespace sccmclictr.automation
                     cClientId = "";
                 }
 
-
                 if (string.IsNullOrEmpty(cClientId))
                 {
-                    cClientId = cCCM_Client.Properties["ClientId"].Value.ToString();
-                    updateTimeStamp("cClientId");
+                    foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.ClientId, remoteRunspace))
+                    {
+                        //Store the Object in cache
+                        if (obj != null)
+                        {
+                            try
+                            {
+                                cClientId = obj.BaseObject.ToString();
+                            }
+                            catch
+                            {
+                                cClientId = "";
+                            }
+                        }
+                        else
+                        {
+                            cClientId = "";
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(cClientId))
+                    {
+                        updateTimeStamp("cClientId");
+                    }
                     System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ClientId:" + cClientId);
                 }
                 else
@@ -427,11 +473,10 @@ namespace sccmclictr.automation
                 }
 
                 //Trace the PowerShell Command
-                tsPSCode.TraceInformation(Properties.Resources.CCM_Client + ".ClientId");
+                tsPSCode.TraceInformation(Properties.Resources.ClientId);
 
                 //Return result
                 return cClientId;
-
             }
         }
 
@@ -764,6 +809,325 @@ namespace sccmclictr.automation
             }
         }
 
+        /// <summary>
+        /// Detect if multiple Users are Logged On.
+        /// Note: This Value will be cached. To get the uncached Version call the 'Initialize' Method from the SCCMAgent Class
+        /// </summary>
+        /// <example>
+        /// PowerShell Code:
+        /// <code>
+        /// $a=[wmiclass]"root\ccm\clientsdk:CCM_ClientInternalUtilities";$a.AreMultiUsersLoggedOn().MultiUsersLoggedOn
+        /// </code>
+        /// </example>
+        public Boolean MultiUsersLoggedOn
+        {
+            get
+            {
+                Boolean reload = false;
+                if (!isCached("cMultiUsersLoggedOn", cacheAge))
+                {
+                    reload = true; ;
+                }
+
+
+                if (reload)
+                {
+                    foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.MultiUsersLoggedOn, remoteRunspace))
+                    {
+                        //Store the Object in cache
+                        if (obj != null)
+                        {
+                            try
+                            {
+                                cMultiUsersLoggedOn = Boolean.Parse(obj.BaseObject.ToString());
+                                updateTimeStamp("cMultiUsersLoggedOn");
+                            }
+                            catch
+                            {
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get MultiUsersLoggedOn:" + cMultiUsersLoggedOn);
+                }
+                else
+                {
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get MultiUsersLoggedOn from cache:" + cMultiUsersLoggedOn);
+                }
+
+                //Trace the PowerShell Command
+                tsPSCode.TraceInformation(Properties.Resources.MultiUsersLoggedOn);
+
+                //Return result
+                return cMultiUsersLoggedOn;
+
+            }
+        }
+
+        /// <summary>
+        /// Return Branding Title (Company Name).
+        /// Note: This Value will be cached. To get the uncached Version call the 'Initialize' Method from the SCCMAgent Class
+        /// </summary>
+        /// <example>
+        /// PowerShell Code:
+        /// <code>
+        /// (Get-Wmiobject -class CCM_ClientAgentSettings -namespace 'ROOT\CCM\ClientSDK').BrandingTitle
+        /// </code>
+        /// </example>
+        public string BrandingTitle
+        {
+            get
+            {
+                if (!isCached("cBrandingTitle", cacheAge))
+                {
+                    cBrandingTitle = "";
+                }
+
+                if (string.IsNullOrEmpty(cBrandingTitle))
+                {
+                    foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.BrandingTitle, remoteRunspace))
+                    {
+                        //Store the Object in cache
+                        if (obj != null)
+                        {
+                            try
+                            {
+                                cBrandingTitle = obj.BaseObject.ToString();
+                            }
+                            catch
+                            {
+                                cBrandingTitle = "";
+                            }
+                        }
+                        else
+                        {
+                            cBrandingTitle = "";
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(cBrandingTitle))
+                    {
+                        updateTimeStamp("cBrandingTitle");
+                    }
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get BrandingTitle:" + cBrandingTitle);
+                }
+                else
+                {
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get BrandingTitle from cache:" + cBrandingTitle);
+                }
+
+                //Trace the PowerShell Command
+                tsPSCode.TraceInformation(Properties.Resources.BrandingTitle);
+
+                //Return result
+                return cBrandingTitle;
+            }
+        }
+
+        /// <summary>
+        /// Detect if a reboot is pending.
+        /// Note: This Value will be cached. To get the uncached Version call the 'Initialize' Method from the SCCMAgent Class
+        /// </summary>
+        /// <example>
+        /// PowerShell Code:
+        /// <code>
+        /// $a=[wmiclass]"root\ccm\clientsdk:CCM_ClientUtilities";$a.DetermineIfRebootPending().RebootPending
+        /// </code>
+        /// </example>
+        public Boolean RebootPending
+        {
+            get
+            {
+                Boolean reload = false;
+                if (!isCached("cRebootPending", cacheAge))
+                {
+                    reload = true;
+                }
+
+                if (reload)
+                {
+                    foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.RebootPending, remoteRunspace))
+                    {
+                        //Store the Object in cache
+                        if (obj != null)
+                        {
+                            try
+                            {
+                                cRebootPending = Boolean.Parse(obj.Properties["RebootPending"].Value.ToString());
+                                updateTimeStamp("cRebootPending");
+
+                                cIsHardRebootPending = Boolean.Parse(obj.Properties["IsHardRebootPending"].Value.ToString());
+                                updateTimeStamp("cIsHardRebootPending");
+                                cInGracePeriod = Boolean.Parse(obj.Properties["InGracePeriod"].Value.ToString());
+                                updateTimeStamp("cInGracePeriod");
+
+                                cRebootDeadline = ManagementDateTimeConverter.ToDateTime(obj.Properties["RebootDeadline"].Value.ToString());
+                                updateTimeStamp("cRebootDeadline");
+                            }
+                            catch
+                            {
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get RebootPending:" + cRebootPending);
+                }
+                else
+                {
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get RebootPending from cache:" + cRebootPending);
+                }
+
+                //Trace the PowerShell Command
+                tsPSCode.TraceInformation(Properties.Resources.RebootPending + ".RebootPending");
+
+                //Return result
+                return cRebootPending;
+            }
+        }
+
+        /// <summary>
+        /// Detect if a hard reboot is pending.
+        /// Note: This Value will be cached. To get the uncached Version call the 'Initialize' Method from the SCCMAgent Class
+        /// </summary>
+        /// <example>
+        /// PowerShell Code:
+        /// <code>
+        /// $a=[wmiclass]"root\ccm\clientsdk:CCM_ClientUtilities";$a.DetermineIfRebootPending().IsHardRebootPending
+        /// </code>
+        /// </example>
+        public Boolean IsHardRebootPending
+        {
+            get
+            {
+                Boolean reload = false;
+                if (!isCached("cIsHardRebootPending", cacheAge))
+                {
+                    reload = true;
+                }
+
+                if (reload)
+                {
+                    foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.RebootPending, remoteRunspace))
+                    {
+                        //Store the Object in cache
+                        if (obj != null)
+                        {
+                            try
+                            {
+                                cRebootPending = Boolean.Parse(obj.Properties["RebootPending"].Value.ToString());
+                                updateTimeStamp("cRebootPending");
+
+                                cIsHardRebootPending = Boolean.Parse(obj.Properties["IsHardRebootPending"].Value.ToString());
+                                updateTimeStamp("cIsHardRebootPending");
+
+                                cInGracePeriod = Boolean.Parse(obj.Properties["InGracePeriod"].Value.ToString());
+                                updateTimeStamp("cInGracePeriod");
+
+                                cRebootDeadline = ManagementDateTimeConverter.ToDateTime(obj.Properties["RebootDeadline"].Value.ToString());
+                                updateTimeStamp("cRebootDeadline");
+                            }
+                            catch
+                            {
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get IsHardRebootPending:" + cIsHardRebootPending);
+                }
+                else
+                {
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get IsHardRebootPending from cache:" + cIsHardRebootPending);
+                }
+
+                //Trace the PowerShell Command
+                tsPSCode.TraceInformation(Properties.Resources.RebootPending + ".IsHardRebootPending");
+
+                //Return result
+                return cIsHardRebootPending;
+            }
+        }
+
+        /// <summary>
+        /// Get deadline of pending reboot
+        /// Note: This Value will be cached. To get the uncached Version call the 'Initialize' Method from the SCCMAgent Class
+        /// </summary>
+        /// <example>
+        /// PowerShell Code:
+        /// <code>
+        /// $a=[wmiclass]"root\ccm\clientsdk:CCM_ClientUtilities";$a.DetermineIfRebootPending().RebootDeadline
+        /// </code>
+        /// </example>
+        public DateTime RebootDeadline
+        {
+            get
+            {
+                Boolean reload = false;
+                if (!isCached("cRebootDeadline", cacheAge))
+                {
+                    reload = true;
+                }
+
+                if (reload)
+                {
+                    foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.RebootPending, remoteRunspace))
+                    {
+                        //Store the Object in cache
+                        if (obj != null)
+                        {
+                            try
+                            {
+                                cRebootPending = Boolean.Parse(obj.Properties["RebootPending"].Value.ToString());
+                                updateTimeStamp("cRebootPending");
+
+                                cIsHardRebootPending = Boolean.Parse(obj.Properties["IsHardRebootPending"].Value.ToString());
+                                updateTimeStamp("cIsHardRebootPending");
+
+                                cInGracePeriod = Boolean.Parse(obj.Properties["InGracePeriod"].Value.ToString());
+                                updateTimeStamp("cInGracePeriod");
+
+                                cRebootDeadline = ManagementDateTimeConverter.ToDateTime(obj.Properties["RebootDeadline"].Value.ToString());
+                                updateTimeStamp("cRebootDeadline");
+                            }
+                            catch
+                            {
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get RebootDeadline:" + cRebootDeadline);
+                }
+                else
+                {
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get RebootDeadline from cache:" + cRebootDeadline);
+                }
+
+                //Trace the PowerShell Command
+                tsPSCode.TraceInformation(Properties.Resources.RebootPending + ".RebootDeadline");
+
+                //Return result
+                return cRebootDeadline;
+            }
+        }
+
 //****** Functions below are not up to date ! *************
         /// <summary>
         /// Return the number of days where the system is up and running
@@ -817,6 +1181,7 @@ namespace sccmclictr.automation
             }
 
         }
+
 
 //**********************************************************
         #endregion

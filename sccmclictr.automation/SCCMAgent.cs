@@ -28,6 +28,7 @@ namespace sccmclictr.automation
         private Runspace remoteRunspace { get; set;}
 
         private agentProperties oAgentProperties;
+        private softwareDistribution oSoftwareDistribution;
         
         public WSManConnectionInfo ConnectionInfo { get { return connectionInfo; } }
 
@@ -126,6 +127,7 @@ namespace sccmclictr.automation
             connectionInfo.ProxyAuthentication = AuthenticationMechanism.Negotiate;
 
             oAgentProperties = new agentProperties(remoteRunspace, PSCode);
+            oSoftwareDistribution = new softwareDistribution(remoteRunspace, PSCode);
         }
 
         /// <summary>
@@ -153,6 +155,7 @@ namespace sccmclictr.automation
                 remoteRunspace = RemoteRunspace;
 
                 oAgentProperties = new agentProperties(remoteRunspace, PSCode);
+                oSoftwareDistribution = new softwareDistribution(remoteRunspace, PSCode);
             }
             else
             {
@@ -171,5 +174,8 @@ namespace sccmclictr.automation
 
 
         public agentProperties AgentProperties { get { return oAgentProperties; } }
+        public softwareDistribution SoftwareDistribution { get { return oSoftwareDistribution; } }
+
+
     }
 }

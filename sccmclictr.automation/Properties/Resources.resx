@@ -121,6 +121,14 @@
     <value>$a=New-Object -comObject 'CPAPPLET.CPAppletMgr';($a.GetClientProperties() | Where-Object { $_.Name -eq 'ADSiteName' }).Value</value>
     <comment>Get SCCM Client Property ADSiteName</comment>
   </data>
+  <data name="BrandingTitle" xml:space="preserve">
+    <value>(Get-Wmiobject -class CCM_ClientAgentSettings -namespace 'ROOT\CCM\ClientSDK').BrandingTitle</value>
+    <comment>Get the Branding Title</comment>
+  </data>
+  <data name="CCM_Application" xml:space="preserve">
+    <value>Get-WmiObject -Class CCM_Application -Namespace "root\ccm\clientsdk"</value>
+    <comment>Get Applications</comment>
+  </data>
   <data name="CCM_Client" xml:space="preserve">
     <value>(Get-Wmiobject -class CCM_Client -namespace 'ROOT\CCM')</value>
     <comment>Get the CCM_Client Class</comment>
@@ -129,9 +137,25 @@
     <value>$a=New-Object -comObject 'CPAPPLET.CPAppletMgr';($a.GetClientProperties() | Where-Object { $_.Name -eq 'CertKeyType' }).Value</value>
     <comment>Get SCCM Client Property CertKeyType</comment>
   </data>
+  <data name="ClientId" xml:space="preserve">
+    <value>$a=[wmiclass]"root\ccm\clientsdk:CCM_SoftwareCatalogUtilities";$a.GetDeviceID().ClientID</value>
+    <comment>Get the SCCMAgent GUID</comment>
+  </data>
+  <data name="ClientVersion" xml:space="preserve">
+    <value>$a=[wmiclass]"root\ccm\clientsdk:CCM_SoftwareCatalogUtilities";$a.GetClientVersion().ClientVersion</value>
+    <comment>Get the SCCM Agent Version</comment>
+  </data>
   <data name="CommunicationMode" xml:space="preserve">
     <value>$a=New-Object -comObject 'CPAPPLET.CPAppletMgr';($a.GetClientProperties() | Where-Object { $_.Name -eq 'CommunicationMode' }).Value</value>
     <comment>Get SCCM Client Property CommunicationMode</comment>
+  </data>
+  <data name="MultiUsersLoggedOn" xml:space="preserve">
+    <value>$a=[wmiclass]"root\ccm\clientsdk:CCM_ClientInternalUtilities";$a.AreMultiUsersLoggedOn().MultiUsersLoggedOn</value>
+    <comment>Check if multiple Users are logged on</comment>
+  </data>
+  <data name="RebootPending" xml:space="preserve">
+    <value>$a=[wmiclass]"root\ccm\clientsdk:CCM_ClientUtilities";$a.DetermineIfRebootPending()</value>
+    <comment>Determine if reboot is pending</comment>
   </data>
   <data name="SMS_Client" xml:space="preserve">
     <value>(Get-Wmiobject -class SMS_Client -namespace 'ROOT\CCM')</value>
