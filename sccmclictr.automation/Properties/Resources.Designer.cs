@@ -70,6 +70,24 @@ namespace sccmclictr.automation.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to $a=Get-Wmiobject -class SMS_Client -namespace &apos;ROOT\CCM&apos;;$a.AllowLocalAdminOverride.
+        /// </summary>
+        internal static string AllowLocalAdminOverride {
+            get {
+                return ResourceManager.GetString("AllowLocalAdminOverride", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $a = (Get-Wmiobject -class SMS_Client -namespace &apos;ROOT\\CCM&apos;);$a.AllowLocalAdminOverride = ${0};$a.Put();.
+        /// </summary>
+        internal static string AllowLocalAdminOverride_Set {
+            get {
+                return ResourceManager.GetString("AllowLocalAdminOverride_Set", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to (Get-Wmiobject -class CCM_ClientAgentSettings -namespace &apos;ROOT\CCM\ClientSDK&apos;).BrandingTitle.
         /// </summary>
         internal static string BrandingTitle {
@@ -84,15 +102,6 @@ namespace sccmclictr.automation.Properties {
         internal static string CCM_Application {
             get {
                 return ResourceManager.GetString("CCM_Application", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to (Get-Wmiobject -class CCM_Client -namespace &apos;ROOT\CCM&apos;).
-        /// </summary>
-        internal static string CCM_Client {
-            get {
-                return ResourceManager.GetString("CCM_Client", resourceCulture);
             }
         }
         
@@ -115,6 +124,24 @@ namespace sccmclictr.automation.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Get-Wmiobject -class CCM_Client -namespace &apos;ROOT\CCM&apos;).ClientIDChangeDate.
+        /// </summary>
+        internal static string ClientIdChangeDate {
+            get {
+                return ResourceManager.GetString("ClientIdChangeDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (Get-Wmiobject -class SMS_Client -namespace &apos;ROOT\CCM&apos;).ClientType.
+        /// </summary>
+        internal static string ClientType {
+            get {
+                return ResourceManager.GetString("ClientType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to $a=[wmiclass]&quot;root\ccm\clientsdk:CCM_SoftwareCatalogUtilities&quot;;$a.GetClientVersion().ClientVersion.
         /// </summary>
         internal static string ClientVersion {
@@ -133,6 +160,24 @@ namespace sccmclictr.automation.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Get-Wmiobject -class SMS_Client -namespace &apos;ROOT\CCM&apos;).EnableAutoAssignment.
+        /// </summary>
+        internal static string EnableAutoAssignment {
+            get {
+                return ResourceManager.GetString("EnableAutoAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $a = (Get-Wmiobject -class SMS_Client -namespace &apos;ROOT\\CCM&apos;);$a.EnableAutoAssignment = ${0};$a.Put().
+        /// </summary>
+        internal static string EnableAutoAssignment_Set {
+            get {
+                return ResourceManager.GetString("EnableAutoAssignment_Set", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to $a=[wmiclass]&quot;root\ccm\clientsdk:CCM_ClientInternalUtilities&quot;;$a.AreMultiUsersLoggedOn().MultiUsersLoggedOn.
         /// </summary>
         internal static string MultiUsersLoggedOn {
@@ -142,20 +187,20 @@ namespace sccmclictr.automation.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Get-Wmiobject -class CCM_Client -namespace &apos;ROOT\CCM&apos;).PreviousClientId.
+        /// </summary>
+        internal static string PreviousClientId {
+            get {
+                return ResourceManager.GetString("PreviousClientId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to $a=[wmiclass]&quot;root\ccm\clientsdk:CCM_ClientUtilities&quot;;$a.DetermineIfRebootPending().
         /// </summary>
         internal static string RebootPending {
             get {
                 return ResourceManager.GetString("RebootPending", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to (Get-Wmiobject -class SMS_Client -namespace &apos;ROOT\CCM&apos;).
-        /// </summary>
-        internal static string SMS_Client {
-            get {
-                return ResourceManager.GetString("SMS_Client", resourceCulture);
             }
         }
     }

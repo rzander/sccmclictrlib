@@ -19,13 +19,16 @@ using System.Management.Automation.Runspaces;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 
+using System.ComponentModel;
+
 namespace sccmclictr.automation
 {
     /// <summary>
     /// SCCM Agent Properties
     /// </summary>
-    public class agentProperties
+    public class agentProperties 
     {
+
         #region Initializing
 
         /// <summary>
@@ -36,8 +39,8 @@ namespace sccmclictr.automation
         /// <summary>
         /// Define the DebugLevel
         /// </summary>
-        private TraceSwitch debugLevel = new TraceSwitch("DebugLevel", "DebugLevel from ConfigFile", "Verbose" );
-        
+        private TraceSwitch debugLevel = new TraceSwitch("DebugLevel", "DebugLevel from ConfigFile", "Verbose");
+
         /// <summary>
         /// Trace Source for PowerShell Commands
         /// </summary>
@@ -58,9 +61,7 @@ namespace sccmclictr.automation
         internal string cClientId;
         internal string cPreviousClientId;
         internal string cClientIdChangeDate;
-        internal string cClientVersionEx;
         internal UInt32 cClientType;
-        internal string cLastRebootDays;
         internal string cADSiteName;
         internal string cCommunicationMode;
         internal string cCertKeyType;
@@ -71,122 +72,6 @@ namespace sccmclictr.automation
         internal Boolean cIsHardRebootPending;
         internal Boolean cInGracePeriod;
         internal DateTime cRebootDeadline;
-
-        /// <summary>
-        /// Cached Copy of the SMS_Client ManagementObject
-        /// </summary>
-        internal ManagementObject cSMS_ClientCached;
-
-        /// <summary>
-        /// Cached Copy of the CCM_Client ManagementObject
-        /// </summary>
-        internal ManagementObject cCCM_ClientCached;
-
-
-        /// <summary>
-        /// Get the SMS_Client ManagementObject
-        /// </summary>
-        private ManagementObject cSMS_Client
-        {
-            get 
-            {
-                try
-                {
-                    //Check if SMS_Client is cached?
-                    if (!isCached("cSMS_Client", cacheAge))
-                    {
-                        //Clear the cached Object
-                        cSMS_ClientCached = null;
-                    }
-
-                    if (cSMS_ClientCached == null)
-                    {
-                        //Call the PSScript to get the SMS_Client Object
-#if DEBUG
-                        tsPSCode.TraceInformation(Properties.Resources.SMS_Client);
-#endif
-                        
-                        foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.SMS_Client, remoteRunspace))
-                        {
-                            //Store the Object in cache
-                            cSMS_Client = obj.BaseObject as ManagementObject;
-                        }
-
-                        Trace.WriteLineIf(debugLevel.TraceVerbose, @"Cache WMI Object 'SMS_Client' from root\ccm.");
-                    }
-                    else
-                    {
-                        Trace.WriteLineIf(debugLevel.TraceVerbose, @"return WMI Object 'SMS_Client' from cache.");
-                    }
-                }
-                catch (Exception ex)
-                {
-#if DEBUG
-                    Trace.TraceError("get cSMS_Client: " + ex.Message);
-#endif
-                }
-                //return the cached Object
-                return cSMS_ClientCached;
-            }
-            set
-            {
-                cSMS_ClientCached = value;
-                
-                //update TimeStamp in cache
-                updateTimeStamp("cSMS_Client");
-            }
-        }
-
-        private ManagementObject cCCM_Client
-        {
-            get
-            {
-                try
-                {
-                    //Check if SMS_Client is cached?
-                    if (!isCached("cCCM_Client", cacheAge))
-                    {
-                        //Clear the cached Object
-                        cCCM_ClientCached = null;
-                    }
-
-                    if (cCCM_ClientCached == null)
-                    {
-                        //Call the PSScript to get the SMS_Client Object
-#if DEBUG
-                        tsPSCode.TraceInformation(Properties.Resources.CCM_Client);
-#endif
-
-                        foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.CCM_Client, remoteRunspace))
-                        {
-                            //Store the Object in cache
-                            cCCM_Client = obj.BaseObject as ManagementObject;
-                        }
-
-                        Trace.WriteLineIf(debugLevel.TraceVerbose, @"Cache WMI Object 'CCM_Client' from root\ccm.");
-                    }
-                    else
-                    {
-                        Trace.WriteLineIf(debugLevel.TraceVerbose, @"return WMI Object 'CCM_Client' from cache.");
-                    }
-                }
-                catch (Exception ex)
-                {
-#if DEBUG
-                    Trace.TraceError("get cCCM_Client: " + ex.Message);
-#endif
-                }
-                //return the cached Object
-                return cCCM_ClientCached;
-            }
-            set
-            {
-                cCCM_ClientCached = value;
-
-                //update TimeStamp in cache
-                updateTimeStamp("cCCM_Client");
-            }
-        }
 
         #endregion
 
@@ -329,31 +214,41 @@ namespace sccmclictr.automation
                     reload = true; ;
                 }
 
-
                 if (reload)
                 {
-                    cAllowLocalAdminOverride = Boolean.Parse(cSMS_Client.Properties["AllowLocalAdminOverride"].Value.ToString());
-                    updateTimeStamp("cAllowLocalAdminOverride");
-                    Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get AllowLocalAdminOverride:" + cAllowLocalAdminOverride.ToString());
+                    foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.AllowLocalAdminOverride, remoteRunspace))
+                    {
+                        //Store the Object in cache
+                        if (obj != null)
+                        {
+                            try
+                            {
+                                cAllowLocalAdminOverride = Boolean.Parse(obj.BaseObject.ToString());
+                                updateTimeStamp("cAllowLocalAdminOverride");
+                            }
+                            catch
+                            {
+                            }
+                        }
+                    }
+
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get AllowLocalAdminOverride:" + cAllowLocalAdminOverride);
                 }
                 else
                 {
-                    Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get AllowLocalAdminOverride from cache:" + cAllowLocalAdminOverride.ToString());
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get AllowLocalAdminOverride from cache:" + cAllowLocalAdminOverride);
                 }
 
                 //Trace the PowerShell Command
-                tsPSCode.TraceInformation(Properties.Resources.SMS_Client + ".AllowLocalAdminOverride");
+                tsPSCode.TraceInformation(Properties.Resources.AllowLocalAdminOverride);
 
                 //Return result
                 return cAllowLocalAdminOverride;
 
-                //return Boolean.Parse(WSMan.RunPSScriptAsString("(Get-Wmiobject -class SMS_Client -namespace 'ROOT\\CCM').AllowLocalAdminOverride", remoteRunspace));
             }
             set
             {
-                string sCode = "$a = (Get-Wmiobject -class SMS_Client -namespace 'ROOT\\CCM');" +
-                "$a.AllowLocalAdminOverride = $" + value.ToString() + ";" +
-                "$a.Put()";
+                string sCode = string.Format(Properties.Resources.AllowLocalAdminOverride_Set, value.ToString());
                 Trace.WriteLineIf(debugLevel.TraceVerbose, "Set AllowLocalAdminOverride:" + WSMan.RunPSScriptAsString(sCode, remoteRunspace));
                 tsPSCode.TraceInformation(sCode);
 
@@ -361,7 +256,6 @@ namespace sccmclictr.automation
 
                 //Clear TimeStamp in cache to enforce reload
                 clearTimeStamp("cAllowLocalAdminOverride");
-                clearTimeStamp("cSMS_Client");
             }
         }
 
@@ -385,31 +279,42 @@ namespace sccmclictr.automation
                     reload = true; ;
                 }
 
-
                 if (reload)
                 {
-                    cEnableAutoAssignment = Boolean.Parse(cSMS_Client.Properties["EnableAutoAssignment"].Value.ToString());
-                    updateTimeStamp("cEnableAutoAssignment");
-                    Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get EnableAutoAssignment:" + cEnableAutoAssignment.ToString());
+                    foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.EnableAutoAssignment, remoteRunspace))
+                    {
+                        //Store the Object in cache
+                        if (obj != null)
+                        {
+                            try
+                            {
+                                cEnableAutoAssignment = Boolean.Parse(obj.BaseObject.ToString());
+                                updateTimeStamp("cEnableAutoAssignment");
+                            }
+                            catch(Exception ex)
+                            {
+                                System.Diagnostics.Trace.TraceError(ex.Message);
+                            }
+                        }
+                    }
+
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get EnableAutoAssignment:" + cEnableAutoAssignment);
                 }
                 else
                 {
-                    Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get EnableAutoAssignment from cache:" + cEnableAutoAssignment.ToString());
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get EnableAutoAssignment from cache:" + cEnableAutoAssignment);
                 }
 
                 //Trace the PowerShell Command
-                tsPSCode.TraceInformation(Properties.Resources.SMS_Client + ".EnableAutoAssignment");
+                tsPSCode.TraceInformation(Properties.Resources.EnableAutoAssignment);
 
                 //Return result
                 return cEnableAutoAssignment;
-                
-                //return Boolean.Parse(WSMan.RunPSScriptAsString("(Get-Wmiobject -class SMS_Client -namespace 'ROOT\\CCM').EnableAutoAssignment", remoteRunspace));
             }
             set
             {
-                string sCode = "$a = (Get-Wmiobject -class SMS_Client -namespace 'ROOT\\CCM');" +
-                "$a.EnableAutoAssignment = $" + value.ToString() + ";" +
-                "$a.Put()";
+                string sCode = string.Format(Properties.Resources.EnableAutoAssignment_Set, value.ToString());
+
                 Trace.WriteLineIf(debugLevel.TraceVerbose, "Set EnableAutoAssignmente:" + WSMan.RunPSScript(sCode, remoteRunspace));
                 tsPSCode.TraceInformation(sCode);
 
@@ -417,7 +322,6 @@ namespace sccmclictr.automation
 
                 //Clear TimeStamp in cache to enforce reload
                 clearTimeStamp("cEnableAutoAssignment");
-                clearTimeStamp("cSMS_Client");
             }
         }
 
@@ -499,11 +403,31 @@ namespace sccmclictr.automation
                     cPreviousClientId = "";
                 }
 
-
                 if (string.IsNullOrEmpty(cPreviousClientId))
                 {
-                    cPreviousClientId = cCCM_Client.Properties["PreviousClientId"].Value.ToString();
-                    updateTimeStamp("cPreviousClientId");
+                    foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.PreviousClientId, remoteRunspace))
+                    {
+                        //Store the Object in cache
+                        if (obj != null)
+                        {
+                            try
+                            {
+                                cPreviousClientId = obj.BaseObject.ToString();
+                            }
+                            catch
+                            {
+                                cPreviousClientId = "";
+                            }
+                        }
+                        else
+                        {
+                            cPreviousClientId = "";
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(cPreviousClientId))
+                    {
+                        updateTimeStamp("cPreviousClientId");
+                    }
                     System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get PreviousClientId:" + cPreviousClientId);
                 }
                 else
@@ -512,7 +436,7 @@ namespace sccmclictr.automation
                 }
 
                 //Trace the PowerShell Command
-                tsPSCode.TraceInformation(Properties.Resources.CCM_Client + ".PreviousClientId");
+                tsPSCode.TraceInformation(Properties.Resources.PreviousClientId);
 
                 //Return result
                 return cPreviousClientId;
@@ -538,11 +462,31 @@ namespace sccmclictr.automation
                     cClientIdChangeDate = "";
                 }
 
-
                 if (string.IsNullOrEmpty(cClientIdChangeDate))
                 {
-                    cClientIdChangeDate= cCCM_Client.Properties["ClientIdChangeDate"].Value.ToString();
-                    updateTimeStamp("cClientIdChangeDate");
+                    foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.ClientIdChangeDate, remoteRunspace))
+                    {
+                        //Store the Object in cache
+                        if (obj != null)
+                        {
+                            try
+                            {
+                                cClientIdChangeDate = obj.BaseObject.ToString();
+                            }
+                            catch
+                            {
+                                cClientIdChangeDate = "";
+                            }
+                        }
+                        else
+                        {
+                            cClientIdChangeDate = "";
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(cPreviousClientId))
+                    {
+                        updateTimeStamp("cClientIdChangeDate");
+                    }
                     System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ClientIdChangeDate:" + cClientIdChangeDate);
                 }
                 else
@@ -551,44 +495,11 @@ namespace sccmclictr.automation
                 }
 
                 //Trace the PowerShell Command
-                tsPSCode.TraceInformation(Properties.Resources.CCM_Client + ".ClientIdChangeDate");
+                tsPSCode.TraceInformation(Properties.Resources.ClientIdChangeDate);
 
                 //Return result
                 return cClientIdChangeDate;
 
-            }
-        }
-
-        /// <summary>
-        /// Get the Client Version (SCCM2007 = 2.50); This function seems to be obsolete!!!
-        /// </summary>
-        public string ClientVersionEx
-        {
-            get
-            {
-                if (!isCached("cClientVersionEx", cacheAge))
-                {
-                    cClientVersionEx = "";
-                }
-
-
-                if (string.IsNullOrEmpty(cClientVersionEx))
-                {
-                    cClientVersionEx = cCCM_Client.Properties["ClientVersion"].Value.ToString();
-                    updateTimeStamp("cClientVersionEx");
-                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ClientVersion:" + cClientVersionEx);
-                }
-                else
-                {
-                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ClientVersion from cache:" + cClientVersionEx);
-                }
-
-                //Trace the PowerShell Command
-                tsPSCode.TraceInformation(Properties.Resources.CCM_Client + ".ClientVersion");
-
-                //Return result
-                return cClientVersionEx;
-                //return WSMan.RunPSScriptAsString("(Get-Wmiobject -class CCM_Client -namespace 'ROOT\\CCM').ClientVersion", remoteRunspace).Trim();
             }
         }
 
@@ -606,25 +517,40 @@ namespace sccmclictr.automation
         {
             get
             {
+                Boolean reload = false;
                 if (!isCached("cClientType", cacheAge))
                 {
-                    cClientType = 0;
+                    reload = true; ;
                 }
 
-
-                if (cClientType == 0)
+                if (reload)
                 {
-                    cClientType = uint.Parse(cSMS_Client.Properties["ClientType"].Value.ToString());
-                    updateTimeStamp("cClientType");
-                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ClientType:" + cClientType.ToString());
+                    foreach (PSObject obj in WSMan.RunPSScript(Properties.Resources.ClientType, remoteRunspace))
+                    {
+                        //Store the Object in cache
+                        if (obj != null)
+                        {
+                            try
+                            {
+                                cClientType =  UInt32.Parse(obj.BaseObject.ToString());
+                                updateTimeStamp("cClientType");
+                            }
+                            catch(Exception ex)
+                            {
+                                System.Diagnostics.Trace.TraceError(ex.Message);
+                            }
+                        }
+                    }
+
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ClientType:" + cClientType);
                 }
                 else
                 {
-                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ClientType from cache:" + cClientType.ToString());
+                    System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceInfo, DateTime.Now.ToString() + " - Get ClientType from cache:" + cClientType);
                 }
 
                 //Trace the PowerShell Command
-                tsPSCode.TraceInformation(Properties.Resources.SMS_Client + ".ClientType");
+                tsPSCode.TraceInformation(Properties.Resources.ClientType);
 
                 //Return result
                 return cClientType;
@@ -672,7 +598,7 @@ namespace sccmclictr.automation
                             cADSiteName = "";
                         }
                     }
-                    if(!string.IsNullOrEmpty(cADSiteName))
+                    if (!string.IsNullOrEmpty(cADSiteName))
                     {
                         updateTimeStamp("cADSiteName");
                     }
@@ -1128,7 +1054,7 @@ namespace sccmclictr.automation
             }
         }
 
-//****** Functions below are not up to date ! *************
+        //****** Functions below are not up to date ! *************
         /// <summary>
         /// Return the number of days where the system is up and running
         /// </summary>
@@ -1147,22 +1073,25 @@ namespace sccmclictr.automation
             {
 
                 powershell.Runspace = remoteRunspace;
-                /*string sQuery = "$query = 'SELECT * FROM __InstanceModificationEvent WITHIN 10 WHERE TargetInstance ISA \"Win32_Service\"';" +
-                    "Register-WmiEvent -Query $query \"WMI.Service.Stopped\" -Forward"; */
-
                 string sQuery = "$query = 'SELECT * FROM __InstanceModificationEvent WITHIN 10 WHERE TargetInstance ISA \"Win32_Service\"';" +
-                    "Register-WmiEvent -Query $query LocalCatchEvent -action {new-event CatchEvent -messageData $event.SourceEventArgs.NewEvent.TargetInstance};" +
-                    "Register-EngineEvent CatchEvent -Forward";
+                    "$a = Register-WmiEvent -Query $query \"WMI.Service.Stopped\" -Forward ;$a";
 
+                /* string sQuery = "$query = 'SELECT * FROM __InstanceModificationEvent WITHIN 10 WHERE TargetInstance ISA \"Win32_Service\"';" +
+                     "$a = Register-WmiEvent -Query $query LocalCatchEvent -action {new-event CatchEvent -messageData $event.SourceEventArgs.NewEvent.TargetInstance};"+
+                     "Register-EngineEvent CatchEvent -Forward"; */
 
-                powershell.AddScript(sQuery);
+                //powershell.AddScript(sQuery);
 
-                /*Pipeline pipe = powershell.Runspace.CreatePipeline();
-                pipe.Commands.AddScript(sQuery);
+                Pipeline pipe = powershell.Runspace.CreatePipeline("Get-ChildItem c: -Name");
+                //pipe.Commands.Add("Out-String -stream");
+                //pipe.Commands.AddScript(sQuery);
                 //pipe.Input.Write()
-                pipe.Input.Close();
+                //pipe.Input.Close();
                 pipe.InvokeAsync();
-                pipe.Output.ToString(); */
+                pipe.Output.DataReady += new EventHandler(Output_DataReady);
+
+                /*pipe.InvokeAsync();
+                pipe.Output.ToString();
 
                 IAsyncResult async = powershell.BeginInvoke();
 
@@ -1173,17 +1102,31 @@ namespace sccmclictr.automation
 
                     Console.WriteLine(result.ToString());
 
-                }
+                } */
 
-
-                Collection<PSObject> results = powershell.Invoke();
+                //Collection<PSObject> results = powershell.Invoke(); 
 
             }
 
         }
 
+        void Output_DataReady(object sender, EventArgs e)
+        {
+            PipelineReader<PSObject> output = sender as PipelineReader<PSObject>;
+            while(!output.EndOfPipeline)
+            {
+                foreach (PSObject obj in output.NonBlockingRead())
+                {
+                    foreach (PSPropertyInfo pi in obj.Properties)
+                    {
+                        Console.WriteLine(pi.Value.ToString());
+                    }
+                }
+            }
+        }
 
-//**********************************************************
+        //**********************************************************
         #endregion
     }
+
 }
