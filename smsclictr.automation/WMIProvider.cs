@@ -18,6 +18,9 @@ namespace smsclictr.automation
     /// </summary>
     public class WMIProvider
     {
+        internal Boolean cisx86 = false;
+        internal Boolean cachedisx86 = false;
+
         /// <summary>
         /// Management Scope of the current WMIProvider
         /// </summary>
@@ -255,23 +258,29 @@ namespace smsclictr.automation
 
         /// <summary>
         /// Detect if remote system is a x64 OS
+        /// This attribute is cached.
         /// </summary>
         /// <returns></returns>
         public bool isX86
         {
             get
             {
-                try
+                //Check if status is cached
+                if (!cachedisx86)
                 {
-                    WMIComputerSystem oSys = new WMIComputerSystem(this);
-                    if (oSys.Architecture == "x86")
-                        return true;
-                    else
-                        return false;
+                    try
+                    {
+                        WMIComputerSystem oSys = new WMIComputerSystem(this);
+                        if (oSys.Architecture == "x86")
+                            cisx86 = true;
+                        else
+                            cisx86 = false;
+                        cachedisx86 = true;
+                    }
+                    catch { }
                 }
-                catch { }
 
-                return true;
+                return cisx86;
             }
         }
 
