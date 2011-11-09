@@ -27,8 +27,8 @@ namespace sccmclictr.automation
         private int WSManPort { get; set; }
         private Runspace remoteRunspace { get; set;}
 
-        private agentProperties oAgentProperties;
-        private softwareDistribution oSoftwareDistribution;
+        //private agentProperties oAgentProperties;
+        //private softwareDistribution oSoftwareDistribution;
         
         public WSManConnectionInfo ConnectionInfo { get { return connectionInfo; } }
 
@@ -126,8 +126,10 @@ namespace sccmclictr.automation
             connectionInfo.AuthenticationMechanism = AuthenticationMechanism.Default;
             connectionInfo.ProxyAuthentication = AuthenticationMechanism.Negotiate;
 
-            oAgentProperties = new agentProperties(remoteRunspace, PSCode);
-            oSoftwareDistribution = new softwareDistribution(remoteRunspace, PSCode);
+            Client = new ccm(remoteRunspace, PSCode);
+            //oAgentProperties = new agentProperties(remoteRunspace, PSCode);
+            //oSoftwareDistribution = new softwareDistribution(remoteRunspace, PSCode);
+
         }
 
         /// <summary>
@@ -154,8 +156,10 @@ namespace sccmclictr.automation
                 //Yes, return Runspace
                 remoteRunspace = RemoteRunspace;
 
-                oAgentProperties = new agentProperties(remoteRunspace, PSCode);
-                oSoftwareDistribution = new softwareDistribution(remoteRunspace, PSCode);
+                Client = new ccm(remoteRunspace, PSCode);
+                //oAgentProperties = new agentProperties(remoteRunspace, PSCode);
+                //oSoftwareDistribution = new softwareDistribution(remoteRunspace, PSCode);
+
             }
             else
             {
@@ -172,10 +176,7 @@ namespace sccmclictr.automation
             remoteRunspace.Close();
         }
 
-
-        public agentProperties AgentProperties { get { return oAgentProperties; } }
-        public softwareDistribution SoftwareDistribution { get { return oSoftwareDistribution; } }
-
-
+        public ccm Client;
+        
     }
 }
