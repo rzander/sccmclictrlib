@@ -25,6 +25,17 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
+        /// Return the ActiveDirectory Site-Name (if exist).
+        /// </summary>
+        public string ADSiteName
+        {
+            get
+            {
+                return base.GetStringFromPS("$a=New-Object -comObject 'CPAPPLET.CPAppletMgr';($a.GetClientProperties() | Where-Object { $_.Name -eq 'ADSiteName' }).Value");
+            }
+        }
+
+        /// <summary>
         /// Get/Set the option if an Administrator can Override Agent Settings from the ControlPanel Applet
         /// </summary>
         public Boolean AllowLocalAdminOverride
@@ -40,13 +51,24 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Return the ActiveDirectory Site-Name (if exist).
+        /// Return the SCCM Agent GUID
         /// </summary>
-        public string ADSiteName
+        public string ClientId
         {
             get
             {
-                return base.GetStringFromPS("$a=New-Object -comObject 'CPAPPLET.CPAppletMgr';($a.GetClientProperties() | Where-Object { $_.Name -eq 'ADSiteName' }).Value");
+                return base.GetProperty(@"ROOT\ccm:CCM_Client=@", "ClientId");
+            }
+        }
+
+        /// <summary>
+        /// Return the previous SCCM Agent GUID
+        /// </summary>
+        public string PreviousClientId
+        {
+            get
+            {
+                return base.GetProperty(@"ROOT\ccm:CCM_Client=@", "PreviousClientId");
             }
         }
 
@@ -75,6 +97,7 @@ namespace sccmclictr.automation.functions
                 base.SetProperty(@"ROOT\ccm:SMS_Client=@", "EnableAutoAssignment", "$" + value.ToString());
             }
         }
+
 
     }
 }
