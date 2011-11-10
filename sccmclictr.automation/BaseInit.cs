@@ -77,7 +77,7 @@ namespace sccmclictr.automation
             tsPSCode = PSCode;
         }
 
-        public string GetStringFromMethod(string WMIPath, string WMIMethod, string ResultProperty)
+        public string GetStringFromClassMethod(string WMIPath, string WMIMethod, string ResultProperty)
         {
             if (!ResultProperty.StartsWith("."))
                 ResultProperty = "." + ResultProperty;
@@ -115,6 +115,122 @@ namespace sccmclictr.automation
             tsPSCode.TraceInformation(sPSCode);
 
             return sResult;
+        }
+
+        public string GetStringFromMethod(string WMIPath, string WMIMethod, string ResultProperty)
+        {
+            if (!ResultProperty.StartsWith("("))
+                ResultProperty = "(" + ResultProperty + ")";
+
+            string sResult = "";
+            string sPSCode = string.Format("$a=[wmi]\"{0}\";$a.{1}{2}", WMIPath, WMIMethod, ResultProperty);
+
+            if (!bShowPSCodeOnly)
+            {
+                string sHash = CreateHash(WMIPath + WMIMethod + ResultProperty);
+
+                if (Cache.Get(sHash) != null)
+                {
+                    sResult = Cache.Get(sHash) as string;
+                }
+                else
+                {
+                    foreach (PSObject obj in WSMan.RunPSScript(sPSCode, remoteRunspace))
+                    {
+                        try
+                        {
+                            sResult = obj.BaseObject.ToString();
+                            Cache.Add(sHash, sResult, DateTime.Now + cacheTime);
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
+                        }
+                    }
+                }
+            }
+
+            //Trace the PowerShell Command
+            tsPSCode.TraceInformation(sPSCode);
+
+            return sResult;
+        }
+
+        public PSObject CallClassMethod(string WMIPath, string WMIMethod, string MethodParams)
+        {
+            PSObject pResult = null;
+            if (!MethodParams.StartsWith("("))
+                MethodParams = "(" + MethodParams + ")";
+            string sPSCode = string.Format("$a=[wmiclass]\"{0}\";$a.{1}{2}", WMIPath, WMIMethod, MethodParams);
+
+            if (!bShowPSCodeOnly)
+            {
+                string sHash = CreateHash(WMIPath + WMIMethod + MethodParams);
+
+                if (Cache.Get(sHash) != null)
+                {
+                    pResult = Cache.Get(sHash) as PSObject;
+                }
+                else
+                {
+                    foreach (PSObject obj in WSMan.RunPSScript(sPSCode, remoteRunspace))
+                    {
+                        try
+                        {
+                            pResult = obj;
+                            Cache.Add(sHash, pResult, DateTime.Now + cacheTime);
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
+                        }
+                    }
+                }
+            }
+
+            //Trace the PowerShell Command
+            tsPSCode.TraceInformation(sPSCode);
+
+            return pResult;
+        }
+
+        public PSObject CallInstanceMethod(string WMIPath, string WMIMethod, string MethodParams)
+        {
+            PSObject pResult = null;
+            string sPSCode = string.Format("$a=[wmi]\"{0}\";$a.{1}({2})", WMIPath, WMIMethod, MethodParams);
+
+            if (!bShowPSCodeOnly)
+            {
+                string sHash = CreateHash(WMIPath + WMIMethod + MethodParams);
+
+                if (Cache.Get(sHash) != null)
+                {
+                    pResult = Cache.Get(sHash) as PSObject;
+                }
+                else
+                {
+                    foreach (PSObject obj in WSMan.RunPSScript(sPSCode, remoteRunspace))
+                    {
+                        try
+                        {
+                            pResult = obj;
+                            Cache.Add(sHash, pResult, DateTime.Now + cacheTime);
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
+                        }
+                    }
+                }
+            }
+
+            //Trace the PowerShell Command
+            tsPSCode.TraceInformation(sPSCode);
+
+            return pResult;
         }
 
         public string GetStringFromPS(string PSCode)
@@ -275,10 +391,12 @@ namespace sccmclictr.automation
     {
         //SCCM2007 Agent related properties 
         public functions.agentproperties AgentProperties;
+        public functions.softwaredistribution SoftwareDistribution;
 
         internal ccm(Runspace RemoteRunspace, TraceSource PSCode) : base(RemoteRunspace, PSCode)
         {
             AgentProperties = new functions.agentproperties(RemoteRunspace, PSCode);
+            SoftwareDistribution = new functions.softwaredistribution(RemoteRunspace, PSCode);
         }
     }
 }
