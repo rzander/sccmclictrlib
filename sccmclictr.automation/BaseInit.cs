@@ -162,7 +162,7 @@ namespace sccmclictr.automation
             PSObject pResult = null;
             if (!MethodParams.StartsWith("("))
                 MethodParams = "(" + MethodParams + ")";
-            string sPSCode = string.Format("$a=[wmiclass]\"{0}\";$a.{1}{2}", WMIPath, WMIMethod, MethodParams);
+            string sPSCode = string.Format("$a=[wmiclass]'{0}';$a.{1}{2}", WMIPath, WMIMethod, MethodParams);
 
             if (!bShowPSCodeOnly)
             {
@@ -198,8 +198,9 @@ namespace sccmclictr.automation
 
         public PSObject CallInstanceMethod(string WMIPath, string WMIMethod, string MethodParams)
         {
+            //$a=([wmi]"ROOT\ccm:SMS_Client=@").ClientVersion()
             PSObject pResult = null;
-            string sPSCode = string.Format("$a=[wmi]\"{0}\";$a.{1}({2})", WMIPath, WMIMethod, MethodParams);
+            string sPSCode = string.Format("$a=[wmi]'{0}';$a.{1}({2})", WMIPath, WMIMethod, MethodParams);
 
             if (!bShowPSCodeOnly)
             {
@@ -313,6 +314,49 @@ namespace sccmclictr.automation
             return sResult;
         }
 
+        public List<PSObject> GetProperties(string WMIPath, string ResultProperty)
+        {
+            //$a=([wmi]"ROOT\ccm:SMS_Client=@").ClientVersion
+            if (!ResultProperty.StartsWith("."))
+                ResultProperty = "." + ResultProperty;
+
+            List<PSObject> lResult = new List<PSObject>();
+
+            string sPSCode = string.Format("([wmi]'{0}'){1}", WMIPath, ResultProperty);
+
+            if (!bShowPSCodeOnly)
+            {
+                string sHash = CreateHash(WMIPath + ResultProperty);
+
+
+
+                if (Cache.Get(sHash) != null)
+                {
+                    lResult = Cache.Get(sHash) as List<PSObject>;
+                }
+                else
+                {
+                    foreach (PSObject obj in WSMan.RunPSScript(sPSCode, remoteRunspace))
+                    {
+                        try
+                        {
+                            lResult.Add(obj);
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
+                        }
+                    }
+                 Cache.Add(sHash, lResult, DateTime.Now + cacheTime);
+                }
+            }
+
+            //Trace the PowerShell Command
+            tsPSCode.TraceInformation(sPSCode);
+
+            return lResult;
+        }
+
         public void SetProperty(string WMIPath, string Property, string Value)
         {
             //$a=([wmi]"ROOT\ccm:SMS_Client=@");$a.AllowLocalAdminOverride=$false;$a.Put()
@@ -347,10 +391,10 @@ namespace sccmclictr.automation
             tsPSCode.TraceInformation(sPSCode);
         }
 
-        public List<object> GetObjects(string WMINamespace, string WQLQuery)
+        public List<PSObject> GetObjects(string WMINamespace, string WQLQuery)
         {
             //get-wmiobject -query "SELECT * FROM CacheInfoEx" -namespace "root\ccm\SoftMgmtAgent"
-            List<object> lResult = new List<object>();
+            List<PSObject> lResult = new List<PSObject>();
             string sPSCode = string.Format("get-wmiobject -query \"{0}\" -namespace \"{1}\"", WQLQuery, WMINamespace);
 
             if (!bShowPSCodeOnly)
@@ -359,7 +403,7 @@ namespace sccmclictr.automation
 
                 if (Cache.Get(sHash) != null)
                 {
-                    lResult = Cache.Get(sHash) as List<object>;
+                    lResult = Cache.Get(sHash) as List<PSObject>;
                 }
                 else
                 {
