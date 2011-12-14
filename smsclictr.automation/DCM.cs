@@ -159,7 +159,32 @@ namespace smsclictr.automation
 
                     if (xNode.SelectSingleNode("./ConstraintViolations[@Count > 0]") != null)
                     {
-                        oItem.ConstraintViolation = xNode.SelectSingleNode("./ConstraintViolations/ConstraintViolation").Attributes["Severity"].Value.ToString();
+                        string sSeverity = "";
+                        //Need to fix !
+                        foreach (XmlNode xSeverity in xNode.SelectNodes("./ConstraintViolations/ConstraintViolation"))
+                        {
+                            string sSev = xSeverity.Attributes["Severity"].Value.ToString();
+                            
+                            if (string.Compare(sSev, "Information", true) == 0)
+                            {
+                                if ((string.Compare(sSeverity, "Error", true) != 0) & (string.Compare(sSeverity, "Warning", true) != 0))
+                                    sSeverity = sSev;
+                            }
+
+                            if (string.Compare(sSev, "Warning", true) == 0)
+                            {
+                                if (string.Compare(sSeverity, "Error", true) != 0)
+                                    sSeverity = sSev;
+                            }
+
+                            if (string.Compare(sSev, "Error", true) == 0)
+                            {
+                                sSeverity = sSev;
+                            }
+                        }
+
+                        //oItem.ConstraintViolation = xNode.SelectSingleNode("./ConstraintViolations/ConstraintViolation").Attributes["Severity"].Value.ToString();
+                        oItem.ConstraintViolation = sSeverity;
                     }
                     else
                     {
