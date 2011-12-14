@@ -143,7 +143,7 @@ namespace smsclictr.automation
                 XmlDocument xDoc = new XmlDocument();
                 DCMBaseline.Get();
                 xDoc.LoadXml(DCMBaseline.Properties["ComplianceDetails"].Value.ToString());
-                XmlNodeList xNodes = xDoc.SelectNodes(@"//DiscoveryReport/BaselineCIComplianceState/PartsCompliance/PartCIComplianceState");
+                XmlNodeList xNodes = xDoc.SelectNodes(@"//DiscoveryReport//BaselineCIComplianceState/PartsCompliance/PartCIComplianceState");
                 foreach (XmlNode xNode in xNodes)
                 {
                     ConfigItem oItem = new ConfigItem();
