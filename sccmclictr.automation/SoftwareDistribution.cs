@@ -21,6 +21,8 @@ using System.Web;
 
 namespace sccmclictr.automation.functions
 {
+#if CM2012
+
     /// <summary>
     /// Template for an empty Class
     /// </summary>
@@ -355,5 +357,5 @@ namespace sccmclictr.automation.functions
         }
     }
 
-
+#endif
 }

@@ -1,73 +1,87 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
   <Class Name="sccmclictr.automation.functions.agentproperties">
-    <Position X="0.75" Y="5.25" Width="11.5" />
+    <Position X="0.75" Y="5.75" Width="11.5" />
     <TypeIdentifier>
-      <HashCode>AAEAAECCoUAAAAAgwQBAEABAiDACCAIACwgAwMAMAAA=</HashCode>
+      <HashCode>AAEAAECCoUABAAAgwYBAEABAiDACCAIACwgAwMAMAAA=</HashCode>
       <FileName>AgentProperties.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="sccmclictr.automation.functions.Class_Template">
-    <Position X="12.75" Y="5.75" Width="4.5" />
+    <Position X="12.75" Y="6" Width="4.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AIAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
       <FileName>Class_Template.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="sccmclictr.automation.baseInit">
     <Position X="9.5" Y="0.5" Width="5.75" />
     <TypeIdentifier>
-      <HashCode>EQAAAAwkAAAQgCAAAAECAAAAAFEAAAAAAAAAAABAAAA=</HashCode>
+      <HashCode>EQAACAwkAAAQgCAAAAECAAAAAFEAAAAAAAAAAgBAAAA=</HashCode>
       <FileName>BaseInit.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="sccmclictr.automation.ccm">
-    <Position X="17.75" Y="5.5" Width="3.75" />
+    <Position X="17.75" Y="6" Width="3.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEACAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAEACAAA=</HashCode>
       <FileName>BaseInit.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="sccmclictr.automation.SCCMAgent">
-    <Position X="20" Y="0.5" Width="6" />
+    <Position X="21.25" Y="0.5" Width="6" />
     <TypeIdentifier>
       <HashCode>AAAEAAQAAAAAAAACgQEBQAAAAAAAEAACABAQAAAAAAQ=</HashCode>
       <FileName>SCCMAgent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="sccmclictr.automation.WSMan">
-    <Position X="18.25" Y="0.5" Width="1.5" />
+    <Position X="15.5" Y="0.5" Width="5.5" />
     <TypeIdentifier>
       <HashCode>ACAAAAAAAAAAAAoAAAAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
       <FileName>WSMan.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="sccmclictr.automation.functions.softwaredistribution">
-    <Position X="1.75" Y="1" Width="6" />
+    <Position X="0.75" Y="1" Width="6" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAQAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
       <FileName>SoftwareDistribution.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="sccmclictr.automation.functions.CCM_SoftwareBase">
     <Position X="13.25" Y="8.5" Width="3.25" />
     <TypeIdentifier>
-      <HashCode>AAAQAAAAAIAgAIAAiAABAAQACAgAACAAAwEACAAAEAA=</HashCode>
+      <HashCode>AAAQAAQAAIEgAIAAiAABAAQACAgAACAAAwEACAAAEAA=</HashCode>
       <FileName>SoftwareDistribution.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="sccmclictr.automation.functions.CCM_AppDeploymentType">
-    <Position X="17" Y="13.25" Width="3.75" />
+    <Position X="17.75" Y="8.5" Width="3.75" />
     <TypeIdentifier>
       <HashCode>CAAiAABAAAAAAACAAAAAAKAAiEAAAAAAAAAAIAAAAgA=</HashCode>
       <FileName>SoftwareDistribution.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="sccmclictr.automation.functions.CCM_Application">
-    <Position X="13.25" Y="13.25" Width="3.5" />
+    <Position X="17.75" Y="12.5" Width="6" />
     <TypeIdentifier>
-      <HashCode>CAAiAiFAAAAIQAAIAAAgAOAACEAIAAAAAACAIAEAAAA=</HashCode>
+      <HashCode>CAAiAiFAACAIQAAMAAAgAOAASEAIAAAAAACAIAEAAAA=</HashCode>
       <FileName>SoftwareDistribution.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sccmclictr.automation.functions.swcache">
+    <Position X="22.5" Y="6" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAB4BAAAAAAAAgAAAAAAAAAAAAAAAAAAEAAAAEAA=</HashCode>
+      <FileName>SWCache.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sccmclictr.automation.functions.CacheInfoEx">
+    <Position X="27.75" Y="6" Width="5.5" />
+    <TypeIdentifier>
+      <HashCode>AQQSEAQAAAEAAAAggAIIAAAASAEAACAAEIAQCQAAEAA=</HashCode>
+      <FileName>SWCache.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

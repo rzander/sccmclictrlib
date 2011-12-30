@@ -226,7 +226,16 @@ namespace sccmclictr.automation.functions
         /// <returns></returns>
         public UInt32 RestartComputer()
         {
-            return UInt32.Parse(GetStringFromClassMethod(@"ROOT\ccm\ClientSDK:CCM_ClientUtilities", "RestartComputer()", "ReturnValue"));
+            try
+            {
+                return UInt32.Parse(GetStringFromClassMethod(@"ROOT\ccm\ClientSDK:CCM_ClientUtilities", "RestartComputer()", "ReturnValue"));
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError("RestartComputer: " + ex.Message);
+            }
+
+            return 1;
         }
 
         /// <summary>
@@ -364,6 +373,71 @@ namespace sccmclictr.automation.functions
             get
             {
                 return int.Parse(base.GetStringFromPS("$wmi = Get-WmiObject -Class Win32_OperatingSystem;$a = New-TimeSpan $wmi.ConvertToDateTime($wmi.LastBootUpTime) $(Get-Date);$a.Days"));
+            }
+        }
+
+        //Assigned SCCM Agent Site Code
+        public string AssignedSite
+        {
+            get
+            {
+                //Backup original Cache timout value
+                TimeSpan oldTime = base.cacheTime;
+
+                //Set new CacheTimeout for the AssignedSite Code to 1hour
+                base.cacheTime = new TimeSpan(1, 0, 0);
+                string sSiteCode = base.GetStringFromClassMethod(@"ROOT\ccm:SMS_Client", "GetAssignedSite()", "sSiteCode");
+
+                //Reset to original Cache timeout value
+                base.cacheTime = oldTime;
+
+                return sSiteCode;
+            }
+            set
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "SetAssignedSite", "\"" + value + "\"");
+                
+                //Remove Site Code from Cache
+                string sHash = CreateHash(@"ROOT\ccm:SMS_Client" + "GetAssignedSite()" + ".sSiteCode");
+                base.Cache.Remove(sHash);
+            }
+        }
+
+        //Configure Management Point
+        public string ManagementPoint
+        {
+            get
+            {
+                //Backup original Cache timout value
+                TimeSpan oldTime = base.cacheTime;
+
+                //Set new CacheTimeout for the ManagementPointe to 1hour
+                base.cacheTime = new TimeSpan(1, 0, 0);
+                
+                string sMP = base.GetProperty(@"ROOT\ccm:SMS_Authority.Name='SMS:" + AssignedSite + "'", "CurrentManagementPoint");
+                
+                //Reset to original Cache timeout value
+                base.cacheTime = oldTime;
+
+                return sMP;
+
+            }
+        }
+
+        //Configure Internet Management Point
+        public string ManagementPointInternet
+        {
+            get
+            {
+                return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Client\\Internet Facing\")).$(\"Internet MP Hostname\")");
+            }
+            set
+            {
+                base.GetStringFromPS("Set-ItemProperty -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Client\\Internet Facing\" -name \"Internet MP Hostname\" -value \"" + value + "\"");
+
+                //Remove Internet MP from Cache
+                string sHash = CreateHash("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Client\\Internet Facing\")).$(\"Internet MP Hostname\")");
+                base.Cache.Remove(sHash);
             }
         }
 

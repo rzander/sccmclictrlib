@@ -21,7 +21,7 @@ namespace sccmclictr.automation
     {
         private Runspace remoteRunspace { get; set; }
 
-        private string CreateHash(string str)
+        internal string CreateHash(string str)
         {
             // First we need to convert the string into bytes, which
             // means using a text encoder.
@@ -429,6 +429,30 @@ namespace sccmclictr.automation
 
             return lResult;
         }
+
+        public List<PSObject> GetObjectsFromPS(string PSCode)
+        {
+            List<PSObject> lResult = new List<PSObject>();
+
+            if (!bShowPSCodeOnly)
+            {
+                string sHash = CreateHash(PSCode);
+
+                if (Cache.Get(sHash) != null)
+                {
+                    lResult = Cache.Get(sHash) as List<PSObject>;
+                }
+                else
+                {
+                    lResult = WSMan.RunPSScript(PSCode, remoteRunspace).ToList<PSObject>();
+                }
+            }
+
+            //Trace the PowerShell Command
+            tsPSCode.TraceInformation(PSCode);
+
+            return lResult;
+        }
     }
 
     public class ccm : baseInit
@@ -436,11 +460,13 @@ namespace sccmclictr.automation
         //SCCM2007 Agent related properties 
         public functions.agentproperties AgentProperties;
         public functions.softwaredistribution SoftwareDistribution;
+        public functions.swcache SWCache;
 
         internal ccm(Runspace RemoteRunspace, TraceSource PSCode) : base(RemoteRunspace, PSCode)
         {
             AgentProperties = new functions.agentproperties(RemoteRunspace, PSCode);
             SoftwareDistribution = new functions.softwaredistribution(RemoteRunspace, PSCode);
+            SWCache = new functions.swcache(RemoteRunspace, PSCode);
         }
     }
 }
