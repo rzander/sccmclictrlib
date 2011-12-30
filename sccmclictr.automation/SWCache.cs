@@ -22,7 +22,7 @@ using System.Management;
 namespace sccmclictr.automation.functions
 {
     /// <summary>
-    /// Template for an empty Class
+    /// Class to manage SCCM Agent Cache (SW Packages, Updates etc.)
     /// </summary>
     public class swcache : baseInit
     {
@@ -70,8 +70,10 @@ namespace sccmclictr.automation.functions
         //Get all Package Directories in the SCCM Agent Cache Folder
         public List<string> GetPkgCacheDirs()
         {
+            string sSiteCode = base.GetStringFromClassMethod(@"ROOT\ccm:SMS_Client", "GetAssignedSite()", "sSiteCode");
+            
             List<string> lResult = new List<string>();
-            List<PSObject> lPSO = base.GetObjectsFromPS(@"dir '" + CachePath + "' | WHERE {$_.PsIsContainer -and $_.Name.StartsWith('C01')} | select Name");
+            List<PSObject> lPSO = base.GetObjectsFromPS(@"dir '" + CachePath + "' | WHERE {$_.PsIsContainer -and $_.Name.StartsWith('" + sSiteCode + "')} | select Name");
             foreach (PSObject pso in lPSO)
             {
                 lResult.Add(pso.Members["Name"].Value.ToString());
@@ -108,6 +110,19 @@ namespace sccmclictr.automation.functions
             set
             {
                 base.SetProperty(@"ROOT\ccm\SoftMgmtAgent:CacheConfig.ConfigKey='Cache'", "Size", value.ToString());
+            }
+        }
+
+        //SCCM Agent Cache in use property
+        public Boolean? InUse
+        {
+            get
+            {
+                string sUse = base.GetProperty(@"ROOT\ccm\SoftMgmtAgent:CacheConfig.ConfigKey='Cache'", "InUse");
+                if (string.IsNullOrEmpty(sUse))
+                    return null;
+                else
+                    return Boolean.Parse(sUse);
             }
         }
 
