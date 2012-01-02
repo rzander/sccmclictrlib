@@ -102,6 +102,28 @@ namespace sccmclictr.automation.functions
                 return lCache;
             }
         }
+
+        /// <summary>
+        /// Show required Software Updates and the current state
+        /// </summary>
+        public List<CCM_SoftwareUpdate> SoftwareUpdate
+        {
+            get
+            {
+                List<CCM_SoftwareUpdate> lCache = new List<CCM_SoftwareUpdate>();
+                List<PSObject> oObj = GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_SoftwareUpdate");
+                foreach (PSObject PSObj in oObj)
+                {
+                    //Get AppDTs sub Objects
+                    CCM_SoftwareUpdate oUpdStat = new CCM_SoftwareUpdate(PSObj, remoteRunspace, pSCode);
+
+                    oUpdStat.remoteRunspace = remoteRunspace;
+                    oUpdStat.pSCode = pSCode;
+                    lCache.Add(oUpdStat);
+                }
+                return lCache;
+            }
+        }
     }
 
     /// <summary>
@@ -513,7 +535,6 @@ namespace sccmclictr.automation.functions
 
     }
 
-
     /// <summary>
     /// Source:ROOT\ccm\SoftwareUpdates\Handler
     /// </summary>
@@ -673,7 +694,6 @@ namespace sccmclictr.automation.functions
 
     }
 
-
     /// <summary>
     /// Source:ROOT\ccm\SoftwareUpdates\WUAHandler
     /// </summary>
@@ -711,6 +731,61 @@ namespace sccmclictr.automation.functions
         public UInt32? ContentVersion { get; set; }
         public String ServiceId { get; set; }
         public String UniqueId { get; set; }
+        #endregion
+
+    }
+
+    /// <summary>
+    /// Source:ROOT\ccm\ClientSDK
+    /// </summary>
+    public class CCM_SoftwareUpdate : CCM_SoftwareBase
+    {
+        //Constructor
+        public CCM_SoftwareUpdate(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode) : base(WMIObject)
+        {
+            remoteRunspace = RemoteRunspace;
+            pSCode = PSCode;
+            
+            this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
+            this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
+            this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
+            this.__INSTANCE = true;
+            this.WMIObject = WMIObject;
+            this.ArticleID = WMIObject.Properties["ArticleID"].Value as String;
+            this.BulletinID = WMIObject.Properties["BulletinID"].Value as String;
+            this.ComplianceState = WMIObject.Properties["ComplianceState"].Value as UInt32?;
+            this.ExclusiveUpdate = WMIObject.Properties["ExclusiveUpdate"].Value as Boolean?;
+            this.OverrideServiceWindows = WMIObject.Properties["OverrideServiceWindows"].Value as Boolean?;
+            this.RebootOutsideServiceWindows = WMIObject.Properties["RebootOutsideServiceWindows"].Value as Boolean?;
+            string sRestartDeadline = WMIObject.Properties["RestartDeadline"].Value as string;
+            if (string.IsNullOrEmpty(sRestartDeadline))
+                this.RestartDeadline = null;
+            else
+                this.RestartDeadline = ManagementDateTimeConverter.ToDateTime(sRestartDeadline) as DateTime?;
+            this.UpdateID = WMIObject.Properties["UpdateID"].Value as String;
+            this.URL = WMIObject.Properties["URL"].Value as String;
+            this.UserUIExperience = WMIObject.Properties["UserUIExperience"].Value as Boolean?;
+        }
+
+        #region Properties
+
+        /*internal string __CLASS { get; set; }
+        internal string __NAMESPACE { get; set; }
+        internal bool __INSTANCE { get; set; }
+        internal string __RELPATH { get; set; }
+        internal PSObject WMIObject { get; set; }
+        internal Runspace remoteRunspace;
+        internal TraceSource pSCode; */
+        public String ArticleID { get; set; }
+        public String BulletinID { get; set; }
+        public UInt32? ComplianceState { get; set; }
+        public Boolean? ExclusiveUpdate { get; set; }
+        public Boolean? OverrideServiceWindows { get; set; }
+        public Boolean? RebootOutsideServiceWindows { get; set; }
+        public DateTime? RestartDeadline { get; set; }
+        public String UpdateID { get; set; }
+        public String URL { get; set; }
+        public Boolean? UserUIExperience { get; set; }
         #endregion
 
     }
