@@ -113,7 +113,6 @@ namespace sccmclictr.automation
 
             //Trace the PowerShell Command
             tsPSCode.TraceInformation(sPSCode);
-
             return sResult;
         }
 
@@ -461,12 +460,14 @@ namespace sccmclictr.automation
         public functions.agentproperties AgentProperties;
         public functions.softwaredistribution SoftwareDistribution;
         public functions.swcache SWCache;
+        public functions.softwareupdates SoftwareUpdates;
 
         internal ccm(Runspace RemoteRunspace, TraceSource PSCode) : base(RemoteRunspace, PSCode)
         {
             AgentProperties = new functions.agentproperties(RemoteRunspace, PSCode);
             SoftwareDistribution = new functions.softwaredistribution(RemoteRunspace, PSCode);
             SWCache = new functions.swcache(RemoteRunspace, PSCode);
+            SoftwareUpdates = new functions.softwareupdates(RemoteRunspace, PSCode);
         }
     }
 }
