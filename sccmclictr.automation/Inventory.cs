@@ -88,11 +88,13 @@ namespace sccmclictr.automation.functions
     /// </summary>
     public class AI_InstalledSoftwareCache
     {
+        internal baseInit oNewBase;
         //Constructor
         public AI_InstalledSoftwareCache(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
         {
             remoteRunspace = RemoteRunspace;
             pSCode = PSCode;
+            oNewBase = new baseInit(remoteRunspace, pSCode);
 
             this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
             this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
@@ -158,6 +160,13 @@ namespace sccmclictr.automation.functions
         public String UpgradeCode { get; set; }
         public String VersionMajor { get; set; }
         public String VersionMinor { get; set; }
+        #endregion
+
+        #region Methods
+        public void Uninstall()
+        {
+            oNewBase.GetStringFromPS("Invoke-Expression(\"" + UninstallString + "\")");
+        }
         #endregion
 
     }
