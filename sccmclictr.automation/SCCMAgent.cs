@@ -126,10 +126,8 @@ namespace sccmclictr.automation
             connectionInfo.AuthenticationMechanism = AuthenticationMechanism.Default;
             connectionInfo.ProxyAuthentication = AuthenticationMechanism.Negotiate;
 
+            //Initialzie connection
             Client = new ccm(remoteRunspace, PSCode);
-            //oAgentProperties = new agentProperties(remoteRunspace, PSCode);
-            //oSoftwareDistribution = new softwareDistribution(remoteRunspace, PSCode);
-
         }
 
         /// <summary>

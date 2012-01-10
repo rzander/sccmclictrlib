@@ -461,6 +461,7 @@ namespace sccmclictr.automation
         public functions.softwaredistribution SoftwareDistribution;
         public functions.swcache SWCache;
         public functions.softwareupdates SoftwareUpdates;
+        public functions.inventory Inventory;
 
         internal ccm(Runspace RemoteRunspace, TraceSource PSCode) : base(RemoteRunspace, PSCode)
         {
@@ -468,6 +469,7 @@ namespace sccmclictr.automation
             SoftwareDistribution = new functions.softwaredistribution(RemoteRunspace, PSCode);
             SWCache = new functions.swcache(RemoteRunspace, PSCode);
             SoftwareUpdates = new functions.softwareupdates(RemoteRunspace, PSCode);
+            Inventory = new functions.inventory(RemoteRunspace, PSCode);
         }
     }
 }

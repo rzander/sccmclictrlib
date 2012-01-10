@@ -57,6 +57,25 @@ namespace sccmclictr.automation.functions
                 return lApps;
             }
         }
+
+        public List<REG_ExecutionHistory> ExecutionHistory
+        {
+            get
+            {
+                List<REG_ExecutionHistory> lExec = new List<REG_ExecutionHistory>();
+                List<PSObject> oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\\System\" -Recurse | % { get-itemproperty -path  $_.PsPath }");
+                foreach (PSObject PSObj in oObj)
+                {
+                    //Get AppDTs sub Objects
+                    REG_ExecutionHistory oReg = new REG_ExecutionHistory(PSObj, remoteRunspace, pSCode);
+
+                    oReg.remoteRunspace = remoteRunspace;
+                    oReg.pSCode = pSCode;
+                    lExec.Add(oReg);
+                }
+                return lExec;
+            }
+        }
     }
 
     public class CCM_SoftwareBase
@@ -354,6 +373,47 @@ namespace sccmclictr.automation.functions
             this.Revision = WMIObject.Properties["Revision"].Value as string;
             this.SoftwareVersion = WMIObject.Properties["SoftwareVersion"].Value as string;
             this.UserUIExperience = WMIObject.Properties["UserUIExperience"].Value as bool?;
+        }
+    }
+
+    public class REG_ExecutionHistory
+    {
+        internal baseInit oNewBase;
+
+        internal string __RegPATH { get; set; }
+        internal PSObject RegObject { get; set; }
+        internal Runspace remoteRunspace;
+        internal TraceSource pSCode;
+
+        public String _ProgramID { get; set; }
+        public String _State { get; set; }
+        public DateTime? _RunStartTime { get; set; }
+        public int? SuccessOrFailureCode { get; set; }
+        public int? SuccessOrFailureReason { get; set; }
+
+        public REG_ExecutionHistory(PSObject RegObject, Runspace RemoteRunspace, TraceSource PSCode)
+        {
+            remoteRunspace = RemoteRunspace;
+            pSCode = PSCode;
+            oNewBase = new baseInit(remoteRunspace, pSCode);
+
+            this.__RegPATH = (RegObject.Properties["PSPath"].Value as string).Replace("Microsoft.PowerShell.Core\\Registry::", "");
+            this._ProgramID = RegObject.Properties["_ProgramID"].Value as string;
+            this._State = RegObject.Properties["_State"].Value as string;
+            this._RunStartTime = DateTime.Parse(RegObject.Properties["_RunStartTime"].Value as string);
+            
+            string sSuccessOrFailureCode = RegObject.Properties["SuccessOrFailureCode"].Value as string;
+            if (!string.IsNullOrEmpty(sSuccessOrFailureCode))
+            {
+                this.SuccessOrFailureCode = int.Parse(RegObject.Properties["SuccessOrFailureCode"].Value as string);
+            }
+            
+            string sSuccessOrFailureReason = RegObject.Properties["SuccessOrFailureReason"].Value as string;
+            if (!string.IsNullOrEmpty(sSuccessOrFailureReason))
+            {
+                this.SuccessOrFailureReason = int.Parse(RegObject.Properties["SuccessOrFailureReason"].Value as string);
+            }
+
         }
     }
 

@@ -135,7 +135,7 @@ namespace sccmclictr.automation.functions
                 return UInt32.Parse(base.GetProperty(@"ROOT\ccm\ClientSDK:CCM_ClientAgentSettings=@", "SuspendBitLocker"));
             }
         }
-        public String SWDBarndingSubtitle
+        public String SWDBrandingSubtitle
         {
             get
             {
@@ -266,6 +266,21 @@ namespace sccmclictr.automation.functions
             RebootDeadline = DateTime.Parse(oResult.Properties["RebootDeadline"].Value.ToString());
             RebootPending = Boolean.Parse(oResult.Properties["RebootPending"].Value.ToString());
             return oResult;
+        }
+
+        public Boolean RebootPending()
+        {
+            PSObject oResult = CallClassMethod(@"ROOT\ccm\ClientSDK:CCM_ClientUtilities", "DetermineIfRebootPending", "");
+            //DisableHideTime = DateTime.Parse(oResult.Properties["DisableHideTime"].Value.ToString());
+            //Boolean InGracePeriod = Boolean.Parse(oResult.Properties["InGracePeriod"].Value.ToString());
+            Boolean IsHardRebootPending = Boolean.Parse(oResult.Properties["IsHardRebootPending"].Value.ToString());
+            //RebootDeadline = DateTime.Parse(oResult.Properties["RebootDeadline"].Value.ToString());
+            Boolean RebootPending = Boolean.Parse(oResult.Properties["RebootPending"].Value.ToString());
+
+            if (IsHardRebootPending | RebootPending)
+                return true;
+            else
+                return false;
         }
         
         /// <summary>
