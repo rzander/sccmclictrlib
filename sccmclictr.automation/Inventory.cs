@@ -28,13 +28,15 @@ namespace sccmclictr.automation.functions
     {
         internal Runspace remoteRunspace;
         internal TraceSource pSCode;
+        internal ccm baseClient;
 
         //Constructor
-        public inventory(Runspace RemoteRunspace, TraceSource PSCode)
+        public inventory(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
             remoteRunspace = RemoteRunspace;
             pSCode = PSCode;
+            baseClient = oClient;
         }
 
         /// <summary>
@@ -79,7 +81,43 @@ namespace sccmclictr.automation.functions
                 }
                 return lCache;
             }
-        } 
+        }
+
+        /// <summary>
+        /// Return OS Architecture (x64 or x86)
+        /// </summary>
+        public string OSArchitecture
+        {
+            get
+            {
+                TimeSpan toldCacheTime = base.cacheTime;
+                
+                //Cache for 15minutes
+                base.cacheTime = new TimeSpan(0, 15, 0);
+
+                string sAddressWith = base.GetStringFromPS("(Get-WmiObject Win32_Processor | where {$_.DeviceID -eq 'CPU0'}).AddressWidth");
+                base.cacheTime = toldCacheTime;
+
+                if(string.Compare("64", sAddressWith, true) == 0)
+                    return "x64";
+                else
+                    return "x86";
+            }
+        }
+
+        /// <summary>
+        /// Return True if OS is x64 Architecture
+        /// </summary>
+        public Boolean isx64OS
+        {
+            get
+            {
+                if (OSArchitecture == "x64")
+                    return true;
+                else
+                    return false;
+            }
+        }
 
     }
 
@@ -220,6 +258,8 @@ namespace sccmclictr.automation.functions
         #endregion
 
     }
+
+
 
 
 

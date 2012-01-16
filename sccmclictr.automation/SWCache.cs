@@ -28,12 +28,15 @@ namespace sccmclictr.automation.functions
     {
         internal Runspace remoteRunspace;
         internal TraceSource pSCode;
+        internal ccm baseClient;
 
         //Constructor
-        public swcache(Runspace RemoteRunspace, TraceSource PSCode) : base(RemoteRunspace, PSCode)
+        public swcache(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
+            : base(RemoteRunspace, PSCode)
         {
             remoteRunspace = RemoteRunspace;
             pSCode = PSCode;
+            baseClient = oClient;
         }
 
         public List<CacheInfoEx> CachedContent

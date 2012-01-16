@@ -465,11 +465,11 @@ namespace sccmclictr.automation
 
         internal ccm(Runspace RemoteRunspace, TraceSource PSCode) : base(RemoteRunspace, PSCode)
         {
-            AgentProperties = new functions.agentproperties(RemoteRunspace, PSCode);
-            SoftwareDistribution = new functions.softwaredistribution(RemoteRunspace, PSCode);
-            SWCache = new functions.swcache(RemoteRunspace, PSCode);
-            SoftwareUpdates = new functions.softwareupdates(RemoteRunspace, PSCode);
-            Inventory = new functions.inventory(RemoteRunspace, PSCode);
+            AgentProperties = new functions.agentproperties(RemoteRunspace, PSCode, this);
+            SoftwareDistribution = new functions.softwaredistribution(RemoteRunspace, PSCode, this);
+            SWCache = new functions.swcache(RemoteRunspace, PSCode, this);
+            SoftwareUpdates = new functions.softwareupdates(RemoteRunspace, PSCode, this);
+            Inventory = new functions.inventory(RemoteRunspace, PSCode, this);
         }
     }
 }

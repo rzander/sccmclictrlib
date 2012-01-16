@@ -30,13 +30,15 @@ namespace sccmclictr.automation.functions
     {
         internal Runspace remoteRunspace;
         internal TraceSource pSCode;
+        internal ccm baseClient;
 
         //Constructor
-        public softwaredistribution(Runspace RemoteRunspace, TraceSource PSCode)
+        public softwaredistribution(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
             remoteRunspace = RemoteRunspace;
             pSCode = PSCode;
+            baseClient = oClient;
         }
 
         public List<CCM_Application> Applications
@@ -62,8 +64,23 @@ namespace sccmclictr.automation.functions
         {
             get
             {
+                
                 List<REG_ExecutionHistory> lExec = new List<REG_ExecutionHistory>();
-                List<PSObject> oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\\System\" -Recurse | % { get-itemproperty -path  $_.PsPath }");
+                List<PSObject> oObj = new List<PSObject>();
+                Boolean bisSCCM2012 = baseClient.AgentProperties.isSCCM2012;
+                Boolean bisx64OS = true;
+                
+                //Only Get Architecture if SCCM < 2012
+                if(!bisSCCM2012)
+                    bisx64OS = baseClient.Inventory.isx64OS;
+
+                if(bisSCCM2012)
+                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\\System\" -Recurse | % { get-itemproperty -path  $_.PsPath }");
+                if (!bisSCCM2012 & bisx64OS)
+                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\\System\" -Recurse | % { get-itemproperty -path  $_.PsPath }");
+                if (!bisSCCM2012 & !bisx64OS)
+                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\\System\" -Recurse | % { get-itemproperty -path  $_.PsPath }");
+
                 foreach (PSObject PSObj in oObj)
                 {
                     //Get AppDTs sub Objects
@@ -390,6 +407,8 @@ namespace sccmclictr.automation.functions
         public DateTime? _RunStartTime { get; set; }
         public int? SuccessOrFailureCode { get; set; }
         public int? SuccessOrFailureReason { get; set; }
+        public string UserID { get; set; }
+        public string PackageID { get; set; }
 
         public REG_ExecutionHistory(PSObject RegObject, Runspace RemoteRunspace, TraceSource PSCode)
         {
@@ -413,6 +432,9 @@ namespace sccmclictr.automation.functions
             {
                 this.SuccessOrFailureReason = int.Parse(RegObject.Properties["SuccessOrFailureReason"].Value as string);
             }
+
+            this.UserID = __RegPATH.Substring(__RegPATH.IndexOf("Execution History", StringComparison.CurrentCultureIgnoreCase)).Split('\\')[1];
+            this.PackageID = __RegPATH.Substring(__RegPATH.IndexOf(UserID, StringComparison.CurrentCultureIgnoreCase)).Split('\\')[1];
 
         }
     }

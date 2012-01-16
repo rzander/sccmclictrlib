@@ -24,9 +24,15 @@ namespace sccmclictr.automation.functions
 
     public class agentproperties : baseInit
     {
-        public agentproperties(Runspace RemoteRunspace, TraceSource PSCode)
+        internal Runspace remoteRunspace;
+        internal TraceSource pSCode;
+        internal ccm baseClient;
+        public agentproperties(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
+            remoteRunspace = RemoteRunspace;
+            pSCode = PSCode;
+            baseClient = oClient;
         }
 
 #if CM2012
@@ -342,7 +348,12 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                return base.GetProperty(@"ROOT\ccm:SMS_Client=@", "ClientVersion");
+                TimeSpan toldCacheTime = base.cacheTime;
+                base.cacheTime = new TimeSpan(0, 5, 0);
+                string sResult = base.GetProperty(@"ROOT\ccm:SMS_Client=@", "ClientVersion");
+                base.cacheTime = toldCacheTime;
+
+                return sResult;
             }
         }
 
@@ -453,6 +464,24 @@ namespace sccmclictr.automation.functions
                 //Remove Internet MP from Cache
                 string sHash = CreateHash("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Client\\Internet Facing\")).$(\"Internet MP Hostname\")");
                 base.Cache.Remove(sHash);
+            }
+        }
+
+        /// <summary>
+        /// determine if SCCM Agent is from SCCM2012(TRUE) otherwise it's SCCM2007(FALSE)
+        /// </summary>
+        public Boolean isSCCM2012
+        {
+            get
+            {
+                if (ClientVersion.StartsWith("5.", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
 

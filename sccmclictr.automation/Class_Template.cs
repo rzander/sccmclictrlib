@@ -28,13 +28,15 @@ namespace sccmclictr.automation.functions
     {
         internal Runspace remoteRunspace;
         internal TraceSource pSCode;
+        internal ccm baseClient;
 
         //Constructor
-        public Class_Template(Runspace RemoteRunspace, TraceSource PSCode)
+        public Class_Template(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
             remoteRunspace = RemoteRunspace;
             pSCode = PSCode;
+            baseClient = oClient;
         }
 
 
