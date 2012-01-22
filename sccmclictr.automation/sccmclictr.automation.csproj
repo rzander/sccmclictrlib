@@ -52,6 +52,8 @@
   <ItemGroup>
     <Compile Include="BaseInit.cs" />
     <Compile Include="Class_Template.cs" />
+    <Compile Include="Components.cs" />
+    <Compile Include="Policy.cs" />
     <Compile Include="Inventory.cs" />
     <Compile Include="SoftwareUpdates.cs" />
     <Compile Include="SWCache.cs" />

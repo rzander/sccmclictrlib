@@ -1,166 +1,245 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+<ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="sccmclictr.automation.functions.agentproperties">
-    <Position X="0.75" Y="5.75" Width="11.5" />
+    <Position X="0.5" Y="6.25" Width="3.75" />
     <TypeIdentifier>
-      <HashCode>AAEAAECCoUABAAAgwYBAEABAiDACCAIACwgAwMAMAAA=</HashCode>
+      <HashCode>AAEAAESC4UABAAAgwYBAEQBAiDACCAIACwAAxMAMkAA=</HashCode>
       <FileName>AgentProperties.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="sccmclictr.automation.functions.softwareupdates">
-    <Position X="12.75" Y="6" Width="4.5" />
+  <Class Name="sccmclictr.automation.functions.Class_Template">
+    <Position X="5" Y="6.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAQEAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
-      <FileName>SoftwareUpdates.cs</FileName>
-      <NewMemberFileName>Class_Template.cs</NewMemberFileName>
+      <HashCode>AIAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkAA=</HashCode>
+      <FileName>Class_Template.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="sccmclictr.automation.baseInit">
-    <Position X="9.5" Y="0.5" Width="5.75" />
+  <Class Name="sccmclictr.automation.functions._PublicClass" Collapsed="true">
+    <Position X="21.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EQAACAwkAAAQgCAAAAECAAAAAFEAAAAAAAAAAgBAAAA=</HashCode>
-      <FileName>BaseInit.cs</FileName>
+      <HashCode>AAAQAAQAAAEAAAAAAAAAAAAACAAAACAAAAAACAAAEAA=</HashCode>
+      <FileName>Class_Template.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="sccmclictr.automation.ccm">
-    <Position X="17.75" Y="6" Width="3.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAgAAAAkACAAA=</HashCode>
-      <FileName>BaseInit.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.SCCMAgent">
-    <Position X="21.25" Y="0.5" Width="6" />
-    <TypeIdentifier>
-      <HashCode>AAAEAAQAAAAAAAACgQEBQAAAAAAAEAACABAQAAAAAAQ=</HashCode>
-      <FileName>SCCMAgent.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.WSMan">
-    <Position X="15.5" Y="0.5" Width="5.5" />
-    <TypeIdentifier>
-      <HashCode>ACAAAAAAAAAAAAoAAAAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
-      <FileName>WSMan.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.functions.softwaredistribution">
-    <Position X="0.75" Y="1" Width="6" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAQAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
-      <FileName>SoftwareDistribution.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.functions.CCM_SoftwareBase">
-    <Position X="13.25" Y="9.5" Width="3.25" />
-    <TypeIdentifier>
-      <HashCode>AAAQAAQAAIEgAIAAiAABAAQACAgAACAAAwEACAAAEAA=</HashCode>
-      <FileName>SoftwareDistribution.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.functions.CCM_AppDeploymentType">
-    <Position X="17.75" Y="8.5" Width="3.75" />
-    <TypeIdentifier>
-      <HashCode>CAAiAABAAAAAAACAAAAAAKAAiEAAAAAAAAAAIAAAAgA=</HashCode>
-      <FileName>SoftwareDistribution.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.functions.CCM_Application">
-    <Position X="17.75" Y="12.5" Width="6" />
-    <TypeIdentifier>
-      <HashCode>CAAiAiFAACAIQAAMAAAgAOAASEAIAAAAAACAIAEAAAA=</HashCode>
-      <FileName>SoftwareDistribution.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.functions.swcache">
-    <Position X="22.5" Y="6" Width="4.25" />
-    <TypeIdentifier>
-      <HashCode>AAAAAB4BAAAAAAAAgAAAAAAAAAAAAAAAAAAEACAAEAA=</HashCode>
-      <FileName>SWCache.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.functions.CacheInfoEx">
-    <Position X="27.75" Y="6" Width="5.5" />
-    <TypeIdentifier>
-      <HashCode>AQQSEAQAAAEAAAAggAIIAAAASAEAACAAEIAQCQAAEAA=</HashCode>
-      <FileName>SWCache.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.functions.CCM_UpdateStatus">
-    <Position X="25.25" Y="12.25" Width="6" />
-    <TypeIdentifier>
-      <HashCode>EAAQAAQFiAEAAMABAAgAAAAAGAAQACAAAAAACAAAUAA=</HashCode>
-      <FileName>SoftwareUpdates.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.functions.CCM_SourceStatus">
-    <Position X="31.5" Y="12.25" Width="3" />
-    <TypeIdentifier>
-      <HashCode>AAAQAAQFgAEAAAABAAgAAAAACAAAACAAAAAACAAAEAA=</HashCode>
-      <FileName>SoftwareUpdates.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.functions.CCM_AssignmentCompliance">
-    <Position X="18" Y="19" Width="3.25" />
-    <TypeIdentifier>
-      <HashCode>AAAQAAQAAAkgAAAAAAAAAAAACAAAACAAAAAAiAAAEAE=</HashCode>
-      <FileName>SoftwareUpdates.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.functions.CCM_AssignmentJobEx1">
-    <Position X="21.5" Y="19" Width="3.5" />
-    <TypeIdentifier>
-      <HashCode>AACQQAQAEAkgAAAAAAAAAAAACAACACAAAAAACAAAEAA=</HashCode>
-      <FileName>SoftwareUpdates.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.functions.CCM_ComponentState">
-    <Position X="29" Y="19" Width="3.25" />
-    <TypeIdentifier>
-      <HashCode>AABQAAQAAAkACAAAAAAAAAEACAAAAiAAAAAACAAAEAA=</HashCode>
-      <FileName>SoftwareUpdates.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.functions.CCM_DeploymentTaskEx1">
-    <Position X="14.5" Y="19" Width="3.25" />
-    <TypeIdentifier>
-      <HashCode>AAAQAAQAAgkgAAAAAAAAAAAACAAACCAAAAAACAAAEAA=</HashCode>
-      <FileName>SoftwareUpdates.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.functions.CCM_SUMLocalSettings">
-    <Position X="25.25" Y="19" Width="3.5" />
-    <TypeIdentifier>
-      <HashCode>AAAQAAQAAAkAAAAAAAAAAAAACAQAACAAAAAACAAAEAA=</HashCode>
-      <FileName>SoftwareUpdates.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.functions.CCM_TargetedUpdateEx1">
-    <Position X="32.5" Y="19" Width="3.75" />
-    <TypeIdentifier>
-      <HashCode>AAQQBISEAAkAAEAIAAAACAgAKQgCgCEAAIEADQBAEAE=</HashCode>
-      <FileName>SoftwareUpdates.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.functions.inventory">
-    <Position X="35.75" Y="0.5" Width="4.75" />
+  <Class Name="sccmclictr.automation.functions.components">
+    <Position X="14.25" Y="6.25" Width="2" />
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
     <NestedTypes>
-      <Class Name="sccmclictr.automation.functions.inventory.AI_InstalledSoftwareCache">
+      <Class Name="sccmclictr.automation.functions.components.CCM_InstalledComponent" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Components.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.components.CCM_ComponentClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Components.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAABAAAAAAAAAAAAAgAAAAAAAAAAAAAkAA=</HashCode>
+      <FileName>Components.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sccmclictr.automation.functions.inventory">
+    <Position X="19.75" Y="6.25" Width="2" />
+    <NestedTypes>
+      <Class Name="sccmclictr.automation.functions.inventory.AI_InstalledSoftwareCache" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Inventory.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="sccmclictr.automation.functions.inventory.InventoryActionStatus">
+      <Class Name="sccmclictr.automation.functions.inventory.InventoryActionStatus" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Inventory.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAEAg=</HashCode>
+      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAJAAAAkAg=</HashCode>
       <FileName>Inventory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sccmclictr.automation.functions.requestedPolicy">
+    <Position X="7.25" Y="6.25" Width="2.25" />
+    <NestedTypes>
+      <Class Name="sccmclictr.automation.functions.requestedPolicy.CCM_Policy" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.requestedPolicy.CCM_ComponentClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.requestedPolicy.CCM_SoftwareUpdatesClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.requestedPolicy.CCM_RootCACertificates" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAAAgAAQAAAAAAAAAAkAE=</HashCode>
+      <FileName>Policy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sccmclictr.automation.functions.softwaredistribution">
+    <Position X="11.75" Y="6.25" Width="1.75" />
+    <NestedTypes>
+      <Class Name="sccmclictr.automation.functions.softwaredistribution.CCM_SoftwareBase" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareDistribution.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwaredistribution.CCM_AppDeploymentType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareDistribution.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwaredistribution.CCM_Application" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareDistribution.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwaredistribution.REG_ExecutionHistory" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareDistribution.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkAA=</HashCode>
+      <FileName>SoftwareDistribution.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sccmclictr.automation.functions.softwareupdates">
+    <Position X="10" Y="6.25" Width="1.5" />
+    <NestedTypes>
+      <Class Name="sccmclictr.automation.functions.softwareupdates.CCM_TargetedUpdateEx1" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareUpdates.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwareupdates.CCM_SUMLocalSettings" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareUpdates.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwareupdates.CCM_UpdateStatus" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareUpdates.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwareupdates.CCM_UpdatesDeploymentJobEx1" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareUpdates.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwareupdates.CCM_UpdateSource" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareUpdates.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwareupdates.CCM_ComponentState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareUpdates.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwareupdates.CCM_SoftwareUpdate" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareUpdates.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwareupdates.CCM_BundledUpdateEx1" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareUpdates.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwareupdates.CCM_AssignmentJobEx1" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareUpdates.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwareupdates.CCM_AssignmentCompliance" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareUpdates.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwareupdates.CCM_AtomicUpdateEx1" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareUpdates.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwareupdates.CCM_SourceStatus" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareUpdates.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwareupdates.CCM_DeploymentTaskEx1" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareUpdates.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAQEAAAAAAIAAAAAAAAAAAAAAAIAAAAAAAAAkAA=</HashCode>
+      <FileName>SoftwareUpdates.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sccmclictr.automation.functions.swcache">
+    <Position X="16.75" Y="6.25" Width="2.25" />
+    <NestedTypes>
+      <Class Name="sccmclictr.automation.functions.swcache.CacheInfoEx" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SWCache.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAB4BAAAAAAAAgAAAAAAAAAAAAAAAAAAEACAAkAA=</HashCode>
+      <FileName>SWCache.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sccmclictr.automation.baseInit">
+    <Position X="9.75" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>EQAACAwkAAAQgCAAAAECAAAAAFEAAAAAAAAAAgBAAAA=</HashCode>
+      <FileName>BaseInit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sccmclictr.automation.ccm">
+    <Position X="2.75" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAKAAAAAAAAAAAAAAAAIAgAAAAkACAAA=</HashCode>
+      <FileName>BaseInit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sccmclictr.automation.SCCMAgent" Collapsed="true">
+    <Position X="26.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAQAAAAAAAACgQEBQAAAAAAAEAACABAQAAAAAAQ=</HashCode>
+      <FileName>SCCMAgent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sccmclictr.automation.WSMan" Collapsed="true">
+    <Position X="28.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAoAAAAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>WSMan.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sccmclictr.automation.Properties.Resources" Collapsed="true">
+    <Position X="24.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

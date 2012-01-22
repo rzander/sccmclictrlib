@@ -154,98 +154,100 @@ namespace sccmclictr.automation.functions
             }
         }
 
+        public class CacheInfoEx
+        {
+            internal baseInit oNewBase;
+
+            public CacheInfoEx(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
+            {
+                remoteRunspace = RemoteRunspace;
+                pSCode = PSCode;
+                oNewBase = new baseInit(remoteRunspace, pSCode);
+
+                this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
+                this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
+                this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
+                this.__INSTANCE = true;
+                this.WMIObject = WMIObject;
+
+                this.CacheId = WMIObject.Properties["CacheId"].Value as string;
+                this.ContentId = WMIObject.Properties["ContentId"].Value as string;
+                this.ContentSize = WMIObject.Properties["ContentSize"].Value as UInt32?;
+                this.ContentType = WMIObject.Properties["ContentType"].Value as string;
+                this.ContentVer = WMIObject.Properties["ContentVer"].Value as string;
+
+                string sLastEvalTime = WMIObject.Properties["LastReferenced"].Value as string;
+                if (string.IsNullOrEmpty(sLastEvalTime))
+                    this.LastReferenced = null;
+                else
+                    this.LastReferenced = ManagementDateTimeConverter.ToDateTime(sLastEvalTime) as DateTime?;
+
+                this.Location = WMIObject.Properties["Location"].Value as string;
+                this.PersistInCache = WMIObject.Properties["PersistInCache"].Value as UInt32?;
+                this.ReferenceCount = WMIObject.Properties["ReferenceCount"].Value as UInt32?;
+            }
+
+            #region Properties
+            internal string __CLASS { get; set; }
+            internal string __NAMESPACE { get; set; }
+            internal bool __INSTANCE { get; set; }
+            internal string __RELPATH { get; set; }
+            internal PSObject WMIObject { get; set; }
+            internal Runspace remoteRunspace;
+            internal TraceSource pSCode;
+
+            public String CacheId { get; set; }
+            public String ContentId { get; set; }
+            public UInt32? ContentSize { get; set; }
+            public String ContentType { get; set; }
+            public String ContentVer { get; set; }
+            public DateTime? LastReferenced { get; set; }
+            public String Location { get; set; }
+            public UInt32? PersistInCache { get; set; }
+            public UInt32? ReferenceCount { get; set; }
+            #endregion
+
+            #region Methods
+
+            //Cehck if Folder exists
+            public Boolean FolderExists()
+            {
+                string sResult = oNewBase.GetStringFromPS("Test-Path \"" + Location + "\"");
+                if (string.IsNullOrEmpty(sResult))
+                    return false;
+                else
+                {
+                    return Boolean.Parse(sResult);
+                }
+            }
+
+            //Delete Cached Item from Disk
+            public void DeleteFolder()
+            {
+                //Prevent deletion of all Files
+                if (Location.Length > 3)
+                {
+                    oNewBase.GetStringFromPS("Remove-Item \"" + Location + "\" -recurse");
+                }
+            }
+
+            //Delete Cached Item from Database (WMI)
+            public void DeleteFromDatabase()
+            {
+                oNewBase.GetStringFromPS("[wmi]'" + __NAMESPACE + ":" + __RELPATH + "' | remove-wmiobject");
+            }
+
+            //Delete Cached Item from Database (WMI) and from Disk
+            public void Delete()
+            {
+                DeleteFolder();
+                DeleteFromDatabase();
+            }
+
+            #endregion
+        }
+
     }
 
-    public class CacheInfoEx
-    {
-        internal baseInit oNewBase;
 
-        public CacheInfoEx(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
-        {
-            remoteRunspace = RemoteRunspace;
-            pSCode = PSCode;
-            oNewBase = new baseInit(remoteRunspace, pSCode);
-
-            this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
-            this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
-            this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
-            this.__INSTANCE = true;
-            this.WMIObject = WMIObject;
-
-            this.CacheId = WMIObject.Properties["CacheId"].Value as string;
-            this.ContentId = WMIObject.Properties["ContentId"].Value as string;
-            this.ContentSize = WMIObject.Properties["ContentSize"].Value as UInt32?;
-            this.ContentType = WMIObject.Properties["ContentType"].Value as string;
-            this.ContentVer = WMIObject.Properties["ContentVer"].Value as string;
-
-            string sLastEvalTime = WMIObject.Properties["LastReferenced"].Value as string;
-            if (string.IsNullOrEmpty(sLastEvalTime))
-                this.LastReferenced = null;
-            else
-                this.LastReferenced = ManagementDateTimeConverter.ToDateTime(sLastEvalTime) as DateTime?;
-
-            this.Location = WMIObject.Properties["Location"].Value as string;
-            this.PersistInCache = WMIObject.Properties["PersistInCache"].Value as UInt32?;
-            this.ReferenceCount = WMIObject.Properties["ReferenceCount"].Value as UInt32?;
-        }
-
-        #region Properties
-        internal string __CLASS { get; set; }
-        internal string __NAMESPACE { get; set; }
-        internal bool __INSTANCE { get; set; }
-        internal string __RELPATH { get; set; }
-        internal PSObject WMIObject { get; set; }
-        internal Runspace remoteRunspace;
-        internal TraceSource pSCode;
-
-        public String CacheId { get; set; }
-        public String ContentId { get; set; }
-        public UInt32? ContentSize { get; set; }
-        public String ContentType { get; set; }
-        public String ContentVer { get; set; }
-        public DateTime? LastReferenced { get; set; }
-        public String Location { get; set; }
-        public UInt32? PersistInCache { get; set; }
-        public UInt32? ReferenceCount { get; set; }
-        #endregion
-
-        #region Methods
-
-        //Cehck if Folder exists
-        public Boolean FolderExists()
-        {
-            string sResult = oNewBase.GetStringFromPS("Test-Path \"" + Location +"\"" );
-            if (string.IsNullOrEmpty(sResult))
-                return false;
-            else
-            {
-                return Boolean.Parse(sResult);
-            }
-        }
-
-        //Delete Cached Item from Disk
-        public void DeleteFolder()
-        {
-            //Prevent deletion of all Files
-            if (Location.Length > 3)
-            {
-                oNewBase.GetStringFromPS("Remove-Item \"" + Location + "\" -recurse");
-            }
-        }
-
-        //Delete Cached Item from Database (WMI)
-        public void DeleteFromDatabase()
-        {
-            oNewBase.GetStringFromPS("[wmi]'" + __NAMESPACE + ":" + __RELPATH + "' | remove-wmiobject");
-        }
-
-        //Delete Cached Item from Database (WMI) and from Disk
-        public void Delete()
-        {
-            DeleteFolder();
-            DeleteFromDatabase();
-        }
-        
-        #endregion
-    }
 }

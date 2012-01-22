@@ -456,12 +456,13 @@ namespace sccmclictr.automation
 
     public class ccm : baseInit
     {
-        //SCCM2007 Agent related properties 
         public functions.agentproperties AgentProperties;
         public functions.softwaredistribution SoftwareDistribution;
         public functions.swcache SWCache;
         public functions.softwareupdates SoftwareUpdates;
         public functions.inventory Inventory;
+        public functions.components Components;
+        public functions.requestedPolicy RequestedPolicy;
 
         internal ccm(Runspace RemoteRunspace, TraceSource PSCode) : base(RemoteRunspace, PSCode)
         {
@@ -470,6 +471,8 @@ namespace sccmclictr.automation
             SWCache = new functions.swcache(RemoteRunspace, PSCode, this);
             SoftwareUpdates = new functions.softwareupdates(RemoteRunspace, PSCode, this);
             Inventory = new functions.inventory(RemoteRunspace, PSCode, this);
+            Components = new functions.components(RemoteRunspace, PSCode, this);
+            RequestedPolicy = new functions.requestedPolicy(RemoteRunspace, PSCode, this);
         }
     }
 }
