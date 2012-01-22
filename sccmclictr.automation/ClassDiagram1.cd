@@ -7,22 +7,8 @@
       <FileName>AgentProperties.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="sccmclictr.automation.functions.Class_Template">
-    <Position X="5" Y="6.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AIAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkAA=</HashCode>
-      <FileName>Class_Template.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="sccmclictr.automation.functions._PublicClass" Collapsed="true">
-    <Position X="21.25" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAQAAQAAAEAAAAAAAAAAAAACAAAACAAAAAACAAAEAA=</HashCode>
-      <FileName>Class_Template.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="sccmclictr.automation.functions.components">
-    <Position X="14.25" Y="6.25" Width="2" />
+    <Position X="19.25" Y="6.25" Width="2.5" />
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
@@ -44,7 +30,10 @@
     </TypeIdentifier>
   </Class>
   <Class Name="sccmclictr.automation.functions.inventory">
-    <Position X="19.75" Y="6.25" Width="2" />
+    <Position X="25" Y="6.25" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
     <NestedTypes>
       <Class Name="sccmclictr.automation.functions.inventory.AI_InstalledSoftwareCache" Collapsed="true">
         <TypeIdentifier>
@@ -62,37 +51,123 @@
       <FileName>Inventory.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="sccmclictr.automation.functions.requestedPolicy">
-    <Position X="7.25" Y="6.25" Width="2.25" />
+  <Class Name="sccmclictr.automation.policy.actualConfig">
+    <Position X="8" Y="6.25" Width="3.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
     <NestedTypes>
-      <Class Name="sccmclictr.automation.functions.requestedPolicy.CCM_Policy" Collapsed="true">
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_SoftwareCenterSettings" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Policy.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="sccmclictr.automation.functions.requestedPolicy.CCM_ComponentClientConfig" Collapsed="true">
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_OutOfBandManagementClientConfig" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Policy.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="sccmclictr.automation.functions.requestedPolicy.CCM_SoftwareUpdatesClientConfig" Collapsed="true">
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_Policy" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Policy.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="sccmclictr.automation.functions.requestedPolicy.CCM_RootCACertificates" Collapsed="true">
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_SoftwareUpdatesClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_HardwareInventoryClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_ConfigurationManagementClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_RemoteTools_Policy" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_RootCACertificates" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_SoftwareDistributionClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_ComponentClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_ApplicationManagementClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_ClientAgentConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_SoftwareInventoryClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_MulticastConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_TargetingSettings" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_NetworkAccessAccount" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_SourceUpdateClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_PowerManagementClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_SystemHealthClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.actualConfig.CCM_SoftwareMeteringClientConfig" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Policy.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAAAgAAQAAAAAAAAAAkAE=</HashCode>
+      <HashCode>AAAAAAQABgAgACACCQACiAAQAAgCAUAAAAIIAAAAmAE=</HashCode>
       <FileName>Policy.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="sccmclictr.automation.functions.softwaredistribution">
-    <Position X="11.75" Y="6.25" Width="1.75" />
+    <Position X="27.75" Y="6.25" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
     <NestedTypes>
       <Class Name="sccmclictr.automation.functions.softwaredistribution.CCM_SoftwareBase" Collapsed="true">
         <TypeIdentifier>
@@ -121,7 +196,10 @@
     </TypeIdentifier>
   </Class>
   <Class Name="sccmclictr.automation.functions.softwareupdates">
-    <Position X="10" Y="6.25" Width="1.5" />
+    <Position X="15.75" Y="6.25" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
     <NestedTypes>
       <Class Name="sccmclictr.automation.functions.softwareupdates.CCM_TargetedUpdateEx1" Collapsed="true">
         <TypeIdentifier>
@@ -195,7 +273,10 @@
     </TypeIdentifier>
   </Class>
   <Class Name="sccmclictr.automation.functions.swcache">
-    <Position X="16.75" Y="6.25" Width="2.25" />
+    <Position X="22.25" Y="6.25" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
     <NestedTypes>
       <Class Name="sccmclictr.automation.functions.swcache.CacheInfoEx" Collapsed="true">
         <TypeIdentifier>
@@ -209,37 +290,159 @@
     </TypeIdentifier>
   </Class>
   <Class Name="sccmclictr.automation.baseInit">
-    <Position X="9.75" Y="0.5" Width="2.25" />
+    <Position X="13.25" Y="0.5" Width="2.25" />
     <TypeIdentifier>
       <HashCode>EQAACAwkAAAQgCAAAAECAAAAAFEAAAAAAAAAAgBAAAA=</HashCode>
       <FileName>BaseInit.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="sccmclictr.automation.ccm">
-    <Position X="2.75" Y="6.25" Width="1.75" />
+    <Position X="4.5" Y="6.25" Width="3.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="sccmclictr.automation.ccm.policy">
+        <TypeIdentifier>
+          <NewMemberFileName>BaseInit.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAKAAAAAAAAAAAAAAAAIAgAAAAkACAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAIAAAAIAAAAAAAAAAAIAgAAAAkACAAA=</HashCode>
       <FileName>BaseInit.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="sccmclictr.automation.SCCMAgent" Collapsed="true">
-    <Position X="26.5" Y="3.5" Width="1.5" />
+  <Class Name="sccmclictr.automation.SCCMAgent">
+    <Position X="16" Y="0.5" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAEAAQAAAAAAAACgQEBQAAAAAAAEAACABAQAAAAAAQ=</HashCode>
       <FileName>SCCMAgent.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="sccmclictr.automation.WSMan" Collapsed="true">
-    <Position X="28.25" Y="3.5" Width="1.5" />
+  <Class Name="sccmclictr.automation.WSMan">
+    <Position X="18.5" Y="0.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>ACAAAAAAAAAAAAoAAAAAAAAAAAAAAAAABAAAAAAAAAA=</HashCode>
       <FileName>WSMan.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="sccmclictr.automation.Properties.Resources" Collapsed="true">
-    <Position X="24.75" Y="3.5" Width="1.5" />
+  <Class Name="sccmclictr.automation.Properties.Resources">
+    <Position X="21.25" Y="0.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sccmclictr.automation.policy.requestedConfig">
+    <Position X="11.75" Y="6.25" Width="3.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_SoftwareDistributionClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_SoftwareCenterSettings" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_RemoteTools_Policy" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_SoftwareUpdatesClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_OutOfBandManagementClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_ApplicationManagementClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_SystemHealthClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_HardwareInventoryClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_ComponentClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_PowerManagementClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_TargetingSettings" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_MulticastConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_SoftwareInventoryClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_SourceUpdateClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_ClientAgentConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_RootCACertificates" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_ConfigurationManagementClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_Policy" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_NetworkAccessAccount" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.policy.requestedConfig.CCM_SoftwareMeteringClientConfig" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Policy.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAQABgAgACACCQACiAAQAAgCAUAAAAIIAAAAmAE=</HashCode>
+      <FileName>Policy.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

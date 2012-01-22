@@ -462,7 +462,23 @@ namespace sccmclictr.automation
         public functions.softwareupdates SoftwareUpdates;
         public functions.inventory Inventory;
         public functions.components Components;
-        public functions.requestedPolicy RequestedPolicy;
+
+        /// <summary>
+        /// SCCM Agent Policy Classes and functions...
+        /// </summary>
+        public policy Policy;
+
+        public class policy 
+        {
+            public sccmclictr.automation.policy.requestedConfig RequestedConfig;
+            public sccmclictr.automation.policy.actualConfig ActualConfig;
+
+            internal policy(Runspace RemoteRunspace, TraceSource PSCode, ccm oBase)
+            {
+                RequestedConfig = new sccmclictr.automation.policy.requestedConfig(RemoteRunspace, PSCode, oBase);
+                ActualConfig = new sccmclictr.automation.policy.actualConfig(RemoteRunspace, PSCode, oBase);
+            }
+        }
 
         internal ccm(Runspace RemoteRunspace, TraceSource PSCode) : base(RemoteRunspace, PSCode)
         {
@@ -472,7 +488,9 @@ namespace sccmclictr.automation
             SoftwareUpdates = new functions.softwareupdates(RemoteRunspace, PSCode, this);
             Inventory = new functions.inventory(RemoteRunspace, PSCode, this);
             Components = new functions.components(RemoteRunspace, PSCode, this);
-            RequestedPolicy = new functions.requestedPolicy(RemoteRunspace, PSCode, this);
+
+            policy Policy = new policy(RemoteRunspace, PSCode, this);
+
         }
     }
 }
