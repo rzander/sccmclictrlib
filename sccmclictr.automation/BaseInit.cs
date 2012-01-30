@@ -462,24 +462,14 @@ namespace sccmclictr.automation
         public functions.softwareupdates SoftwareUpdates;
         public functions.inventory Inventory;
         public functions.components Components;
+        public sccmclictr.automation.policy.requestedConfig RequestedConfig;
+        public sccmclictr.automation.policy.actualConfig ActualConfig;
 
         /// <summary>
-        /// SCCM Agent Policy Classes and functions...
+        /// Constructor
         /// </summary>
-        public policy Policy;
-
-        public class policy 
-        {
-            public sccmclictr.automation.policy.requestedConfig RequestedConfig;
-            public sccmclictr.automation.policy.actualConfig ActualConfig;
-
-            internal policy(Runspace RemoteRunspace, TraceSource PSCode, ccm oBase)
-            {
-                RequestedConfig = new sccmclictr.automation.policy.requestedConfig(RemoteRunspace, PSCode, oBase);
-                ActualConfig = new sccmclictr.automation.policy.actualConfig(RemoteRunspace, PSCode, oBase);
-            }
-        }
-
+        /// <param name="RemoteRunspace"></param>
+        /// <param name="PSCode"></param>
         internal ccm(Runspace RemoteRunspace, TraceSource PSCode) : base(RemoteRunspace, PSCode)
         {
             AgentProperties = new functions.agentproperties(RemoteRunspace, PSCode, this);
@@ -488,8 +478,8 @@ namespace sccmclictr.automation
             SoftwareUpdates = new functions.softwareupdates(RemoteRunspace, PSCode, this);
             Inventory = new functions.inventory(RemoteRunspace, PSCode, this);
             Components = new functions.components(RemoteRunspace, PSCode, this);
-
-            policy Policy = new policy(RemoteRunspace, PSCode, this);
+            RequestedConfig = new sccmclictr.automation.policy.requestedConfig(RemoteRunspace, PSCode, this);
+            ActualConfig = new sccmclictr.automation.policy.actualConfig(RemoteRunspace, PSCode, this);
 
         }
     }

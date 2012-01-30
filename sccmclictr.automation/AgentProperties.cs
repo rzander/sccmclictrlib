@@ -455,15 +455,33 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Client\\Internet Facing\")).$(\"Internet MP Hostname\")");
+                if (baseClient.Inventory.isx64OS)
+                {
+                    return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Client\\Internet Facing\")).$(\"Internet MP Hostname\")");
+                }
+                else
+                {
+                    return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Client\\Internet Facing\")).$(\"Internet MP Hostname\")");
+                }
             }
             set
             {
-                base.GetStringFromPS("Set-ItemProperty -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Client\\Internet Facing\" -name \"Internet MP Hostname\" -value \"" + value + "\"");
+                if (baseClient.Inventory.isx64OS)
+                {
+                    base.GetStringFromPS("Set-ItemProperty -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Client\\Internet Facing\" -name \"Internet MP Hostname\" -value \"" + value + "\"");
 
-                //Remove Internet MP from Cache
-                string sHash = CreateHash("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Client\\Internet Facing\")).$(\"Internet MP Hostname\")");
-                base.Cache.Remove(sHash);
+                    //Remove Internet MP from Cache
+                    string sHash = CreateHash("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Client\\Internet Facing\")).$(\"Internet MP Hostname\")");
+                    base.Cache.Remove(sHash);
+                }
+                else
+                {
+                    base.GetStringFromPS("Set-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Client\\Internet Facing\" -name \"Internet MP Hostname\" -value \"" + value + "\"");
+
+                    //Remove Internet MP from Cache
+                    string sHash = CreateHash("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Client\\Internet Facing\")).$(\"Internet MP Hostname\")");
+                    base.Cache.Remove(sHash);
+                }
             }
         }
 
@@ -484,6 +502,36 @@ namespace sccmclictr.automation.functions
                 }
             }
         }
+
+        /// <summary>
+        /// Get the local Path of the SCCM Agent (e.g. C:\Windows\CCM )
+        /// </summary>
+        public string LocalSCCMAgentPath
+        {
+            get
+            {
+                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                {
+                    return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Client\\Configuration\\Client Properties\")).$(\"Local SMS Path\")");
+                }
+                else
+                {
+                    return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Client\\Configuration\\Client Properties\")).$(\"Local SMS Path\")");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get the local Path of the SCCM Agent Log Files (e.g. C:\windows\ccm\logs)
+        /// </summary>
+        public string LocalSCCMAgentLogPath
+        {
+            get
+            {
+                return System.IO.Path.Combine(LocalSCCMAgentPath, "Logs");
+            }
+        }
+
 
     }
 }
