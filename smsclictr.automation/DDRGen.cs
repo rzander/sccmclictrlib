@@ -248,7 +248,7 @@ namespace smsclictr.automation
             object[] args = new object[5];
             args[0] = Name;
             if (Value != null)
-                args[1] = Value.ToString("MM/dd/yy HH:mm:ss");
+                args[1] = Value.ToString("MM/dd/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
             else
                 args[1] = "(null)";
             args[2] = 4; //Length
