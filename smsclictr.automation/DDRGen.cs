@@ -194,7 +194,10 @@ namespace smsclictr.automation
             AddBegin();
             object[] args = new object[5];
             args[0] = Name;
-            args[1] = Value;
+            if (Value != null)
+                args[1] = Value;
+            else
+                args[1] = "(null)";
             args[2] = 4; //Length
             args[3] = ((int)DDRPropertyFlag).ToString();
             args[4] = "8";
@@ -230,6 +233,29 @@ namespace smsclictr.automation
             }
 
             AddEndArray();
+            AddEnd();
+        }
+
+        /// <summary>
+        /// Add DateTime value (MM/DD/YY HH:MM:SS) 
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <param name="Value"></param>
+        /// <param name="DDRPropertyFlag"></param>
+        public void DDRAddDateTime(string Name, DateTime Value, DDRPropertyFlagsEnum DDRPropertyFlag)
+        {
+            AddBegin();
+            object[] args = new object[5];
+            args[0] = Name;
+            if (Value != null)
+                args[1] = Value.ToString("MM/dd/yy HH:mm:ss");
+            else
+                args[1] = "(null)";
+            args[2] = 4; //Length
+            args[3] = ((int)DDRPropertyFlag).ToString();
+            args[4] = "12";
+
+            sDDR.AppendLine(string.Format("<{3}><{0}><{4}><{2}><{1}>", args));
             AddEnd();
         }
     }
