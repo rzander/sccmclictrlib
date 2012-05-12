@@ -532,6 +532,64 @@ namespace sccmclictr.automation.functions
             }
         }
 
+        /// <summary>
+        /// Get or Set the Server Locator Point (in CM12 it's the Management Point)
+        /// </summary>
+        public string ServerLocatorPoint
+        {
+            get
+            {
+                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                {
+                    return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\")).$(\"SMSSLP\")");
+                }
+                else
+                {
+                    return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\")).$(\"SMSSLP\")");
+                }
+            }
 
+            set
+            {
+                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                {
+                    base.GetStringFromPS(string.Format("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\" -name \"SMSSLP\" -PropertyType String -Force-value {0}", value));
+                }
+                else
+                {
+                    base.GetStringFromPS(string.Format("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\CCM\" -name \"SMSSLP\" -PropertyType String -Force -value {0}", value));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get or Set the DNS Suffix
+        /// </summary>
+        public string DNSSuffix
+        {
+            get
+            {
+                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                {
+                    return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\\LocationServices\")).$(\"DnsSuffix\")");
+                }
+                else
+                {
+                    return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\\LocationServices\")).$(\"DnsSuffix\")");
+                }
+            }
+
+            set
+            {
+                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                {
+                    base.GetStringFromPS(string.Format("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\\LocationServices\" -name \"DnsSuffix\" -PropertyType String -Force-value {0}", value));
+                }
+                else
+                {
+                    base.GetStringFromPS(string.Format("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\CCM\\LocationServices\" -name \"DnsSuffix\" -PropertyType String -Force -value {0}", value));
+                }
+            }
+        }
     }
 }
