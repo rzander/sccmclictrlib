@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgentActions.cs" />
     <Compile Include="BaseInit.cs" />
     <Compile Include="Class_Template.cs" />
     <Compile Include="Components.cs" />

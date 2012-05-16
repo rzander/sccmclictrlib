@@ -457,6 +457,7 @@ namespace sccmclictr.automation
     public class ccm : baseInit
     {
         public functions.agentproperties AgentProperties;
+        public functions.agentactions AgentActions;
         public functions.softwaredistribution SoftwareDistribution;
         public functions.swcache SWCache;
         public functions.softwareupdates SoftwareUpdates;
@@ -473,6 +474,7 @@ namespace sccmclictr.automation
         internal ccm(Runspace RemoteRunspace, TraceSource PSCode) : base(RemoteRunspace, PSCode)
         {
             AgentProperties = new functions.agentproperties(RemoteRunspace, PSCode, this);
+            AgentActions = new functions.agentactions(RemoteRunspace, PSCode, this);
             SoftwareDistribution = new functions.softwaredistribution(RemoteRunspace, PSCode, this);
             SWCache = new functions.swcache(RemoteRunspace, PSCode, this);
             SoftwareUpdates = new functions.softwareupdates(RemoteRunspace, PSCode, this);
