@@ -83,7 +83,7 @@ namespace sccmclictr.automation
                 ResultProperty = "." + ResultProperty;
 
             string sResult = "";
-            string sPSCode = string.Format("$a=[wmiclass]\"{0}\";$a.{1}{2}", WMIPath, WMIMethod, ResultProperty);
+            string sPSCode = string.Format("([wmiclass]\"{0}\").{1}{2}", WMIPath, WMIMethod, ResultProperty);
 
             if (!bShowPSCodeOnly)
             {
@@ -122,7 +122,7 @@ namespace sccmclictr.automation
                 ResultProperty = "(" + ResultProperty + ")";
 
             string sResult = "";
-            string sPSCode = string.Format("$a=[wmi]\"{0}\";$a.{1}{2}", WMIPath, WMIMethod, ResultProperty);
+            string sPSCode = string.Format("([wmi]\"{0}\").{1}{2}", WMIPath, WMIMethod, ResultProperty);
 
             if (!bShowPSCodeOnly)
             {
@@ -161,7 +161,7 @@ namespace sccmclictr.automation
             PSObject pResult = null;
             if (!MethodParams.StartsWith("("))
                 MethodParams = "(" + MethodParams + ")";
-            string sPSCode = string.Format("$a=[wmiclass]'{0}';$a.{1}{2}", WMIPath, WMIMethod, MethodParams);
+            string sPSCode = string.Format("([wmiclass]'{0}').{1}{2}", WMIPath, WMIMethod, MethodParams);
 
             if (!bShowPSCodeOnly)
             {
@@ -199,7 +199,7 @@ namespace sccmclictr.automation
         {
             //$a=([wmi]"ROOT\ccm:SMS_Client=@").ClientVersion()
             PSObject pResult = null;
-            string sPSCode = string.Format("$a=[wmi]'{0}';$a.{1}({2})", WMIPath, WMIMethod, MethodParams);
+            string sPSCode = string.Format("([wmi]'{0}').{1}({2})", WMIPath, WMIMethod, MethodParams);
 
             if (!bShowPSCodeOnly)
             {
