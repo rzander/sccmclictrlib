@@ -429,7 +429,7 @@ namespace sccmclictr.automation.functions
             }
         }
 
-        //Configure Management Point
+        //Get the assigned Management Point
         public string ManagementPoint
         {
             get
@@ -482,6 +482,38 @@ namespace sccmclictr.automation.functions
                     string sHash = CreateHash("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Client\\Internet Facing\")).$(\"Internet MP Hostname\")");
                     base.Cache.Remove(sHash);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Get the assigned Proxy Management Point
+        /// </summary>
+        public string ManagementPointProxy
+        {
+            get
+            {
+                //Backup original Cache timout value
+                TimeSpan oldTime = base.cacheTime;
+
+                //Set new CacheTimeout for the ManagementPoint to 1 Minute
+                base.cacheTime = new TimeSpan(0, 1, 0);
+
+                string sMP = "";
+                
+                try
+                {
+                    foreach (PSObject oMP in base.GetObjects(@"ROOT\CCM", "SELECT * FROM SMS_MPProxyInformation Where State = 'Active'"))
+                    {
+                        sMP = oMP.Properties["Name"].Value.ToString();
+                    }
+                }
+                catch { }
+
+                //Reset to original Cache timeout value
+                base.cacheTime = oldTime;
+
+                return sMP;
+
             }
         }
 
@@ -553,11 +585,17 @@ namespace sccmclictr.automation.functions
             {
                 if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
                 {
-                    base.GetStringFromPS(string.Format("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\" -name \"SMSSLP\" -PropertyType String -Force-value {0}", value));
+                    base.GetStringFromPS(string.Format("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\" -name \"SMSSLP\" -PropertyType String -Force -value {0}", value));
+                    //Remove SLP from Cache
+                    string sHash = CreateHash("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\")).$(\"SMSSLP\")");
+                    base.Cache.Remove(sHash);
                 }
                 else
                 {
                     base.GetStringFromPS(string.Format("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\CCM\" -name \"SMSSLP\" -PropertyType String -Force -value {0}", value));
+                    //Remove SLP from Cache
+                    string sHash = CreateHash("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\")).$(\"SMSSLP\")");
+                    base.Cache.Remove(sHash);
                 }
             }
         }
@@ -583,11 +621,110 @@ namespace sccmclictr.automation.functions
             {
                 if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
                 {
-                    base.GetStringFromPS(string.Format("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\\LocationServices\" -name \"DnsSuffix\" -PropertyType String -Force-value {0}", value));
+                    base.GetStringFromPS(string.Format("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\\LocationServices\" -name \"DnsSuffix\" -PropertyType String -Force -value {0}", value));
+                    //Remove DNS from Cache
+                    string sHash = CreateHash("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\\LocationServices\")).$(\"DnsSuffix\")");
+                    base.Cache.Remove(sHash);
                 }
                 else
                 {
                     base.GetStringFromPS(string.Format("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\CCM\\LocationServices\" -name \"DnsSuffix\" -PropertyType String -Force -value {0}", value));
+                    //Remove DNS from Cache
+                    string sHash = CreateHash("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\\LocationServices\")).$(\"DnsSuffix\")");
+                    base.Cache.Remove(sHash);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get or Set the HTTP Port from the Agent.
+        /// </summary>
+        public int? HTTPPort
+        {
+            get
+            {
+                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                {
+                    string sPort = base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\")).$(\"HttpPort\")");
+                    if(!string.IsNullOrEmpty(sPort))
+                        return int.Parse(sPort);
+                    else
+                        return null; 
+                }
+                else
+                {
+                    //return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\\LocationServices\")).$(\"DnsSuffix\")");
+                    string sPort = base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\")).$(\"HttpPort\")");
+                    if (!string.IsNullOrEmpty(sPort))
+                        return int.Parse(sPort);
+                    else
+                        return null; 
+                }
+            }
+
+            set
+            {
+                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                {
+                    base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\")).$(\"HttpPort\")");
+
+                    //Remove HTTP Port from Cache
+                    string sHash = CreateHash("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\")).$(\"HttpPort\")");
+                    base.Cache.Remove(sHash);
+                }
+                else
+                {
+                    base.GetStringFromPS(string.Format("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\CCM\" -name \"HttpPort\" -Type DWORD -force -value {0}", value.ToString()));
+                    
+                    //Remove HTTP Port from Cache
+                    string sHash = CreateHash(string.Format("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\CCM\" -name \"HttpPort\" -Type DWORD -force -value {0}", value.ToString()));
+                    base.Cache.Remove(sHash);
+                }
+            } 
+        }
+
+        /// <summary>
+        /// Get or Set the HTTPS Port from the Agent.
+        /// </summary>
+        public int? HTTPSPort
+        {
+            get
+            {
+                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                {
+                    string sPort = base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\")).$(\"HttpsPort\")");
+                    if (!string.IsNullOrEmpty(sPort))
+                        return int.Parse(sPort);
+                    else
+                        return null;
+                }
+                else
+                {
+                    string sPort = base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\")).$(\"HttpsPort\")");
+                    if (!string.IsNullOrEmpty(sPort))
+                        return int.Parse(sPort);
+                    else
+                        return null;
+                }
+            }
+
+            set
+            {
+                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                {
+                    base.GetStringFromPS(string.Format("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\" -name \"HttpsPort\" -Type DWORD -force -value {0}", value.ToString()));
+
+                    //Remove HTTPS Port from Cache
+                    string sHash = CreateHash("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\")).$(\"HttpsPort\")");
+                    base.Cache.Remove(sHash);
+                }
+                else
+                {
+                    base.GetStringFromPS(string.Format("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\CCM\" -name \"HttpsPort\" -Type DWORD -force -value {0}", value.ToString()));
+                    
+                    //Remove HTTPS Port from Cache
+                    string sHash = CreateHash("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\")).$(\"HttpsPort\")");
+                    base.Cache.Remove(sHash);
                 }
             }
         }
