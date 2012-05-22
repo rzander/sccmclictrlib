@@ -104,12 +104,18 @@ namespace sccmclictr.automation.functions
 
                 try
                 {
+                    //Disable Tracing
+                    PSCode.Switch.Level = SourceLevels.Off;
+
                     this.Enabled = oClient.Components.ComponentClientConfig.First(t => t.ComponentName == this.Name).Enabled;
                 }
                 catch
                 {
                     this.Enabled = false;
+                    PSCode.Switch.Level = SourceLevels.All;
                 }
+
+                PSCode.Switch.Level = SourceLevels.All;
             }
 
             #region Properties
