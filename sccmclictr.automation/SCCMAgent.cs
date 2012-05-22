@@ -33,6 +33,24 @@ namespace sccmclictr.automation
         public WSManConnectionInfo ConnectionInfo { get { return connectionInfo; } }
 
         /// <summary>
+        /// Get the connected computername.
+        /// </summary>
+        public string TargetHostname
+        {
+            get 
+            {
+                try
+                {
+                    return ConnectionInfo.ComputerName;
+                }
+                catch
+                {
+                    return "";
+                }
+            }
+        }
+
+        /// <summary>
         /// TraceSource for all PowerShell Command
         /// </summary>
         public TraceSource PSCode {get; set; }
@@ -55,7 +73,6 @@ namespace sccmclictr.automation
                 }
             }
         }
-
 
         /// <summary>
         /// Connect to a remote SCCM Agent by using WSMan
