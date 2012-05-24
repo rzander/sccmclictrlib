@@ -43,6 +43,12 @@ namespace sccmclictr.automation.functions
         {
             get
             {
+                //Backup original Cache timout value
+                TimeSpan oldTime = base.cacheTime;
+
+                //Set new CacheTimeout for the AssignedSite Code to 1 minute
+                base.cacheTime = new TimeSpan(0, 1, 0);
+
                 List<CacheInfoEx> lCache = new List<CacheInfoEx>();
                 List<PSObject> oObj = GetObjects(@"ROOT\ccm\SoftMgmtAgent", "SELECT * FROM CacheInfoEx");
                 foreach (PSObject PSObj in oObj)
@@ -54,6 +60,10 @@ namespace sccmclictr.automation.functions
                     oCIEx.pSCode = pSCode;
                     lCache.Add(oCIEx);
                 }
+
+                //Reset to original Cache timeout value
+                base.cacheTime = oldTime;
+
                 return lCache;
             }
         }
@@ -95,7 +105,7 @@ namespace sccmclictr.automation.functions
             }
             set
             {
-                base.SetProperty(@"ROOT\ccm\SoftMgmtAgent:CacheConfig.ConfigKey='Cache'", "Location", value);
+                base.SetProperty(@"ROOT\ccm\SoftMgmtAgent:CacheConfig.ConfigKey='Cache'", "Location", "'" + value + "'");
             }
         }
 
