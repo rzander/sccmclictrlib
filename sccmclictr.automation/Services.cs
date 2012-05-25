@@ -39,15 +39,12 @@ namespace sccmclictr.automation.functions
             baseClient = oClient;
         }
 
-        /// <summary>
-        /// Get a List of all Services
-        /// </summary>
-        public List<Win32_Service> Win32_Services
+        internal List<Win32_Service> win32_Services
         {
             get
             {
                 List<Win32_Service> lCache = new List<Win32_Service>();
-                List<PSObject> oObj = GetObjects(@"ROOT\cimv2", "SELECT * FROM Win32_Service");
+                List<PSObject> oObj = GetObjects(@"ROOT\cimv2", "SELECT * FROM Win32_Service", false);
                 foreach (PSObject PSObj in oObj)
                 {
                     //Get AppDTs sub Objects
@@ -59,6 +56,36 @@ namespace sccmclictr.automation.functions
                 }
                 return lCache;
             }
+
+            set { }
+
+        }
+
+        /// <summary>
+        /// Get a List of all Services
+        /// </summary>
+        public List<Win32_Service> Win32_Services
+        {
+            get
+            {
+                return win32_Services;
+            }
+        }
+
+        public void Reload()
+        {
+            List<Win32_Service> lCache = new List<Win32_Service>();
+            List<PSObject> oObj = GetObjects(@"ROOT\cimv2", "SELECT * FROM Win32_Service", true);
+            foreach (PSObject PSObj in oObj)
+            {
+                //Get AppDTs sub Objects
+                Win32_Service oCIEx = new Win32_Service(PSObj, remoteRunspace, pSCode);
+
+                oCIEx.remoteRunspace = remoteRunspace;
+                oCIEx.pSCode = pSCode;
+                lCache.Add(oCIEx);
+            }
+            win32_Services = lCache;
         }
 
         /// <summary>
@@ -68,6 +95,9 @@ namespace sccmclictr.automation.functions
         /// <returns></returns>
         public Win32_Service GetService(string ServiceName)
         {
+            //Remove cached results
+            string sHash1 = base.CreateHash(@"ROOT\cimv2" + string.Format("SELECT * FROM Win32_Service WHERE Name ='{0}'", ServiceName));
+            base.Cache.Remove(sHash1);
 
             List<PSObject> oObj = GetObjects(@"ROOT\cimv2", string.Format("SELECT * FROM Win32_Service WHERE Name ='{0}'", ServiceName));
             foreach (PSObject PSObj in oObj)
@@ -132,32 +162,87 @@ namespace sccmclictr.automation.functions
         /// <returns>0</returns>
         public UInt32 StartService()
         {
+            //Remove cached results
+            string sHash1 = oNewBase.CreateHash(string.Format("(Get-Service '{0}').Start()", base.Name));
+            oNewBase.Cache.Remove(sHash1);
+            string sHash2 = oNewBase.CreateHash(string.Format("(Get-Service '{0}').Status", base.Name));
+            oNewBase.Cache.Remove(sHash2);
+
             oNewBase.GetStringFromPS(string.Format("(Get-Service '{0}').Start()", base.Name));
             base.State = oNewBase.GetStringFromPS(string.Format("(Get-Service '{0}').Status", base.Name));
+
+            //Remove cached results
+            oNewBase.Cache.Remove(sHash1);
+            oNewBase.Cache.Remove(sHash2);
+            
             return 0;
         }
         public UInt32 StopService()
         {
+            //Remove cached results
+            string sHash1 = oNewBase.CreateHash(string.Format("(Get-Service '{0}').Stop()", base.Name));
+            oNewBase.Cache.Remove(sHash1);
+            string sHash2 = oNewBase.CreateHash(string.Format("(Get-Service '{0}').Status", base.Name));
+            oNewBase.Cache.Remove(sHash2);
+
             oNewBase.GetStringFromPS(string.Format("(Get-Service '{0}').Stop()", base.Name));
             base.State = oNewBase.GetStringFromPS(string.Format("(Get-Service '{0}').Status", base.Name));
+
+            //Remove cached results
+            oNewBase.Cache.Remove(sHash1);
+            oNewBase.Cache.Remove(sHash2);
+
             return 0;
         }
         public UInt32 RestartService()
         {
+            //Remove cached results
+            string sHash1 = oNewBase.CreateHash(string.Format("Restart-Service '{0}'", base.Name));
+            oNewBase.Cache.Remove(sHash1);
+            string sHash2 = oNewBase.CreateHash(string.Format("(Get-Service '{0}').Status", base.Name));
+            oNewBase.Cache.Remove(sHash2);
+
             oNewBase.GetStringFromPS(string.Format("Restart-Service '{0}'", base.Name));
             base.State = oNewBase.GetStringFromPS(string.Format("(Get-Service '{0}').Status", base.Name));
+
+            //Remove cached results
+            oNewBase.Cache.Remove(sHash1);
+            oNewBase.Cache.Remove(sHash2);
+
             return 0;
         }
         public UInt32 PauseService()
         {
+            //Remove cached results
+            string sHash1 = oNewBase.CreateHash(string.Format("(Get-Service '{0}').Pause()", base.Name));
+            oNewBase.Cache.Remove(sHash1);
+            string sHash2 = oNewBase.CreateHash(string.Format("(Get-Service '{0}').Status", base.Name));
+            oNewBase.Cache.Remove(sHash2);
+
             oNewBase.GetStringFromPS(string.Format("(Get-Service '{0}').Pause()", base.Name));
             base.State = oNewBase.GetStringFromPS(string.Format("(Get-Service '{0}').Status", base.Name));
+
+            //Remove cached results
+            oNewBase.Cache.Remove(sHash1);
+            oNewBase.Cache.Remove(sHash2);
+
             return 0;
         }
         public UInt32 ResumeService()
         {
+            //Remove cached results
+            string sHash1 = oNewBase.CreateHash(string.Format("(Get-Service '{0}').Start()", base.Name));
+            oNewBase.Cache.Remove(sHash1);
+            string sHash2 = oNewBase.CreateHash(string.Format("(Get-Service '{0}').Status", base.Name));
+            oNewBase.Cache.Remove(sHash2);
+
             oNewBase.GetStringFromPS(string.Format("(Get-Service '{0}').Start()", base.Name));
             base.State = oNewBase.GetStringFromPS(string.Format("(Get-Service '{0}').Status", base.Name));
+
+            //Remove cached results
+            oNewBase.Cache.Remove(sHash1);
+            oNewBase.Cache.Remove(sHash2);
+
             return 0;
         }
         /*

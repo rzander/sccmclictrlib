@@ -251,7 +251,8 @@ namespace sccmclictr.automation
                     {
                         try
                         {
-                            sResult = obj.BaseObject.ToString();
+                            //sResult = obj.BaseObject.ToString();
+                            sResult = obj.ToString();
                             Cache.Add(sHash, sResult, DateTime.Now + cacheTime);
                             break;
                         }
@@ -392,6 +393,12 @@ namespace sccmclictr.automation
 
         public List<PSObject> GetObjects(string WMINamespace, string WQLQuery)
         {
+            //return cached Items
+            return GetObjects(WMINamespace, WQLQuery, false);
+        }
+
+        public List<PSObject> GetObjects(string WMINamespace, string WQLQuery, bool Reload)
+        {
             //get-wmiobject -query "SELECT * FROM CacheInfoEx" -namespace "root\ccm\SoftMgmtAgent"
             List<PSObject> lResult = new List<PSObject>();
             string sPSCode = string.Format("get-wmiobject -query \"{0}\" -namespace \"{1}\"", WQLQuery, WMINamespace);
@@ -399,8 +406,7 @@ namespace sccmclictr.automation
             if (!bShowPSCodeOnly)
             {
                 string sHash = CreateHash(WMINamespace + WQLQuery);
-
-                if (Cache.Get(sHash) != null)
+                if ((Cache.Get(sHash) != null) & !Reload)
                 {
                     lResult = Cache.Get(sHash) as List<PSObject>;
                 }

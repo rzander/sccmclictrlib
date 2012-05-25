@@ -46,8 +46,8 @@ namespace sccmclictr.automation.functions
                 //Backup original Cache timout value
                 TimeSpan oldTime = base.cacheTime;
 
-                //Set new CacheTimeout for the AssignedSite Code to 1 minute
-                base.cacheTime = new TimeSpan(0, 1, 0);
+                //Set new CacheTimeout for the AssignedSite Code to 30 seconds
+                base.cacheTime = new TimeSpan(0, 0, 30);
 
                 List<CacheInfoEx> lCache = new List<CacheInfoEx>();
                 List<PSObject> oObj = GetObjects(@"ROOT\ccm\SoftMgmtAgent", "SELECT * FROM CacheInfoEx");
