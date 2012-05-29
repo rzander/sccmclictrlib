@@ -470,6 +470,7 @@ namespace sccmclictr.automation
         public functions.inventory Inventory;
         public functions.components Components;
         public functions.services Services;
+        public functions.processes Process;
         public sccmclictr.automation.policy.requestedConfig RequestedConfig;
         public sccmclictr.automation.policy.actualConfig ActualConfig;
 
@@ -490,6 +491,7 @@ namespace sccmclictr.automation
             RequestedConfig = new sccmclictr.automation.policy.requestedConfig(RemoteRunspace, PSCode, this);
             ActualConfig = new sccmclictr.automation.policy.actualConfig(RemoteRunspace, PSCode, this);
             Services = new functions.services(RemoteRunspace, PSCode, this);
+            Process = new functions.processes(RemoteRunspace, PSCode, this);
 
         }
     }
