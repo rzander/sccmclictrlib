@@ -78,7 +78,6 @@ namespace sccmclictr.automation.functions
             List<PSObject> oObj = GetObjects(@"ROOT\cimv2", "SELECT * FROM Win32_Service", true);
             foreach (PSObject PSObj in oObj)
             {
-                //Get AppDTs sub Objects
                 Win32_Service oCIEx = new Win32_Service(PSObj, remoteRunspace, pSCode);
 
                 oCIEx.remoteRunspace = remoteRunspace;
@@ -113,6 +112,8 @@ namespace sccmclictr.automation.functions
         }
 
     }
+
+
 
     /// <summary>
     /// Source:ROOT\CIMV2

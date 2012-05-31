@@ -36,7 +36,6 @@ namespace sccmclictr.automation.functions
             baseClient = oClient;
         }
 
-
         public List<Win32_Process> Win32_Processes
         {
             get
@@ -57,6 +56,69 @@ namespace sccmclictr.automation.functions
 
             set { }
         }
+
+        internal List<ExtProcess> LoadExtProcess(bool Reload)
+        {
+            List<ExtProcess> lCache = new List<ExtProcess>();
+            TimeSpan orgTime = cacheTime;
+            //Set Cache TTL to 10seconds.
+            cacheTime = new TimeSpan(0, 0, 10);
+            List<PSObject> oObj = GetObjectsFromPS("Get-WMIObject win32_Process | Foreach {  $owner = $_.GetOwner();  $_ | Add-Member -MemberType \"Noteproperty\" -name \"Owner\" -value $(\"{0}\\{1}\" -f $owner.Domain, $owner.User) -passthru }", Reload);
+            foreach (PSObject PSObj in oObj)
+            {
+                //Get AppDTs sub Objects
+                ExtProcess oCIEx = new ExtProcess(PSObj, remoteRunspace, pSCode);
+
+                oCIEx.remoteRunspace = remoteRunspace;
+                oCIEx.pSCode = pSCode;
+                lCache.Add(oCIEx);
+            }
+            cacheTime = orgTime;
+            return lCache;
+        }
+
+        internal List<ExtProcess> extProcess
+        {
+            get
+            {
+                return LoadExtProcess(false);
+            }
+
+            set { }
+
+        }
+
+        public List<ExtProcess> ExtProcesses(bool Reload)
+        {
+            return LoadExtProcess(Reload);
+        }
+    }
+
+    /// <summary>
+    /// Extended Win32_Process with Owner attribute
+    /// </summary>
+    public class ExtProcess : Win32_Process
+    {
+        //Constructor
+        public ExtProcess(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
+            : base(WMIObject, RemoteRunspace, PSCode)
+        {
+            remoteRunspace = RemoteRunspace;
+            pSCode = PSCode;
+
+            oNewBase = new baseInit(remoteRunspace, pSCode);
+
+            this.Owner = WMIObject.Properties["Owner"].Value as string;
+        }
+
+        internal baseInit oNewBase;
+
+        #region Properties
+
+        public string Owner { get; set; }
+
+        #endregion
+
     }
 
     /// <summary>

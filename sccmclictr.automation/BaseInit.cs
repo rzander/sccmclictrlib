@@ -435,7 +435,23 @@ namespace sccmclictr.automation
             return lResult;
         }
 
+        /// <summary>
+        /// Get Object from Powershell Command
+        /// </summary>
+        /// <param name="PSCode"></param>
+        /// <returns></returns>
         public List<PSObject> GetObjectsFromPS(string PSCode)
+        {
+            return GetObjectsFromPS(PSCode, false);
+        }
+
+        /// <summary>
+        /// Get Object from Powershell Command
+        /// </summary>
+        /// <param name="PSCode"></param>
+        /// <param name="Reload">Ignore cached results, always reload Objects</param>
+        /// <returns></returns>
+        public List<PSObject> GetObjectsFromPS(string PSCode, bool Reload)
         {
             List<PSObject> lResult = new List<PSObject>();
 
@@ -443,13 +459,14 @@ namespace sccmclictr.automation
             {
                 string sHash = CreateHash(PSCode);
 
-                if (Cache.Get(sHash) != null)
+                if ((Cache.Get(sHash) != null) & !Reload)
                 {
                     lResult = Cache.Get(sHash) as List<PSObject>;
                 }
                 else
                 {
                     lResult = WSMan.RunPSScript(PSCode, remoteRunspace).ToList<PSObject>();
+                    Cache.Add(sHash, lResult, DateTime.Now + cacheTime);
                 }
             }
 
