@@ -41,7 +41,7 @@ namespace sccmclictr.automation
             {
                 powershell.Runspace = remoteRunspace;
                 powershell.AddScript(scriptText);
-                powershell.Invoke();
+                //powershell.Invoke();
                 Collection<PSObject> results = powershell.Invoke();
 
                 return results;

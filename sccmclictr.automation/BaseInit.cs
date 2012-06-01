@@ -235,13 +235,18 @@ namespace sccmclictr.automation
 
         public string GetStringFromPS(string PSCode)
         {
+            return GetStringFromPS(PSCode, false);
+        }
+
+        public string GetStringFromPS(string PSCode, bool Reload)
+        {
             string sResult = "";
 
             if (!bShowPSCodeOnly)
             {
                 string sHash = CreateHash(PSCode);
 
-                if (Cache.Get(sHash) != null)
+                if ((Cache.Get(sHash) != null) & !Reload)
                 {
                     sResult = Cache.Get(sHash) as string;
                 }

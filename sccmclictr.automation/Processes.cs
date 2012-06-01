@@ -92,6 +92,49 @@ namespace sccmclictr.automation.functions
         {
             return LoadExtProcess(Reload);
         }
+
+        /// <summary>
+        /// Get a single Process
+        /// </summary>
+        /// <param name="ProcessID">ProcessID of the process</param>
+        /// <returns></returns>
+        public ExtProcess GetExtProcess(string ProcessID)
+        {
+            TimeSpan orgTime = cacheTime;
+            List<PSObject> oObj = GetObjectsFromPS("Get-WMIObject win32_Process -filter \"ProcessId = " + ProcessID +"\" | Foreach {  $owner = $_.GetOwner();  $_ | Add-Member -MemberType \"Noteproperty\" -name \"Owner\" -value $(\"{0}\\{1}\" -f $owner.Domain, $owner.User) -passthru }", true);
+            foreach (PSObject PSObj in oObj)
+            {
+                //Get AppDTs sub Objects
+                ExtProcess oCIEx = new ExtProcess(PSObj, remoteRunspace, pSCode);
+
+                oCIEx.remoteRunspace = remoteRunspace;
+                oCIEx.pSCode = pSCode;
+                return oCIEx;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Create a new Process
+        /// </summary>
+        /// <param name="Command">Command to start</param>
+        /// <returns>ProcessId of the started process</returns>
+        public UInt32? CreateProcess(string Command)
+        {
+            try
+            {
+                // (start-process "notepad.exe" -PassThru).Id
+                string sRes = GetStringFromPS("(start-process " + Command + " -PassThru).Id");
+                if (!string.IsNullOrEmpty(sRes))
+                {
+                    return UInt32.Parse(sRes);
+                }
+            }
+            catch { }
+
+            return null;
+        }
     }
 
     /// <summary>
