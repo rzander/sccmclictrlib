@@ -447,7 +447,7 @@ namespace sccmclictr.automation
         /// <returns></returns>
         public List<PSObject> GetObjectsFromPS(string PSCode)
         {
-            return GetObjectsFromPS(PSCode, false);
+            return GetObjectsFromPS(PSCode, false, cacheTime);
         }
 
         /// <summary>
@@ -457,6 +457,18 @@ namespace sccmclictr.automation
         /// <param name="Reload">Ignore cached results, always reload Objects</param>
         /// <returns></returns>
         public List<PSObject> GetObjectsFromPS(string PSCode, bool Reload)
+        {
+            return GetObjectsFromPS(PSCode, Reload, cacheTime);
+        }
+
+        /// <summary>
+        /// Get Object from Powershell Command
+        /// </summary>
+        /// <param name="PSCode">Powershell code</param>
+        /// <param name="Reload">enforce reload</param>
+        /// <param name="tCacheTime">custom cache time</param>
+        /// <returns></returns>
+        public List<PSObject> GetObjectsFromPS(string PSCode, bool Reload, TimeSpan tCacheTime)
         {
             List<PSObject> lResult = new List<PSObject>();
 
@@ -471,7 +483,7 @@ namespace sccmclictr.automation
                 else
                 {
                     lResult = WSMan.RunPSScript(PSCode, remoteRunspace).ToList<PSObject>();
-                    Cache.Add(sHash, lResult, DateTime.Now + cacheTime);
+                    Cache.Add(sHash, lResult, DateTime.Now + tCacheTime);
                 }
             }
 

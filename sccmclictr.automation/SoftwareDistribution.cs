@@ -73,13 +73,13 @@ namespace sccmclictr.automation.functions
                 //Only Get Architecture if SCCM < 2012
                 if(!bisSCCM2012)
                     bisx64OS = baseClient.Inventory.isx64OS;
-
+                
                 if(bisSCCM2012)
-                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\\System\" -Recurse | % { get-itemproperty -path  $_.PsPath }");
+                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\\System\" -Recurse | % { get-itemproperty -path  $_.PsPath }", false, new TimeSpan(0, 0, 10));
                 if (!bisSCCM2012 & bisx64OS)
-                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\\System\" -Recurse | % { get-itemproperty -path  $_.PsPath }");
+                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\\System\" -Recurse | % { get-itemproperty -path  $_.PsPath }", false, new TimeSpan(0, 0, 10));
                 if (!bisSCCM2012 & !bisx64OS)
-                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\\System\" -Recurse | % { get-itemproperty -path  $_.PsPath }");
+                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\\System\" -Recurse | % { get-itemproperty -path  $_.PsPath }", false, new TimeSpan(0, 0, 10));
 
                 foreach (PSObject PSObj in oObj)
                 {
@@ -90,6 +90,8 @@ namespace sccmclictr.automation.functions
                     oReg.pSCode = pSCode;
                     lExec.Add(oReg);
                 }
+
+
                 return lExec;
             }
         }
@@ -405,7 +407,7 @@ namespace sccmclictr.automation.functions
             public String _State { get; set; }
             public DateTime? _RunStartTime { get; set; }
             public int? SuccessOrFailureCode { get; set; }
-            public int? SuccessOrFailureReason { get; set; }
+            public string SuccessOrFailureReason { get; set; }
             public string UserID { get; set; }
             public string PackageID { get; set; }
 
@@ -429,13 +431,14 @@ namespace sccmclictr.automation.functions
                 string sSuccessOrFailureReason = RegObject.Properties["SuccessOrFailureReason"].Value as string;
                 if (!string.IsNullOrEmpty(sSuccessOrFailureReason))
                 {
-                    this.SuccessOrFailureReason = int.Parse(RegObject.Properties["SuccessOrFailureReason"].Value as string);
+                    this.SuccessOrFailureReason = RegObject.Properties["SuccessOrFailureReason"].Value as string;
                 }
 
                 this.UserID = __RegPATH.Substring(__RegPATH.IndexOf("Execution History", StringComparison.CurrentCultureIgnoreCase)).Split('\\')[1];
                 this.PackageID = __RegPATH.Substring(__RegPATH.IndexOf(UserID, StringComparison.CurrentCultureIgnoreCase)).Split('\\')[1];
 
             }
+
         }
     }
 
