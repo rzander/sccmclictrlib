@@ -741,12 +741,15 @@ namespace sccmclictr.automation.functions
         /// </summary>
         public class CCM_SoftwareUpdate : softwaredistribution.CCM_SoftwareBase
         {
+            internal baseInit oNewBase;
+
             //Constructor
             public CCM_SoftwareUpdate(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
                 : base(WMIObject)
             {
                 remoteRunspace = RemoteRunspace;
                 pSCode = PSCode;
+                oNewBase = new baseInit(remoteRunspace, pSCode);
 
                 this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
                 this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
@@ -790,6 +793,18 @@ namespace sccmclictr.automation.functions
             public Boolean? UserUIExperience { get; set; }
             #endregion
 
+            public void Install()
+            {
+                string sCode = string.Format("$a = get-wmiobject -query \"SELECT * FROM CCM_SoftwareUpdate WHERE UpdateID='{0}'\" -namespace \"ROOT\\ccm\\ClientSDK\";([wmiclass]'ROOT\\ccm\\ClientSDK:CCM_SoftwareUpdatesManager').InstallUpdates($a)", this.UpdateID);
+                oNewBase.GetObjectsFromPS(sCode, true);
+            }
+
+        }
+
+        public void InstallPendingUpdates()
+        {
+            string sCode = string.Format("([wmiclass]'ROOT\\ccm\\ClientSDK:CCM_SoftwareUpdatesManager').InstallUpdates()");
+            baseClient.GetObjectsFromPS(sCode, true);
         }
     }
 

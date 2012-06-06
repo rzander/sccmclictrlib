@@ -439,6 +439,19 @@ namespace sccmclictr.automation.functions
 
             }
 
+            /// <summary>
+            /// Delete the Execution-History Item
+            /// </summary>
+            public void Delete()
+            {
+                try
+                {
+                    string sReg = __RegPATH.Replace(@"HKEY_LOCAL_MACHINE\", @"HKLM:\");
+                    oNewBase.GetObjectsFromPS("Remove-Item \"" + sReg + "\" -Recurse", true, new TimeSpan(0, 0, 1));
+                }
+                catch { }
+            }
+
         }
     }
 
