@@ -151,7 +151,7 @@ namespace sccmclictr.automation.functions
         {
             try
             {
-                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000021}'");
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000021}'", true);
             }
             catch
             {
@@ -169,7 +169,7 @@ namespace sccmclictr.automation.functions
         {
             try
             {
-                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000022}'");
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000022}'", true);
             }
             catch
             {

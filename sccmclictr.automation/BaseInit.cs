@@ -79,6 +79,11 @@ namespace sccmclictr.automation
 
         public string GetStringFromClassMethod(string WMIPath, string WMIMethod, string ResultProperty)
         {
+            return GetStringFromClassMethod(WMIPath, WMIMethod, ResultProperty, false);
+        }
+
+        public string GetStringFromClassMethod(string WMIPath, string WMIMethod, string ResultProperty, bool Reload)
+        {
             if (!ResultProperty.StartsWith("."))
                 ResultProperty = "." + ResultProperty;
 
@@ -89,7 +94,7 @@ namespace sccmclictr.automation
             {
                 string sHash = CreateHash(WMIPath + WMIMethod + ResultProperty);
 
-                if (Cache.Get(sHash) != null)
+                if ((Cache.Get(sHash) != null) & !Reload)
                 {
                     sResult = Cache.Get(sHash) as string;
                 }
@@ -115,8 +120,13 @@ namespace sccmclictr.automation
             tsPSCode.TraceInformation(sPSCode);
             return sResult;
         }
-
+        
         public string GetStringFromMethod(string WMIPath, string WMIMethod, string ResultProperty)
+        {
+            return GetStringFromMethod(WMIPath, WMIMethod, ResultProperty, false);
+        }
+
+        public string GetStringFromMethod(string WMIPath, string WMIMethod, string ResultProperty, bool Reload)
         {
             if (!ResultProperty.StartsWith("("))
                 ResultProperty = "(" + ResultProperty + ")";
@@ -128,7 +138,7 @@ namespace sccmclictr.automation
             {
                 string sHash = CreateHash(WMIPath + WMIMethod + ResultProperty);
 
-                if (Cache.Get(sHash) != null)
+                if ((Cache.Get(sHash) != null) & !Reload)
                 {
                     sResult = Cache.Get(sHash) as string;
                 }
@@ -158,6 +168,12 @@ namespace sccmclictr.automation
 
         public PSObject CallClassMethod(string WMIPath, string WMIMethod, string MethodParams)
         {
+            //do not cache per default.
+            return CallClassMethod(WMIPath, WMIMethod, MethodParams, true);
+        }
+
+        public PSObject CallClassMethod(string WMIPath, string WMIMethod, string MethodParams, bool Reload)
+        {
             PSObject pResult = null;
             if (!MethodParams.StartsWith("("))
                 MethodParams = "(" + MethodParams + ")";
@@ -167,7 +183,7 @@ namespace sccmclictr.automation
             {
                 string sHash = CreateHash(WMIPath + WMIMethod + MethodParams);
 
-                if (Cache.Get(sHash) != null)
+                if ((Cache.Get(sHash) != null) & !Reload)
                 {
                     pResult = Cache.Get(sHash) as PSObject;
                 }
@@ -197,7 +213,12 @@ namespace sccmclictr.automation
 
         public PSObject CallInstanceMethod(string WMIPath, string WMIMethod, string MethodParams)
         {
-            //$a=([wmi]"ROOT\ccm:SMS_Client=@").ClientVersion()
+            //Do not cache per default
+            return CallInstanceMethod(WMIPath, WMIMethod, MethodParams, true);
+        }
+
+        public PSObject CallInstanceMethod(string WMIPath, string WMIMethod, string MethodParams, bool Reload)
+        {
             PSObject pResult = null;
             string sPSCode = string.Format("([wmi]'{0}').{1}({2})", WMIPath, WMIMethod, MethodParams);
 
@@ -205,7 +226,7 @@ namespace sccmclictr.automation
             {
                 string sHash = CreateHash(WMIPath + WMIMethod + MethodParams);
 
-                if (Cache.Get(sHash) != null)
+                if ((Cache.Get(sHash) != null) & !Reload)
                 {
                     pResult = Cache.Get(sHash) as PSObject;
                 }
@@ -277,6 +298,11 @@ namespace sccmclictr.automation
 
         public string GetProperty(string WMIPath, string ResultProperty)
         {
+            return GetProperty(WMIPath, ResultProperty, false);
+        }
+
+        public string GetProperty(string WMIPath, string ResultProperty, bool Reload)
+        {
             //(Get-Wmiobject -class CCM_Client -namespace 'ROOT\CCM').ClientIDChangeDate
             //$a=([wmi]"ROOT\ccm:SMS_Client=@").ClientVersion
             if (!ResultProperty.StartsWith("."))
@@ -291,7 +317,7 @@ namespace sccmclictr.automation
 
 
 
-                if (Cache.Get(sHash) != null)
+                if ((Cache.Get(sHash) != null) & !Reload)
                 {
                     sResult = Cache.Get(sHash) as string;
                 }
@@ -321,6 +347,11 @@ namespace sccmclictr.automation
 
         public List<PSObject> GetProperties(string WMIPath, string ResultProperty)
         {
+            return GetProperties(WMIPath, ResultProperty, false);
+        }
+
+        public List<PSObject> GetProperties(string WMIPath, string ResultProperty, bool Reload)
+        {
             //$a=([wmi]"ROOT\ccm:SMS_Client=@").ClientVersion
             if (!ResultProperty.StartsWith("."))
                 ResultProperty = "." + ResultProperty;
@@ -335,7 +366,7 @@ namespace sccmclictr.automation
 
 
 
-                if (Cache.Get(sHash) != null)
+                if ((Cache.Get(sHash) != null) & !Reload)
                 {
                     lResult = Cache.Get(sHash) as List<PSObject>;
                 }
@@ -403,6 +434,11 @@ namespace sccmclictr.automation
         }
 
         public List<PSObject> GetObjects(string WMINamespace, string WQLQuery, bool Reload)
+        {
+            return GetObjects(WMINamespace, WQLQuery, Reload, cacheTime);
+        }
+
+        public List<PSObject> GetObjects(string WMINamespace, string WQLQuery, bool Reload, TimeSpan tCacheTime)
         {
             //get-wmiobject -query "SELECT * FROM CacheInfoEx" -namespace "root\ccm\SoftMgmtAgent"
             List<PSObject> lResult = new List<PSObject>();

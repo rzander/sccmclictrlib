@@ -106,14 +106,36 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Show required Software Updates and the current state
+        /// Show required Software Updates and the current state (from cache)
         /// </summary>
         public List<CCM_SoftwareUpdate> SoftwareUpdate
         {
             get
             {
                 List<CCM_SoftwareUpdate> lCache = new List<CCM_SoftwareUpdate>();
-                List<PSObject> oObj = GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_SoftwareUpdate");
+                List<PSObject> oObj = GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_SoftwareUpdate", false, new TimeSpan(0,0,10));
+                foreach (PSObject PSObj in oObj)
+                {
+                    //Get AppDTs sub Objects
+                    CCM_SoftwareUpdate oUpdStat = new CCM_SoftwareUpdate(PSObj, remoteRunspace, pSCode);
+
+                    oUpdStat.remoteRunspace = remoteRunspace;
+                    oUpdStat.pSCode = pSCode;
+                    lCache.Add(oUpdStat);
+                }
+                return lCache;
+            }
+        }
+
+        /// <summary>
+        ///  Show required Software Updates and the current state (reload the cache)
+        /// </summary>
+        public List<CCM_SoftwareUpdate> SoftwareUpdateReload
+        {
+            get
+            {
+                List<CCM_SoftwareUpdate> lCache = new List<CCM_SoftwareUpdate>();
+                List<PSObject> oObj = GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_SoftwareUpdate", true);
                 foreach (PSObject PSObj in oObj)
                 {
                     //Get AppDTs sub Objects
@@ -801,10 +823,28 @@ namespace sccmclictr.automation.functions
 
         }
 
-        public void InstallPendingUpdates()
+        /// <summary>
+        /// Install all required updates
+        /// </summary>
+        public void InstallAllRequiredUpdates()
         {
             string sCode = string.Format("([wmiclass]'ROOT\\ccm\\ClientSDK:CCM_SoftwareUpdatesManager').InstallUpdates()");
             baseClient.GetObjectsFromPS(sCode, true);
+        }
+
+        //Install List of Updates
+        public void InstallUpdates(List<CCM_SoftwareUpdate> Updates)
+        {
+            List<string> sUpdateIDs = new List<string>();
+            sUpdateIDs = Updates.Select(t => t.UpdateID).ToList();
+
+            string sIDs = string.Join("' OR UpdateID='", sUpdateIDs);
+
+            string sCode = string.Format("[System.Management.ManagementObject[]] $a = get-wmiobject -query \"SELECT * FROM CCM_SoftwareUpdate WHERE UpdateID like '{0}'\" -namespace \"ROOT\\ccm\\ClientSDK\";([wmiclass]'ROOT\\ccm\\ClientSDK:CCM_SoftwareUpdatesManager').InstallUpdates($a)", sIDs);
+            baseClient.GetObjectsFromPS(sCode, true);
+
+            /*string sCode = string.Format("([wmiclass]'ROOT\\ccm\\ClientSDK:CCM_SoftwareUpdatesManager').InstallUpdates()");
+            baseClient.GetObjectsFromPS(sCode, true);*/
         }
     }
 
