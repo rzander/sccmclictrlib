@@ -592,5 +592,27 @@ namespace sccmclictr.automation.functions
 
             return true;
         }
+
+        /// <summary>
+        /// Cleanup the Message Queue from the SCCM Agent
+        /// </summary>
+        /// <returns></returns>
+        public bool CleanupMessageQueue()
+        {
+            try
+            {
+                baseClient.Services.GetService("CcmExec").StopService();
+                string sQueuePath = System.IO.Path.Combine(baseClient.AgentProperties.LocalSCCMAgentPath, @"ServiceData\Messaging\EndpointQueues");
+                base.GetStringFromPS("get-childitem '" + sQueuePath + @"' -include *.msg,*.que -recurse | foreach ($_) {remove-item $_.fullname -force}");
+                baseClient.Services.GetService("CcmExec").StartService();
+                StateMessageManagerTask();
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
