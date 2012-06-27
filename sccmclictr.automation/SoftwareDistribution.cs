@@ -164,7 +164,6 @@ namespace sccmclictr.automation.functions
 
             public String[] AllowedActions { get; set; }
             public String ApplicabilityState { get; set; }
-            public String CurrentState { get; set; }
 
             public CCM_AppDeploymentType[] Dependencies { get; set; }
             /*{
@@ -191,12 +190,13 @@ namespace sccmclictr.automation.functions
 
             public String DeploymentReport { get; set; }
             public String Id { get; set; }
+            public String InstallState { get; set; }
             public DateTime? LastEvalTime { get; set; }
             public String PostInstallAction { get; set; }
-            public String ProgressState { get; set; }
             public String ResolvedState { get; set; }
             public UInt32? RetriesRemaining { get; set; }
             public String Revision { get; set; }
+            public String SupersessionState { get; set; }
             #endregion
 
             #region Methods
@@ -216,11 +216,10 @@ namespace sccmclictr.automation.functions
 
                 this.AllowedActions = WMIObject.Properties["AllowedActions"].Value as string[];
                 this.ApplicabilityState = WMIObject.Properties["ApplicabilityState"].Value as string;
-                this.CurrentState = WMIObject.Properties["CurrentState"].Value as string;
                 this.Dependencies = WMIObject.Properties["Dependencies"].Value as CCM_AppDeploymentType[];
                 this.DeploymentReport = WMIObject.Properties["DeploymentReport"].Value as string;
                 this.Id = WMIObject.Properties["Id"].Value as string;
-
+                this.InstallState = WMIObject.Properties["InstallState"].Value as String;
                 string sLastEvalTime = WMIObject.Properties["LastEvalTime"].Value as string;
                 if (string.IsNullOrEmpty(sLastEvalTime))
                     this.LastEvalTime = null;
@@ -228,11 +227,10 @@ namespace sccmclictr.automation.functions
                     this.LastEvalTime = ManagementDateTimeConverter.ToDateTime(sLastEvalTime) as DateTime?;
 
                 this.PostInstallAction = WMIObject.Properties["PostInstallAction"].Value as string;
-                this.ProgressState = WMIObject.Properties["ProgressState"].Value as string;
                 this.ResolvedState = WMIObject.Properties["ResolvedState"].Value as string;
                 this.RetriesRemaining = WMIObject.Properties["RetriesRemaining"].Value as uint?;
                 this.Revision = WMIObject.Properties["Revision"].Value as string;
-
+                this.SupersessionState = WMIObject.Properties["SupersessionState"].Value as String;
             }
 
         }
@@ -241,6 +239,53 @@ namespace sccmclictr.automation.functions
         {
             internal baseInit oNewBase;
 
+            #region Properties
+
+            public String[] AllowedActions { get; set; }
+            //public CCM_AppDeploymentType[] AppDTs { get; set; }
+            public String ApplicabilityState { get; set; }
+            public String DeploymentReport { get; set; }
+            public UInt32? EnforcePreference { get; set; }
+            public String FileTypes { get; set; }
+            public String Icon { get; set; }
+            public String Id { get; set; }
+            public String InformativeUrl { get; set; }
+            public String[] InProgressActions { get; set; }
+            public String InstallState { get; set; }
+            public Boolean? IsMachineTarget { get; set; }
+            public Boolean? IsPreflightOnly { get; set; }
+            public DateTime? LastEvalTime { get; set; }
+            public DateTime? LastInstallTime { get; set; }
+            public Boolean? NotifyUser { get; set; }
+            public DateTime? ReleaseDate { get; set; }
+            public String ResolvedState { get; set; }
+            public String Revision { get; set; }
+            public String SoftwareVersion { get; set; }
+            public DateTime? StartTime { get; set; }
+            public String SupersessionState { get; set; }
+            public Boolean? UserUIExperience { get; set; }
+
+            public CCM_AppDeploymentType[] AppDTs
+            {
+                get
+                {
+                    //Get AppDTs sub Objects
+                    List<CCM_AppDeploymentType> lAppDTs = new List<CCM_AppDeploymentType>();
+
+                    List<PSObject> lPSAppDts = oNewBase.GetProperties(@"ROOT\ccm\clientsdk:" + this.__RELPATH, "AppDTs");
+
+                    foreach (PSObject pAppDT in lPSAppDts)
+                    {
+                        lAppDTs.Add(new CCM_AppDeploymentType(pAppDT));
+                    }
+
+                    return lAppDTs.ToArray();
+                }
+                set {}
+            }
+            #endregion
+
+            /*
             #region Properties
             public String[] AllowedActions { get; set; }
             public String ApplicabilityState { get; set; }
@@ -287,6 +332,7 @@ namespace sccmclictr.automation.functions
             }
             #endregion
 
+             * */
             #region Methods
             /*
         public UInt32 GetProperty(UInt32 LanguageId, String PropertyName, out String PropertyValue)
@@ -350,12 +396,55 @@ namespace sccmclictr.automation.functions
                 this.WMIObject = WMIObject;
 
                 List<string> lActions = new List<string>();
-                foreach (string sAction in ((WMIObject.Properties["AllowedActions"].Value as PSObject).BaseObject as System.Collections.ArrayList))
+                //foreach (string sAction in ((WMIObject.Properties["AllowedActions"].Value as PSObject).BaseObject as System.Collections.ArrayList))
+                foreach (string sAction in WMIObject.Properties["AllowedActions"].Value as string[])
                 {
                     lActions.Add(sAction);
                 }
 
                 this.AllowedActions = lActions.ToArray();
+
+                this.AppDTs = WMIObject.Properties["AppDTs"].Value as CCM_AppDeploymentType[];
+                this.ApplicabilityState = WMIObject.Properties["ApplicabilityState"].Value as String;
+                this.DeploymentReport = WMIObject.Properties["DeploymentReport"].Value as String;
+                this.EnforcePreference = WMIObject.Properties["EnforcePreference"].Value as UInt32?;
+                this.FileTypes = WMIObject.Properties["FileTypes"].Value as String;
+                this.Icon = WMIObject.Properties["Icon"].Value as String;
+                this.Id = WMIObject.Properties["Id"].Value as String;
+                this.InformativeUrl = WMIObject.Properties["InformativeUrl"].Value as String;
+                this.InProgressActions = WMIObject.Properties["InProgressActions"].Value as String[];
+                this.InstallState = WMIObject.Properties["InstallState"].Value as String;
+                this.IsMachineTarget = WMIObject.Properties["IsMachineTarget"].Value as Boolean?;
+                this.IsPreflightOnly = WMIObject.Properties["IsPreflightOnly"].Value as Boolean?;
+                string sLastEvalTime = WMIObject.Properties["LastEvalTime"].Value as string;
+                if (string.IsNullOrEmpty(sLastEvalTime))
+                    this.LastEvalTime = null;
+                else
+                    this.LastEvalTime = ManagementDateTimeConverter.ToDateTime(sLastEvalTime) as DateTime?;
+                string sLastInstallTime = WMIObject.Properties["LastInstallTime"].Value as string;
+                if (string.IsNullOrEmpty(sLastInstallTime))
+                    this.LastInstallTime = null;
+                else
+                    this.LastInstallTime = ManagementDateTimeConverter.ToDateTime(sLastInstallTime) as DateTime?;
+                this.NotifyUser = WMIObject.Properties["NotifyUser"].Value as Boolean?;
+                string sReleaseDate = WMIObject.Properties["ReleaseDate"].Value as string;
+                if (string.IsNullOrEmpty(sReleaseDate))
+                    this.ReleaseDate = null;
+                else
+                    this.ReleaseDate = ManagementDateTimeConverter.ToDateTime(sReleaseDate) as DateTime?;
+                this.ResolvedState = WMIObject.Properties["ResolvedState"].Value as String;
+                this.Revision = WMIObject.Properties["Revision"].Value as String;
+                this.SoftwareVersion = WMIObject.Properties["SoftwareVersion"].Value as String;
+                string sStartTime = WMIObject.Properties["StartTime"].Value as string;
+                if (string.IsNullOrEmpty(sStartTime))
+                    this.StartTime = null;
+                else
+                    this.StartTime = ManagementDateTimeConverter.ToDateTime(sStartTime) as DateTime?;
+                this.SupersessionState = WMIObject.Properties["SupersessionState"].Value as String;
+                this.UserUIExperience = WMIObject.Properties["UserUIExperience"].Value as Boolean?;
+
+                //sub
+                /*
                 this.ApplicabilityState = WMIObject.Properties["ApplicabilityState"].Value as string;
                 this.CurrentState = WMIObject.Properties["CurrentState"].Value as string;
                 this.DeploymentReport = WMIObject.Properties["DeploymentReport"].Value as string;
@@ -390,7 +479,7 @@ namespace sccmclictr.automation.functions
                 this.ResolvedState = WMIObject.Properties["ResolvedState"].Value as string;
                 this.Revision = WMIObject.Properties["Revision"].Value as string;
                 this.SoftwareVersion = WMIObject.Properties["SoftwareVersion"].Value as string;
-                this.UserUIExperience = WMIObject.Properties["UserUIExperience"].Value as bool?;
+                this.UserUIExperience = WMIObject.Properties["UserUIExperience"].Value as bool?; */
             }
         }
 
