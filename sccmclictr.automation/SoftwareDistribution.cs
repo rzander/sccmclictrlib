@@ -216,7 +216,31 @@ namespace sccmclictr.automation.functions
 
                 this.AllowedActions = WMIObject.Properties["AllowedActions"].Value as string[];
                 this.ApplicabilityState = WMIObject.Properties["ApplicabilityState"].Value as string;
-                this.Dependencies = WMIObject.Properties["Dependencies"].Value as CCM_AppDeploymentType[];
+
+                //Get Dependencies Objects
+                try
+                {
+                    //baseInit oNewBase = new baseInit(remoteRunspace, pSCode);
+
+                    if (WMIObject.Properties["Dependencies"].Value == null)
+                    {
+                        this.Dependencies = null;
+                    }
+                    else
+                    {
+                        List<CCM_AppDeploymentType> lAppDTs = new List<CCM_AppDeploymentType>();
+                        foreach (PSObject pAppDT in WMIObject.Properties["Dependencies"].Value as PSObject[])
+                        {
+                            lAppDTs.Add(new CCM_AppDeploymentType(pAppDT));
+                        }
+                        this.Dependencies = lAppDTs.ToArray();
+                    }
+                }
+                catch(Exception ex)
+                {
+                    ex.Message.ToString();
+                }
+
                 this.DeploymentReport = WMIObject.Properties["DeploymentReport"].Value as string;
                 this.Id = WMIObject.Properties["Id"].Value as string;
                 this.InstallState = WMIObject.Properties["InstallState"].Value as String;
@@ -242,7 +266,7 @@ namespace sccmclictr.automation.functions
             #region Properties
 
             public String[] AllowedActions { get; set; }
-            //public CCM_AppDeploymentType[] AppDTs { get; set; }
+            public CCM_AppDeploymentType[] AppDTs { get; set; }
             public String ApplicabilityState { get; set; }
             public String DeploymentReport { get; set; }
             public UInt32? EnforcePreference { get; set; }
@@ -264,25 +288,33 @@ namespace sccmclictr.automation.functions
             public DateTime? StartTime { get; set; }
             public String SupersessionState { get; set; }
             public Boolean? UserUIExperience { get; set; }
-
+            /*
             public CCM_AppDeploymentType[] AppDTs
             {
                 get
                 {
+
                     //Get AppDTs sub Objects
                     List<CCM_AppDeploymentType> lAppDTs = new List<CCM_AppDeploymentType>();
 
-                    List<PSObject> lPSAppDts = oNewBase.GetProperties(@"ROOT\ccm\clientsdk:" + this.__RELPATH, "AppDTs");
-
-                    foreach (PSObject pAppDT in lPSAppDts)
+                    if (remoteRunspace != null)
                     {
-                        lAppDTs.Add(new CCM_AppDeploymentType(pAppDT));
+                        List<PSObject> lPSAppDts = oNewBase.GetProperties(@"ROOT\ccm\clientsdk:" + this.__RELPATH, "AppDTs");
+
+                        foreach (PSObject pAppDT in lPSAppDts)
+                        {
+                            lAppDTs.Add(new CCM_AppDeploymentType(pAppDT));
+                        }
                     }
 
                     return lAppDTs.ToArray();
                 }
-                set {}
-            }
+
+                set
+                {
+                } 
+            } 
+             * */
             #endregion
 
             /*
@@ -396,15 +428,33 @@ namespace sccmclictr.automation.functions
                 this.WMIObject = WMIObject;
 
                 List<string> lActions = new List<string>();
-                //foreach (string sAction in ((WMIObject.Properties["AllowedActions"].Value as PSObject).BaseObject as System.Collections.ArrayList))
-                foreach (string sAction in WMIObject.Properties["AllowedActions"].Value as string[])
+                //foreach (string sAction in WMIObject.Properties["AllowedActions"].Value as string[])
+                foreach (string sAction in ((WMIObject.Properties["AllowedActions"].Value as PSObject).BaseObject as System.Collections.ArrayList))
                 {
                     lActions.Add(sAction);
                 }
 
                 this.AllowedActions = lActions.ToArray();
 
-                this.AppDTs = WMIObject.Properties["AppDTs"].Value as CCM_AppDeploymentType[];
+                //Get AppDTs
+                try
+                {
+                    //Get AppDTs sub Objects
+                    List<CCM_AppDeploymentType> lAppDTs = new List<CCM_AppDeploymentType>();
+
+                    if (remoteRunspace != null)
+                    {
+                        List<PSObject> lPSAppDts = oNewBase.GetProperties(@"ROOT\ccm\clientsdk:" + this.__RELPATH, "AppDTs");
+
+                        foreach (PSObject pAppDT in lPSAppDts)
+                        {
+                            lAppDTs.Add(new CCM_AppDeploymentType(pAppDT));
+                        }
+                    }
+                    this.AppDTs = lAppDTs.ToArray();
+                }
+                catch { }
+
                 this.ApplicabilityState = WMIObject.Properties["ApplicabilityState"].Value as String;
                 this.DeploymentReport = WMIObject.Properties["DeploymentReport"].Value as String;
                 this.EnforcePreference = WMIObject.Properties["EnforcePreference"].Value as UInt32?;

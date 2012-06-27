@@ -63,14 +63,17 @@ namespace sccmclictr.automation
         {
             get
             {
-                if (remoteRunspace.RunspaceStateInfo.State == RunspaceState.Opened)
+                try
                 {
-                    return true;
+                    if (remoteRunspace.RunspaceStateInfo.State == RunspaceState.Opened)
+                    {
+                        return true;
+                    }
                 }
-                else
-                {
-                    return false;
-                }
+                catch { }
+
+                return false;
+
             }
         }
 
@@ -142,6 +145,8 @@ namespace sccmclictr.automation
             //Default Settings
             connectionInfo.AuthenticationMechanism = AuthenticationMechanism.Default;
             connectionInfo.ProxyAuthentication = AuthenticationMechanism.Negotiate;
+
+            connect();
 
             //Initialzie connection
             Client = new ccm(remoteRunspace, PSCode);

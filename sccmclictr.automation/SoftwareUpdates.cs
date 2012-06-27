@@ -50,7 +50,6 @@ namespace sccmclictr.automation.functions
                 List<PSObject> oObj = GetObjects(@"root\ccm\SoftwareUpdates\UpdatesStore", "SELECT * FROM CCM_UpdateStatus");
                 foreach (PSObject PSObj in oObj)
                 {
-                    //Get AppDTs sub Objects
                     CCM_UpdateStatus oUpdStat = new CCM_UpdateStatus(PSObj, remoteRunspace, pSCode);
 
                     oUpdStat.remoteRunspace = remoteRunspace;
