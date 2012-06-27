@@ -53,6 +53,7 @@
     <Compile Include="AgentActions.cs" />
     <Compile Include="BaseInit.cs" />
     <Compile Include="Class_Template.cs" />
+    <Compile Include="Common.cs" />
     <Compile Include="Components.cs" />
     <Compile Include="Policy.cs" />
     <Compile Include="Inventory.cs" />
