@@ -19,6 +19,8 @@ using System.Management.Automation.Runspaces;
 using System.Diagnostics;
 using System.Web;
 
+using System.Drawing;
+
 namespace sccmclictr.automation.functions
 {
 #if CM2012
