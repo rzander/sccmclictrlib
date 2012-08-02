@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Windows.Media.Imaging;
+//using System.Windows.Media.Imaging;
 
 namespace sccmclictr.automation
 {

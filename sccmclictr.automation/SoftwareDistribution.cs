@@ -394,19 +394,54 @@ namespace sccmclictr.automation.functions
             return 0;
         } */
 
-            public string Install(string Priority, bool isRebootIfNeeded)
+            /// <summary>
+            /// Install an Application
+            /// </summary>
+            /// <returns></returns>
+            public string Install()
             {
+                return Install(AppPriority.Normal, false);
+            }
+
+            /// <summary>
+            /// Install an Application
+            /// </summary>
+            /// <param name="AppPriority">Foreground, High, Normal , Low</param>
+            /// <param name="isRebootIfNeeded"></param>
+            /// <returns></returns>
+            public string Install(string AppPriority, bool isRebootIfNeeded)
+            {
+                if (string.IsNullOrEmpty(AppPriority))
+                    AppPriority = "Normal";
+
                 string sJobID = "";
-                PSObject oResult = oNewBase.CallClassMethod("ROOT\\ccm\\ClientSdk:CCM_Application", "Install", "'" + Id + "', " + Revision + ", $" + IsMachineTarget.ToString() + ", " + EnforcePreference.ToString() + ", " + Priority + ", $" + isRebootIfNeeded.ToString());
+                PSObject oResult = oNewBase.CallClassMethod("ROOT\\ccm\\ClientSdk:CCM_Application", "Install", "'" + Id + "', " + Revision + ", $" + IsMachineTarget.ToString() + ", " + AppEnforcePreference.Immediate + ", " + "'" + AppPriority + "'" + ", $" + isRebootIfNeeded.ToString());
                 //sJobID = oResult.Properties["JobID"].Value.ToString();
                 return sJobID;
             }
 
-            public string Uninstall(string Priority, bool isRebootIfNeeded)
+            /// <summary>
+            /// Uninstall an Application
+            /// </summary>
+            /// <returns></returns>
+            public string Uninstall()
             {
+                return Uninstall(AppPriority.Normal, false);
+            }
+
+            /// <summary>
+            /// Uninstall an Application
+            /// </summary>
+            /// <param name="AppPriority">Foreground, High, Normal , Low</param>
+            /// <param name="isRebootIfNeeded"></param>
+            /// <returns></returns>
+            public string Uninstall(string AppPriority, bool isRebootIfNeeded)
+            {
+                if (string.IsNullOrEmpty(AppPriority))
+                    AppPriority = "Normal";
+
                 string sJobID = "";
-                PSObject oResult = oNewBase.CallClassMethod("ROOT\\ccm\\ClientSdk:CCM_Application", "Uninstall", "'" + Id + "', " + Revision + ", $" + IsMachineTarget.ToString() + ", " + EnforcePreference.ToString() + ", " + Priority + ", $" + isRebootIfNeeded.ToString());
-                //sJobID = oResult.Properties["JobID"].Value.ToString();
+                PSObject oResult = oNewBase.CallClassMethod("ROOT\\ccm\\ClientSdk:CCM_Application", "Uninstall", "'" + Id + "', " + Revision + ", $" + IsMachineTarget.ToString() + ", " + AppEnforcePreference.Immediate + ", " + "'" + AppPriority + "'" + ", $" + isRebootIfNeeded.ToString());
                 return sJobID;
             }
 
@@ -535,6 +570,54 @@ namespace sccmclictr.automation.functions
             }
         }
 
+        /// <summary>
+        /// Application Priorities
+        /// </summary>
+        public static class AppPriority
+        {
+            public static string Low
+            {
+                get { return "Low"; }
+            }
+
+            public static string Normal
+            {
+                get { return "Normal"; }
+            }
+
+            public static string High
+            {
+                get { return "High"; }
+            }
+
+            public static string Foreground
+            {
+                get { return "Foreground"; }
+            }
+        }
+
+        public static class AppEnforcePreference
+        {
+            public static UInt32 Immediate
+            {
+                get { return 0; }
+            }
+
+            public static UInt32 NonBusinessHours
+            {
+                get { return 1; }
+            }
+
+            public static UInt32 AdminSchedule
+            {
+                get { return 2; }
+            }
+        }
+
+
+        /// <summary>
+        /// Execution History
+        /// </summary>
         public class REG_ExecutionHistory
         {
             internal baseInit oNewBase;
