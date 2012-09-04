@@ -614,5 +614,35 @@ namespace sccmclictr.automation.functions
 
             return true;
         }
+
+        /// <summary>
+        /// Reset Policy
+        /// </summary>
+        /// <param name="Hardreset"></param>
+        /// <returns>false=Error</returns>
+        public bool ResetPolicy(bool Hardreset)
+        {
+            try
+            {
+                if (Hardreset)
+                {
+                    base.CallClassMethod(@"ROOT\ccm:SMS_Client", "ResetPolicy", "1", true);
+                    this.CertificateMaintenanceCycle();
+                    this.PolicyAgentCleanupCycle();
+                }
+                else
+                {
+                    base.CallClassMethod(@"ROOT\ccm:SMS_Client", "ResetPolicy", "0", true);
+                    this.PolicyAgentCleanupCycle();
+                }
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+
+        }
     }
 }
