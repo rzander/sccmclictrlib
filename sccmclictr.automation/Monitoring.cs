@@ -42,218 +42,261 @@ namespace sccmclictr.automation.functions
         }
 
         public runScriptAsync AsynchronousScript;
-    
-    }
 
-    public class runScriptAsync
-    {
-        private AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
-        internal Runspace _remoteRunspace;
-        internal Pipeline pipeline;
-
-        public runScriptAsync(Runspace remoteRunspace)
+        public class runScriptAsync
         {
-            _remoteRunspace = remoteRunspace;
+            private AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
+            internal Runspace _remoteRunspace;
+            internal Pipeline pipeline;
+            internal RunspaceConnectionInfo _connectionInfo;
 
-        }
-
-        public void Connect()
-        {
-            pipeline = _remoteRunspace.CreatePipeline();
-
-            pipeline.Output.DataReady += new EventHandler(Output_DataReady);
-            pipeline.StateChanged += new EventHandler<PipelineStateEventArgs>(pipeline_StateChanged);
-        }
-
-        void pipeline_StateChanged(object sender, PipelineStateEventArgs e)
-        {
-            if (!pipeline.Output.IsOpen)
+            public runScriptAsync(Runspace remoteRunspace)
             {
-                if(this.Finished != null)
-                    this.Finished.Invoke(pipeline.Output, new EventArgs());
+                if (_remoteRunspace == null)
+                {
+                    _connectionInfo = remoteRunspace.ConnectionInfo;
+                    _remoteRunspace = RunspaceFactory.CreateRunspace(_connectionInfo);
+                }
+                else
+                {
+                    _remoteRunspace = RunspaceFactory.CreateRunspace(remoteRunspace.ConnectionInfo);
+                }
             }
 
-            _autoResetEvent.Set();
-        }
-
-        /// <summary>
-        ///  Output data arrived
-        /// </summary>
-        /// <param name="sender">contains the result as List of strings</string></param>
-        /// <param name="e"></param>
-        internal void Output_DataReady(object sender, EventArgs e)
-        {
-            PipelineReader<PSObject> output = sender as PipelineReader<PSObject>;
-            List<string> lStringOutput = new List<string>();
-            List<object> lOutput = new List<object>();
-            if (output != null)
+            public void Connect()
             {
-                Collection<PSObject> pso = output.NonBlockingRead();
-                if (pso.Count > 0)
+                if (_remoteRunspace.RunspaceStateInfo.State != RunspaceState.Opened)
                 {
-                    //Forward the Raw data...
-                    if (this.RawOutput != null)
-                        this.RawOutput.Invoke(pso, e);
+                    _remoteRunspace = RunspaceFactory.CreateRunspace(_connectionInfo);
+                    _remoteRunspace.Open();
+                }
 
-                    foreach (PSObject PO in pso)
+                pipeline = _remoteRunspace.CreatePipeline();
+
+                pipeline.Output.DataReady += new EventHandler(Output_DataReady);
+                pipeline.StateChanged += new EventHandler<PipelineStateEventArgs>(pipeline_StateChanged);
+            }
+
+            void pipeline_StateChanged(object sender, PipelineStateEventArgs e)
+            {
+                if (e.PipelineStateInfo.State != PipelineState.Running)
+                {
+                    pipeline.Output.Close();
+                    pipeline.Input.Close();
+                }
+
+                if (e.PipelineStateInfo.State == PipelineState.Completed)
+                {
+                    if (this.Finished != null)
+                        this.Finished.Invoke(pipeline.Output, new EventArgs());
+                }
+
+                _autoResetEvent.Set();
+            }
+
+            /// <summary>
+            ///  Output data arrived
+            /// </summary>
+            /// <param name="sender">contains the result as List of strings</string></param>
+            /// <param name="e"></param>
+            internal void Output_DataReady(object sender, EventArgs e)
+            {
+                PipelineReader<PSObject> output = sender as PipelineReader<PSObject>;
+                List<string> lStringOutput = new List<string>();
+                List<object> lOutput = new List<object>();
+                if (output != null)
+                {
+                    Collection<PSObject> pso = output.NonBlockingRead();
+                    if (pso.Count > 0)
                     {
-                        if (PO != null)
+                        //Forward the Raw data...
+                        if (this.RawOutput != null)
+                            this.RawOutput.Invoke(pso, e);
+
+                        foreach (PSObject PO in pso)
                         {
-                            lStringOutput.Add(PO.ToString());
-
-
-                            foreach (string sType in PO.TypeNames)
+                            if (PO != null)
                             {
-                                ConvertThroughString cts = new ConvertThroughString();
-                                Type objectType = Type.GetType(sType.Replace("Deserialized.", ""));
+                                lStringOutput.Add(PO.ToString());
 
-                                if (cts.CanConvertFrom(PO, objectType))
+
+                                foreach (string sType in PO.TypeNames)
                                 {
-                                    try
-                                    {
-                                        lOutput.Add(cts.ConvertFrom(PO, objectType, null, true));
-                                        break;
-                                    }
-                                    catch (Exception ex)
+                                    ConvertThroughString cts = new ConvertThroughString();
+                                    Type objectType = Type.GetType(sType.Replace("Deserialized.", ""));
+
+                                    if (cts.CanConvertFrom(PO, objectType))
                                     {
                                         try
                                         {
-                                            System.Collections.Hashtable HT = new System.Collections.Hashtable();
-                                            foreach (PSPropertyInfo PI in PO.Properties)
-                                            {
-                                                try
-                                                {
-                                                    HT.Add(PI.Name, PI.Value.ToString());
-                                                }
-                                                catch { }
-                                            }
-                                            lOutput.Add(HT);
+                                            lOutput.Add(cts.ConvertFrom(PO, objectType, null, true));
                                             break;
                                         }
-                                        catch { }
-                                        //break;
+                                        catch (Exception ex)
+                                        {
+                                            try
+                                            {
+                                                System.Collections.Hashtable HT = new System.Collections.Hashtable();
+                                                foreach (PSPropertyInfo PI in PO.Properties)
+                                                {
+                                                    try
+                                                    {
+                                                        HT.Add(PI.Name, PI.Value.ToString());
+                                                    }
+                                                    catch { }
+                                                }
+                                                lOutput.Add(HT);
+                                                break;
+                                            }
+                                            catch { }
+                                            //break;
+                                        }
                                     }
-                                }
-                                else
-                                {
-                                }
+                                    else
+                                    {
+                                    }
 
+                                }
                             }
                         }
                     }
+
+                    if (output.EndOfPipeline & output.IsOpen)
+                    {
+                        output.Close();
+                    }
+                }
+                else
+                {
+                    PipelineReader<object> error = sender as PipelineReader<object>;
+
+                    if (error != null)
+                    {
+                        while (error.Count > 0)
+                        {
+                            lStringOutput.Add(error.Read().ToString());
+                            lOutput.Add(error.Read());
+                        }
+
+                        if (error.EndOfPipeline)
+                        {
+                            error.Close();
+                        }
+
+                        if (this.ErrorOccured != null)
+                            this.ErrorOccured.Invoke(sender, e);
+
+                        _autoResetEvent.Set();
+                    }
                 }
 
-                if (output.EndOfPipeline & output.IsOpen)
-                {
-                    output.Close();
-                }
+                //Forward output as ListOfStrings
+                if (this.StringOutput != null)
+                    this.StringOutput.Invoke(lStringOutput, e);
+                if (this.TypedOutput != null)
+                    this.TypedOutput.Invoke(lOutput, e);
+                _autoResetEvent.Set();
             }
-            else
+
+            /// <summary>
+            /// Powershell Script to execute
+            /// </summary>
+            public string Command
             {
-                PipelineReader<object> error = sender as PipelineReader<object>;
-
-                if (error != null)
+                get
                 {
-                    while (error.Count > 0)
-                    {
-                        lStringOutput.Add(error.Read().ToString());
-                        lOutput.Add(error.Read());
-                    }
-
-                    if (error.EndOfPipeline)
-                    {
-                        error.Close();
-                    }
-
-                    if(this.ErrorOccured != null)
-                        this.ErrorOccured.Invoke(sender, e);
-
-                    _autoResetEvent.Set();
+                    if (pipeline == null)
+                        this.Connect();
+                    return pipeline.Commands.ToString();
                 }
+                set
+                {
+                    if (pipeline == null)
+                        this.Connect();
+                    pipeline.Commands.Clear();
+                    pipeline.Commands.AddScript(value);
+                }
+
             }
 
-            //Forward output as ListOfStrings
-            if (this.StringOutput != null)
-                this.StringOutput.Invoke(lStringOutput, e);
-            if (this.TypedOutput != null)
-                this.TypedOutput.Invoke(lOutput, e);
-            _autoResetEvent.Set();
-        }
-
-        /// <summary>
-        /// Powershell Script to execute
-        /// </summary>
-        public string Command
-        {
-            get
+            public void Run()
             {
                 if (pipeline == null)
                     this.Connect();
-                return pipeline.Commands.ToString();
+                pipeline.InvokeAsync();
+                pipeline.Input.Close();
             }
-            set
+
+            public void RunWait()
             {
                 if (pipeline == null)
                     this.Connect();
-                pipeline.Commands.Clear();
-                pipeline.Commands.AddScript(value);
+                pipeline.InvokeAsync();
+                pipeline.Input.Close();
+                do
+                {
+                    _autoResetEvent.WaitOne(500);
+                }
+                while (pipeline.Output.IsOpen);
+
             }
 
-        }
-
-        public void Run()
-        {
-            if (pipeline == null)
-                this.Connect();
-            pipeline.InvokeAsync();
-        }
-
-        public void RunWait()
-        {
-            if (pipeline == null)
-                this.Connect();
-            pipeline.InvokeAsync();
-            do
-            {
-                _autoResetEvent.WaitOne(500);
-            }
-            while (pipeline.Output.IsOpen);
-
-        }
-
-        /// <summary>
-        /// Stop the pieline reader
-        /// </summary>
-        public void Stop()
-        {
-            if (pipeline != null)
-                if (pipeline.Output.IsOpen)
-                    pipeline.Output.Close();
-        }
-
-        /// <summary>
-        /// Close the pipeline
-        /// </summary>
-        public void Close()
-        {
-            try
+            /// <summary>
+            /// Stop the pieline reader
+            /// </summary>
+            public void Stop()
             {
                 if (pipeline != null)
                 {
                     if (pipeline.Output.IsOpen)
                         pipeline.Output.Close();
-                    pipeline.StopAsync();
                 }
             }
-            catch { }
+
+            /// <summary>
+            /// Check if PS output is open..
+            /// </summary>
+            public bool isRunning
+            {
+                get
+                {
+                    if (pipeline != null)
+                        if (pipeline.Output != null)
+                            return pipeline.Output.IsOpen;
+                    return false;
+                }
+            }
+
+            /// <summary>
+            /// Close the pipeline
+            /// </summary>
+            public void Close()
+            {
+                try
+                {
+                    if (pipeline != null)
+                    {
+                        if (pipeline.Output.IsOpen)
+                            pipeline.Output.Close();
+
+                        pipeline.Output.DataReady -= Output_DataReady;
+                        pipeline.StateChanged -= pipeline_StateChanged;
+
+                        _remoteRunspace.Close();
+                    }
+                }
+                catch { }
+            }
+
+            public event EventHandler StringOutput;
+            public event EventHandler RawOutput;
+            public event EventHandler TypedOutput;
+            public event EventHandler Finished;
+            public event EventHandler ErrorOccured;
+
+
         }
-
-        public event EventHandler StringOutput;
-        public event EventHandler RawOutput;
-        public event EventHandler TypedOutput;
-        public event EventHandler Finished;
-        public event EventHandler ErrorOccured;
-
-
     }
+
+
 }

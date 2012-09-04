@@ -14,6 +14,8 @@ using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Diagnostics;
 using System.Runtime.Caching;
+using System.Threading;
+
 
 namespace sccmclictr.automation
 {
@@ -528,7 +530,10 @@ namespace sccmclictr.automation
 
             return lResult;
         }
-    }
+
+   }
+
+
 
     public class ccm : baseInit
     {
@@ -543,6 +548,7 @@ namespace sccmclictr.automation
         public functions.processes Process;
         public sccmclictr.automation.policy.requestedConfig RequestedConfig;
         public sccmclictr.automation.policy.actualConfig ActualConfig;
+        public functions.monitoring Monitoring;
 
         /// <summary>
         /// Constructor
@@ -562,6 +568,7 @@ namespace sccmclictr.automation
             ActualConfig = new sccmclictr.automation.policy.actualConfig(RemoteRunspace, PSCode, this);
             Services = new functions.services(RemoteRunspace, PSCode, this);
             Process = new functions.processes(RemoteRunspace, PSCode, this);
+            Monitoring = new functions.monitoring(RemoteRunspace, PSCode, this);
 
         }
     }

@@ -149,7 +149,7 @@ namespace sccmclictr.automation
             connect();
 
             //Initialzie connection
-            Client = new ccm(remoteRunspace, PSCode);
+            //Client = new ccm(remoteRunspace, PSCode);
         }
 
         /// <summary>
