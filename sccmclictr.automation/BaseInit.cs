@@ -549,6 +549,7 @@ namespace sccmclictr.automation
         public sccmclictr.automation.policy.requestedConfig RequestedConfig;
         public sccmclictr.automation.policy.actualConfig ActualConfig;
         public functions.monitoring Monitoring;
+        public functions.health Health;
 
         /// <summary>
         /// Constructor
@@ -569,6 +570,7 @@ namespace sccmclictr.automation
             Services = new functions.services(RemoteRunspace, PSCode, this);
             Process = new functions.processes(RemoteRunspace, PSCode, this);
             Monitoring = new functions.monitoring(RemoteRunspace, PSCode, this);
+            Health = new functions.health(RemoteRunspace, PSCode, this);
 
         }
     }
