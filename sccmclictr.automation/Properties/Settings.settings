@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="sccmclictr.automation.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="PSGetDCOMPerm" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">$Reg = [WMIClass]"root\default:StdRegProv"
+$DCOM = $Reg.GetBinaryValue(2147483650,"{0}","{1}").uValue
+$security = Get-WmiObject -Namespace root/cimv2 -Class __SystemSecurity
+$converter = new-object system.management.ManagementClass Win32_SecurityDescriptorHelper
+$converter.BinarySDToSDDL($DCOM).SDDL
+</Value>
+    </Setting>
+    <Setting Name="PSSetDCOMPerm" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">$Reg = [WMIClass]"root\default:StdRegProv"
+$newDCOMSDDL = "{2}"
+$DCOMbinarySD = $converter.SDDLToBinarySD($newDCOMSDDL)
+$Reg.SetBinaryValue(2147483650,"{0}","{1}", $DCOMbinarySD.binarySD)
+</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
