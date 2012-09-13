@@ -98,7 +98,7 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Trigger DataDiscovery (Heartbeat)
+        /// Trigger Discovery Inventory
         /// </summary>
         /// <param name="Full">Enforce a full Discovery (Delete History-Timestamp)</param>
         /// <returns>false=Error</returns>
@@ -134,6 +134,52 @@ namespace sccmclictr.automation.functions
                     SMSDelInvHist("{00000000-0000-0000-0000-000000000010}");
                 }
                 base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000010}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// IDMIF Collection
+        /// </summary>
+        /// <param name="Full"></param>
+        /// <returns></returns>
+        public bool IDMIFCollection(Boolean Full)
+        {
+            try
+            {
+                if (Full)
+                {
+                    SMSDelInvHist("{00000000-0000-0000-0000-000000000011}");
+                }
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000011}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Client Machine Authentication
+        /// </summary>
+        /// <param name="Full"></param>
+        /// <returns></returns>
+        public bool ClientMachineAuthentication(Boolean Full)
+        {
+            try
+            {
+                if (Full)
+                {
+                    SMSDelInvHist("{00000000-0000-0000-0000-000000000012}");
+                }
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000012}'");
             }
             catch
             {
@@ -216,7 +262,7 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Location Services Cleanup Task
+        /// LS (Location Service) Timeout Refresh Task
         /// </summary>
         /// <returns>false=Error</returns>
         public bool LocationServicesCleanupTask()
@@ -224,6 +270,44 @@ namespace sccmclictr.automation.functions
             try
             {
                 base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000025}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Policy Agent Request Assignment (User)</
+        /// </summary>
+        /// <typeparam name="?"></typeparam>
+        /// <param name="?"></param>
+        /// <returns></returns>
+        public bool RequestUserAssignments()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000026}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Policy Agent Evaluate Assignment (User)</
+        /// </summary>
+        /// <returns></returns>
+        public bool EvaluateUserPolicies()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000027}'");
             }
             catch
             {
@@ -252,10 +336,10 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Source Update Manage Update Cycle
+        /// Source Update Message
         /// </summary>
         /// <returns>false=Error</returns>
-        public bool SourceUpdateManageUpdateCycle()
+        public bool SourceUpdateMessage()
         {
             try
             {
@@ -270,10 +354,28 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Policy Agent Cleanup Cycle
+        /// Clearing proxy settings cache
+        /// </summary>
+        /// <returns></returns>
+        public bool ClearingProxySettingsCache()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000037}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Machine Policy Agent Cleanup
         /// </summary>
         /// <returns>false=Error</returns>
-        public bool PolicyAgentCleanupCycle()
+        public bool MachinePolicyAgentCleanupCycle()
         {
             try
             {
@@ -288,10 +390,28 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Validate Assignments
+        /// User Policy Agent Cleanup
+        /// </summary>
+        /// <returns></returns>
+        public bool UserPolicyAgentCleanupCycle()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000041}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Policy Agent Validate Machine Policy / Assignment
         /// </summary>
         /// <returns>false=Error</returns>
-        public bool ValidateAssignments()
+        public bool ValidateMachineAssignments()
         {
             try
             {
@@ -306,7 +426,25 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Certificate Maintenance Cycle
+        /// Policy Agent Validate User Policy / Assignment
+        /// </summary>
+        /// <returns></returns>
+        public bool ValidateUserAssignments()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000043}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Retrying/Refreshing certificates in AD on MP
         /// </summary>
         /// <returns>false=Error</returns>
         public bool CertificateMaintenanceCycle()
@@ -324,7 +462,7 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Peer Distribution Point Status Task
+        /// Peer DP Status reporting
         /// </summary>
         /// <returns>false=Error</returns>
         public bool PeerDistributionPointStatusTask()
@@ -342,10 +480,10 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Peer Distribution Point Provisioning Status Task
+        /// Peer DP Pending package check schedule
         /// </summary>
         /// <returns>false=Error</returns>
-        public bool PeerDistributionPointProvisioningStatusTask()
+        public bool PeerDPPackageCheck()
         {
             try
             {
@@ -360,14 +498,158 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Compliance Interval Enforcement
+        /// SUM Updates install schedule
+        /// </summary>
+        /// <returns></returns>
+        public bool SUMUpdatesInstall()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000063}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// NAP Compliance Interval Enforcement
         /// </summary>
         /// <returns>false=Error</returns>
-        public bool ComplianceIntervalEnforcement()
+        public bool NAPIntervalEnforcement()
         {
             try
             {
                 base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000071}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Hardware Inventory Collection Cycle
+        /// </summary>
+        /// <returns></returns>
+        public bool HWInvCollection()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000101}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Software Inventory Collection Cycle
+        /// </summary>
+        /// <returns></returns>
+        public bool SWInvCollection()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000102}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Discovery Data Collection Cycle
+        /// </summary>
+        /// <returns></returns>
+        public bool DDRCollection()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000103}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// File Collection Cycle
+        /// </summary>
+        /// <returns></returns>
+        public bool FileCollection()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000104}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// IDMIF Collection Cycle
+        /// </summary>
+        /// <returns></returns>
+        public bool IDMIFCollection()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000105}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Software Metering Usage Report Cycle
+        /// </summary>
+        /// <returns></returns>
+        public bool SWMeteringUsageReport()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000106}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Windows Installer Source List Update Cycle
+        /// </summary>
+        /// <returns></returns>
+        public bool MSISourceListUpdate()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000107}'");
             }
             catch
             {
@@ -396,6 +678,42 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
+        /// Branch Distribution Point Maintenance Task
+        /// </summary>
+        /// <returns></returns>
+        public bool BranchDPMaintenanceTask()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000109}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// DCM policy
+        /// </summary>
+        /// <returns></returns>
+        public bool DCMPolicy()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000110}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Send Unsent State Messages with Priority 5
         /// </summary>
         /// <returns>false=Error</returns>
@@ -414,7 +732,7 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// State Message Manager Task
+        /// State System policy cache cleanout
         /// </summary>
         /// <returns>false=Error</returns>
         public bool StateMessageManagerTask()
@@ -432,7 +750,7 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Force Update Scan
+        /// Scan by Update Source
         /// </summary>
         /// <returns>false=Error</returns>
         public bool ForceUpdateScan()
@@ -450,7 +768,7 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Update Status Refresh
+        /// Update Store Policy
         /// </summary>
         /// <returns>false=Error</returns>
         public bool UpdateStatusRefresh()
@@ -468,10 +786,10 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Send Unsent Status Messages with Priority 1
+        /// State system policy bulk send high
         /// </summary>
         /// <returns>false=Error</returns>
-        public bool SendUnsentStatusMessages_Prio1()
+        public bool StateSystemPolicyBulksendHigh()
         {
             try
             {
@@ -486,10 +804,10 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Send Unsent Status Messages with Priority 10
+        /// State system policy bulk send low
         /// </summary>
         /// <returns>false=Error</returns>
-        public bool SendUnsentStatusMessages_Prio10()
+        public bool StateSystemPolicyBulksendLow()
         {
             try
             {
@@ -504,7 +822,7 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// AMT Provision Cycle
+        /// AMT Status Check Policy
         /// </summary>
         /// <returns>false=Error</returns>
         public bool AMTProvisionCycle()
@@ -522,14 +840,50 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// DCM Policy Enforcement
+        /// Application manager policy action
         /// </summary>
         /// <returns>false=Error</returns>
-        public bool DCMPolicyEnforcement()
+        public bool AppManPolicyAction()
         {
             try
             {
                 base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000121}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Application manager user policy action
+        /// </summary>
+        /// <returns></returns>
+        public bool AppManUserPolicyAction()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000122}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Application manager global evaluation action
+        /// </summary>
+        /// <returns></returns>
+        public bool AppManGlobalEvaluation()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000123}'");
             }
             catch
             {
@@ -558,7 +912,7 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Endpoint Deployment Message
+        /// Endpoint deployment reevaluate
         /// </summary>
         /// <returns>false=Error</returns>
         public bool EndpointDeploymentMessage()
@@ -576,7 +930,25 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// External Event Detection Message
+        /// Endpoint AM policy reevaluate
+        /// </summary>
+        /// <returns></returns>
+        public bool EndpointAMPolicyreevaluate()
+        {
+            try
+            {
+                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000222}'");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// External event detection
         /// </summary>
         /// <returns>false=Error</returns>
         public bool ExternalEventDetectionMessage()
@@ -627,14 +999,14 @@ namespace sccmclictr.automation.functions
                 if (Hardreset)
                 {
                     base.CallClassMethod(@"ROOT\ccm:SMS_Client", "ResetPolicy", "1", true);
-                    this.CertificateMaintenanceCycle();
-                    this.PolicyAgentCleanupCycle();
                 }
                 else
                 {
                     base.CallClassMethod(@"ROOT\ccm:SMS_Client", "ResetPolicy", "0", true);
-                    this.PolicyAgentCleanupCycle();
                 }
+
+                this.MachinePolicyAgentCleanupCycle();
+                this.RequestMachinePolicyAssignments();
             }
             catch
             {
