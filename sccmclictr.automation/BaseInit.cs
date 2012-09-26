@@ -533,8 +533,6 @@ namespace sccmclictr.automation
 
    }
 
-
-
     public class ccm : baseInit
     {
         public functions.agentproperties AgentProperties;

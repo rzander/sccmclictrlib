@@ -265,7 +265,7 @@ namespace sccmclictr.automation.functions
         /// LS (Location Service) Timeout Refresh Task
         /// </summary>
         /// <returns>false=Error</returns>
-        public bool LocationServicesCleanupTask()
+        public bool TimeoutLocationServicesTask()
         {
             try
             {
@@ -714,10 +714,10 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Send Unsent State Messages with Priority 5
+        /// Send Unsent State Messages
         /// </summary>
         /// <returns>false=Error</returns>
-        public bool SendUnsentStatusMessages_Prio5()
+        public bool SendUnsentStatusMessages()
         {
             try
             {
