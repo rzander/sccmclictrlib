@@ -728,5 +728,39 @@ namespace sccmclictr.automation.functions
                 }
             }
         }
+
+        /// <summary>
+        /// Determine if pending FileRenameOperations exists...
+        /// </summary>
+        public bool FileRenameOperationsPending
+        {
+            get
+            {
+                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                {
+                    List<PSObject> lResult = base.GetObjectsFromPS("(Get-ItemProperty(\"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\")).$(\"PendingFileRenameOperations\")");
+                    if (lResult.Count > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    List<PSObject> lResult = base.GetObjectsFromPS("(Get-ItemProperty(\"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\")).$(\"PendingFileRenameOperations\")");
+                    if (lResult.Count > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
     }
 }
