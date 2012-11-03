@@ -845,6 +845,7 @@ namespace sccmclictr.automation.functions
             /*string sCode = string.Format("([wmiclass]'ROOT\\ccm\\ClientSDK:CCM_SoftwareUpdatesManager').InstallUpdates()");
             baseClient.GetObjectsFromPS(sCode, true);*/
         }
+
     }
 
 

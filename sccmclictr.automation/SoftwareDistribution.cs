@@ -571,6 +571,313 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
+        /// Source:ROOT\ccm\Policy\Machine\ActualConfig
+        /// </summary>
+        public class CCM_Policy
+        {
+            //Constructor
+            public CCM_Policy(PSObject WMIObject)
+            {
+                this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
+                this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
+                this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
+                this.__INSTANCE = true;
+                this.WMIObject = WMIObject;
+            }
+
+            #region Properties
+
+            internal string __CLASS { get; set; }
+            internal string __NAMESPACE { get; set; }
+            internal bool __INSTANCE { get; set; }
+            internal string __RELPATH { get; set; }
+            internal PSObject WMIObject { get; set; }
+            internal Runspace remoteRunspace;
+            internal TraceSource pSCode;
+            #endregion
+
+        }
+
+        /// <summary>
+        /// Source:ROOT\ccm\Policy\Machine\ActualConfig
+        /// </summary>
+        public class CCM_SoftwareDistribution : CCM_Policy
+        {
+            //Constructor
+            public CCM_SoftwareDistribution(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode) : base(WMIObject)
+            {
+                remoteRunspace = RemoteRunspace;
+                pSCode = PSCode;
+
+                this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
+                this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
+                this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
+                this.__INSTANCE = true;
+                this.WMIObject = WMIObject;
+                string sADV_ActiveTime = WMIObject.Properties["ADV_ActiveTime"].Value as string;
+                if (string.IsNullOrEmpty(sADV_ActiveTime))
+                    this.ADV_ActiveTime = null;
+                else
+                    this.ADV_ActiveTime = ManagementDateTimeConverter.ToDateTime(sADV_ActiveTime) as DateTime?;
+                this.ADV_ActiveTimeIsGMT = WMIObject.Properties["ADV_ActiveTimeIsGMT"].Value as Boolean?;
+                this.ADV_ADF_Published = WMIObject.Properties["ADV_ADF_Published"].Value as Boolean?;
+                this.ADV_ADF_RunNotification = WMIObject.Properties["ADV_ADF_RunNotification"].Value as Boolean?;
+                this.ADV_AdvertisementID = WMIObject.Properties["ADV_AdvertisementID"].Value as String;
+                string sADV_ExpirationTime = WMIObject.Properties["ADV_ExpirationTime"].Value as string;
+                if (string.IsNullOrEmpty(sADV_ExpirationTime))
+                    this.ADV_ExpirationTime = null;
+                else
+                    this.ADV_ExpirationTime = ManagementDateTimeConverter.ToDateTime(sADV_ExpirationTime) as DateTime?;
+                this.ADV_ExpirationTimeIsGMT = WMIObject.Properties["ADV_ExpirationTimeIsGMT"].Value as Boolean?;
+                this.ADV_FirstRunBehavior = WMIObject.Properties["ADV_FirstRunBehavior"].Value as String;
+                this.ADV_MandatoryAssignments = WMIObject.Properties["ADV_MandatoryAssignments"].Value as Boolean?;
+                this.ADV_ProgramWindowIsGMT = WMIObject.Properties["ADV_ProgramWindowIsGMT"].Value as Boolean?;
+                string sADV_ProgramWindowStartTime = WMIObject.Properties["ADV_ProgramWindowStartTime"].Value as string;
+                if (string.IsNullOrEmpty(sADV_ProgramWindowStartTime))
+                    this.ADV_ProgramWindowStartTime = null;
+                else
+                    this.ADV_ProgramWindowStartTime = ManagementDateTimeConverter.ToDateTime(sADV_ProgramWindowStartTime) as DateTime?;
+                string sADV_ProgramWindowStopTime = WMIObject.Properties["ADV_ProgramWindowStopTime"].Value as string;
+                if (string.IsNullOrEmpty(sADV_ProgramWindowStopTime))
+                    this.ADV_ProgramWindowStopTime = null;
+                else
+                    this.ADV_ProgramWindowStopTime = ManagementDateTimeConverter.ToDateTime(sADV_ProgramWindowStopTime) as DateTime?;
+                this.ADV_RCF_InstallFromCDOptions = WMIObject.Properties["ADV_RCF_InstallFromCDOptions"].Value as String;
+                this.ADV_RCF_InstallFromLocalDPOptions = WMIObject.Properties["ADV_RCF_InstallFromLocalDPOptions"].Value as String;
+                this.ADV_RCF_InstallFromRemoteDPOptions = WMIObject.Properties["ADV_RCF_InstallFromRemoteDPOptions"].Value as String;
+                this.ADV_RCF_PostponeToAC = WMIObject.Properties["ADV_RCF_PostponeToAC"].Value as Boolean?;
+                this.ADV_RebootLogoffNotification = WMIObject.Properties["ADV_RebootLogoffNotification"].Value as Boolean?;
+                this.ADV_RebootLogoffNotificationCountdownDuration = WMIObject.Properties["ADV_RebootLogoffNotificationCountdownDuration"].Value as UInt32?;
+                this.ADV_RebootLogoffNotificationFinalWindow = WMIObject.Properties["ADV_RebootLogoffNotificationFinalWindow"].Value as UInt32?;
+                this.ADV_RepeatRunBehavior = WMIObject.Properties["ADV_RepeatRunBehavior"].Value as String;
+                this.ADV_RetryCount = WMIObject.Properties["ADV_RetryCount"].Value as UInt32?;
+                this.ADV_RetryInterval = WMIObject.Properties["ADV_RetryInterval"].Value as UInt32?;
+                this.ADV_RunNotificationCountdownDuration = WMIObject.Properties["ADV_RunNotificationCountdownDuration"].Value as UInt32?;
+                this.PKG_ContentSize = WMIObject.Properties["PKG_ContentSize"].Value as UInt32?;
+                this.PKG_Language = WMIObject.Properties["PKG_Language"].Value as String;
+                this.PKG_Manufacturer = WMIObject.Properties["PKG_Manufacturer"].Value as String;
+                this.PKG_MIFChecking = WMIObject.Properties["PKG_MIFChecking"].Value as Boolean?;
+                this.PKG_MifFileName = WMIObject.Properties["PKG_MifFileName"].Value as String;
+                this.PKG_MIFName = WMIObject.Properties["PKG_MIFName"].Value as String;
+                this.PKG_MIFPublisher = WMIObject.Properties["PKG_MIFPublisher"].Value as String;
+                this.PKG_MIFVersion = WMIObject.Properties["PKG_MIFVersion"].Value as String;
+                this.PKG_Name = WMIObject.Properties["PKG_Name"].Value as String;
+                this.PKG_PackageID = WMIObject.Properties["PKG_PackageID"].Value as String;
+                this.PKG_PSF_ContainsSourceFiles = WMIObject.Properties["PKG_PSF_ContainsSourceFiles"].Value as Boolean?;
+                this.PKG_SourceHash = WMIObject.Properties["PKG_SourceHash"].Value as String;
+                this.PKG_SourceVersion = WMIObject.Properties["PKG_SourceVersion"].Value as String;
+                this.PKG_version = WMIObject.Properties["PKG_version"].Value as String;
+                this.PRG_Category = WMIObject.Properties["PRG_Category"].Value as String[];
+                this.PRG_CommandLine = WMIObject.Properties["PRG_CommandLine"].Value as String;
+                this.PRG_Comment = WMIObject.Properties["PRG_Comment"].Value as String;
+                this.PRG_CustomLogoffReturnCodes = WMIObject.Properties["PRG_CustomLogoffReturnCodes"].Value as UInt32?[];
+                this.PRG_CustomRebootReturnCodes = WMIObject.Properties["PRG_CustomRebootReturnCodes"].Value as UInt32?[];
+                this.PRG_CustomSuccessReturnCodes = WMIObject.Properties["PRG_CustomSuccessReturnCodes"].Value as UInt32?[];
+                this.PRG_DependentPolicy = WMIObject.Properties["PRG_DependentPolicy"].Value as Boolean?;
+                this.PRG_DependentProgramPackageID = WMIObject.Properties["PRG_DependentProgramPackageID"].Value as String;
+                this.PRG_DependentProgramProgramID = WMIObject.Properties["PRG_DependentProgramProgramID"].Value as String;
+                this.PRG_DiskSpaceReq = WMIObject.Properties["PRG_DiskSpaceReq"].Value as String;
+                this.PRG_DriveLetter = WMIObject.Properties["PRG_DriveLetter"].Value as String;
+                this.PRG_ForceDependencyRun = WMIObject.Properties["PRG_ForceDependencyRun"].Value as Boolean?;
+                this.PRG_HistoryLocation = WMIObject.Properties["PRG_HistoryLocation"].Value as String;
+                this.PRG_MaxDuration = WMIObject.Properties["PRG_MaxDuration"].Value as UInt32?;
+                this.PRG_PRF_AfterRunning = WMIObject.Properties["PRG_PRF_AfterRunning"].Value as String;
+                this.PRG_PRF_Disabled = WMIObject.Properties["PRG_PRF_Disabled"].Value as Boolean?;
+                this.PRG_PRF_InstallsApplication = WMIObject.Properties["PRG_PRF_InstallsApplication"].Value as Boolean?;
+                this.PRG_PRF_MappedDriveRequired = WMIObject.Properties["PRG_PRF_MappedDriveRequired"].Value as Boolean?;
+                this.PRG_PRF_PersistMappedDrive = WMIObject.Properties["PRG_PRF_PersistMappedDrive"].Value as Boolean?;
+                this.PRG_PRF_RunNotification = WMIObject.Properties["PRG_PRF_RunNotification"].Value as Boolean?;
+                this.PRG_PRF_RunWithAdminRights = WMIObject.Properties["PRG_PRF_RunWithAdminRights"].Value as Boolean?;
+                this.PRG_PRF_ShowWindow = WMIObject.Properties["PRG_PRF_ShowWindow"].Value as String;
+                this.PRG_PRF_UserInputRequired = WMIObject.Properties["PRG_PRF_UserInputRequired"].Value as Boolean?;
+                this.PRG_PRF_UserLogonRequirement = WMIObject.Properties["PRG_PRF_UserLogonRequirement"].Value as String;
+                this.PRG_ProgramID = WMIObject.Properties["PRG_ProgramID"].Value as String;
+                this.PRG_ProgramName = WMIObject.Properties["PRG_ProgramName"].Value as String;
+                this.PRG_Requirements = WMIObject.Properties["PRG_Requirements"].Value as String;
+                this.PRG_ReturnCodesSource = WMIObject.Properties["PRG_ReturnCodesSource"].Value as String;
+                this.PRG_WorkingDirectory = WMIObject.Properties["PRG_WorkingDirectory"].Value as String;
+            }
+
+            #region Properties
+
+            public DateTime? ADV_ActiveTime { get; set; }
+            public Boolean? ADV_ActiveTimeIsGMT { get; set; }
+            public Boolean? ADV_ADF_Published { get; set; }
+            public Boolean? ADV_ADF_RunNotification { get; set; }
+            public String ADV_AdvertisementID { get; set; }
+            public DateTime? ADV_ExpirationTime { get; set; }
+            public Boolean? ADV_ExpirationTimeIsGMT { get; set; }
+            public String ADV_FirstRunBehavior { get; set; }
+            public Boolean? ADV_MandatoryAssignments { get; set; }
+            public Boolean? ADV_ProgramWindowIsGMT { get; set; }
+            public DateTime? ADV_ProgramWindowStartTime { get; set; }
+            public DateTime? ADV_ProgramWindowStopTime { get; set; }
+            public String ADV_RCF_InstallFromCDOptions { get; set; }
+            public String ADV_RCF_InstallFromLocalDPOptions { get; set; }
+            public String ADV_RCF_InstallFromRemoteDPOptions { get; set; }
+            public Boolean? ADV_RCF_PostponeToAC { get; set; }
+            public Boolean? ADV_RebootLogoffNotification { get; set; }
+            public UInt32? ADV_RebootLogoffNotificationCountdownDuration { get; set; }
+            public UInt32? ADV_RebootLogoffNotificationFinalWindow { get; set; }
+            public String ADV_RepeatRunBehavior { get; set; }
+            public UInt32? ADV_RetryCount { get; set; }
+            public UInt32? ADV_RetryInterval { get; set; }
+            public UInt32? ADV_RunNotificationCountdownDuration { get; set; }
+            public UInt32? PKG_ContentSize { get; set; }
+            public String PKG_Language { get; set; }
+            public String PKG_Manufacturer { get; set; }
+            public Boolean? PKG_MIFChecking { get; set; }
+            public String PKG_MifFileName { get; set; }
+            public String PKG_MIFName { get; set; }
+            public String PKG_MIFPublisher { get; set; }
+            public String PKG_MIFVersion { get; set; }
+            public String PKG_Name { get; set; }
+            public String PKG_PackageID { get; set; }
+            public Boolean? PKG_PSF_ContainsSourceFiles { get; set; }
+            public String PKG_SourceHash { get; set; }
+            public String PKG_SourceVersion { get; set; }
+            public String PKG_version { get; set; }
+            public String[] PRG_Category { get; set; }
+            public String PRG_CommandLine { get; set; }
+            public String PRG_Comment { get; set; }
+            public UInt32?[] PRG_CustomLogoffReturnCodes { get; set; }
+            public UInt32?[] PRG_CustomRebootReturnCodes { get; set; }
+            public UInt32?[] PRG_CustomSuccessReturnCodes { get; set; }
+            public Boolean? PRG_DependentPolicy { get; set; }
+            public String PRG_DependentProgramPackageID { get; set; }
+            public String PRG_DependentProgramProgramID { get; set; }
+            public String PRG_DiskSpaceReq { get; set; }
+            public String PRG_DriveLetter { get; set; }
+            public Boolean? PRG_ForceDependencyRun { get; set; }
+            public String PRG_HistoryLocation { get; set; }
+            public UInt32? PRG_MaxDuration { get; set; }
+            public String PRG_PRF_AfterRunning { get; set; }
+            public Boolean? PRG_PRF_Disabled { get; set; }
+            public Boolean? PRG_PRF_InstallsApplication { get; set; }
+            public Boolean? PRG_PRF_MappedDriveRequired { get; set; }
+            public Boolean? PRG_PRF_PersistMappedDrive { get; set; }
+            public Boolean? PRG_PRF_RunNotification { get; set; }
+            public Boolean? PRG_PRF_RunWithAdminRights { get; set; }
+            public String PRG_PRF_ShowWindow { get; set; }
+            public Boolean? PRG_PRF_UserInputRequired { get; set; }
+            public String PRG_PRF_UserLogonRequirement { get; set; }
+            public String PRG_ProgramID { get; set; }
+            public String PRG_ProgramName { get; set; }
+            public String PRG_Requirements { get; set; }
+            public String PRG_ReturnCodesSource { get; set; }
+            public String PRG_WorkingDirectory { get; set; }
+            #endregion
+
+        }
+
+        /// <summary>
+        /// Source:ROOT\ccm\Policy\Machine\ActualConfig
+        /// </summary>
+        public class CCM_TaskSequence : CCM_SoftwareDistribution
+        {
+            //Constructor
+            public CCM_TaskSequence(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode) : base(WMIObject, RemoteRunspace, PSCode)
+            {
+                remoteRunspace = RemoteRunspace;
+                pSCode = PSCode;
+
+                this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
+                this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
+                this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
+                this.__INSTANCE = true;
+                this.WMIObject = WMIObject;
+                this.Reserved = WMIObject.Properties["Reserved"].Value as String;
+                this.TS_BootImageID = WMIObject.Properties["TS_BootImageID"].Value as String;
+                string sTS_Deadline = WMIObject.Properties["TS_Deadline"].Value as string;
+                if (string.IsNullOrEmpty(sTS_Deadline))
+                    this.TS_Deadline = null;
+                else
+                    this.TS_Deadline = ManagementDateTimeConverter.ToDateTime(sTS_Deadline) as DateTime?;
+                this.TS_MandatoryCountdown = WMIObject.Properties["TS_MandatoryCountdown"].Value as UInt32?;
+                this.TS_PopupReminderInterval = WMIObject.Properties["TS_PopupReminderInterval"].Value as UInt32?;
+                this.TS_References = WMIObject.Properties["TS_References"].Value as String[];
+                this.TS_Sequence = WMIObject.Properties["TS_Sequence"].Value as String;
+                this.TS_Type = WMIObject.Properties["TS_Type"].Value as UInt32?;
+                this.TS_UserNotificationFlags = WMIObject.Properties["TS_UserNotificationFlags"].Value as UInt32?;
+            }
+
+            #region Properties
+
+            public String Reserved { get; set; }
+            public String TS_BootImageID { get; set; }
+            public DateTime? TS_Deadline { get; set; }
+            public UInt32? TS_MandatoryCountdown { get; set; }
+            public UInt32? TS_PopupReminderInterval { get; set; }
+            public String[] TS_References { get; set; }
+            public String TS_Sequence { get; set; }
+            public UInt32? TS_Type { get; set; }
+            public UInt32? TS_UserNotificationFlags { get; set; }
+            #endregion
+
+        }
+
+
+        /// <summary>
+        /// Source:ROOT\ccm\Policy\Machine\ActualConfig
+        /// </summary>
+        public class CCM_Scheduler_ScheduledMessage : CCM_Policy
+        {
+            //Constructor
+            public CCM_Scheduler_ScheduledMessage(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode) : base(WMIObject)
+            {
+                remoteRunspace = RemoteRunspace;
+                pSCode = PSCode;
+
+                this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
+                this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
+                this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
+                this.__INSTANCE = true;
+                this.WMIObject = WMIObject;
+                this.ActiveMessage = WMIObject.Properties["ActiveMessage"].Value as String;
+                string sActiveTime = WMIObject.Properties["ActiveTime"].Value as string;
+                if (string.IsNullOrEmpty(sActiveTime))
+                    this.ActiveTime = null;
+                else
+                    this.ActiveTime = ManagementDateTimeConverter.ToDateTime(sActiveTime) as DateTime?;
+                this.ActiveTimeIsGMT = WMIObject.Properties["ActiveTimeIsGMT"].Value as Boolean?;
+                this.DeliverMode = WMIObject.Properties["DeliverMode"].Value as String;
+                this.ExpireMessage = WMIObject.Properties["ExpireMessage"].Value as String;
+                string sExpireTime = WMIObject.Properties["ExpireTime"].Value as string;
+                if (string.IsNullOrEmpty(sExpireTime))
+                    this.ExpireTime = null;
+                else
+                    this.ExpireTime = ManagementDateTimeConverter.ToDateTime(sExpireTime) as DateTime?;
+                this.ExpireTimeIsGMT = WMIObject.Properties["ExpireTimeIsGMT"].Value as Boolean?;
+                this.MessageName = WMIObject.Properties["MessageName"].Value as String;
+                this.MessageTimeout = WMIObject.Properties["MessageTimeout"].Value as String;
+                this.ReplyToEndpoint = WMIObject.Properties["ReplyToEndpoint"].Value as String;
+                this.ScheduledMessageID = WMIObject.Properties["ScheduledMessageID"].Value as String;
+                this.TargetEndpoint = WMIObject.Properties["TargetEndpoint"].Value as String;
+                this.TriggerMessage = WMIObject.Properties["TriggerMessage"].Value as String;
+                this.Triggers = WMIObject.Properties["Triggers"].Value as String[];
+            }
+
+            #region Properties
+
+            public String ActiveMessage { get; set; }
+            public DateTime? ActiveTime { get; set; }
+            public Boolean? ActiveTimeIsGMT { get; set; }
+            public String DeliverMode { get; set; }
+            public String ExpireMessage { get; set; }
+            public DateTime? ExpireTime { get; set; }
+            public Boolean? ExpireTimeIsGMT { get; set; }
+            public String MessageName { get; set; }
+            public String MessageTimeout { get; set; }
+            public String ReplyToEndpoint { get; set; }
+            public String ScheduledMessageID { get; set; }
+            public String TargetEndpoint { get; set; }
+            public String TriggerMessage { get; set; }
+            public String[] Triggers { get; set; }
+            #endregion
+
+        }
+
+        /// <summary>
         /// Application Priorities
         /// </summary>
         public static class AppPriority

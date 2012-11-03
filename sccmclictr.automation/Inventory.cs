@@ -199,9 +199,24 @@ namespace sccmclictr.automation.functions
             #endregion
 
             #region Methods
-            public void Uninstall()
+            public string Uninstall()
             {
-                oNewBase.GetStringFromPS("Invoke-Expression(\"" + UninstallString + "\")");
+                if (SoftwareCode.StartsWith("{"))
+                {
+                    return oNewBase.GetStringFromPS("Invoke-Expression(\"msiexec.exe /x '" + SoftwareCode + "' REBOOT=ReallySuppress /q\")");
+                }
+
+                return null;
+            }
+
+            public string Repair()
+            {
+                if (SoftwareCode.StartsWith("{"))
+                {
+                    return oNewBase.GetStringFromPS("Invoke-Expression(\"msiexec.exe /fpecmsu '" + SoftwareCode + "' REBOOT=ReallySuppress REINSTALL=ALL /q\")");
+                }
+
+                return null;
             }
             #endregion
 
