@@ -823,11 +823,20 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Install all required updates
+        /// Install all required updates with a deadline (mandatory).
         /// </summary>
         public void InstallAllRequiredUpdates()
         {
             string sCode = string.Format("([wmiclass]'ROOT\\ccm\\ClientSDK:CCM_SoftwareUpdatesManager').InstallUpdates()");
+            baseClient.GetObjectsFromPS(sCode, true);
+        }
+
+        /// <summary>
+        /// Install all approved updates even if they do not have a deadline.
+        /// </summary>
+        public void InstallAllApprovedUpdates()
+        {
+            string sCode = string.Format(@"([wmiclass]'ROOT\ccm\ClientSDK:CCM_SoftwareUpdatesManager').InstallUpdates([System.Management.ManagementObject[]] (get-wmiobject -query 'SELECT * FROM CCM_SoftwareUpdate' -namespace 'ROOT\ccm\ClientSDK'))");
             baseClient.GetObjectsFromPS(sCode, true);
         }
 
@@ -841,9 +850,6 @@ namespace sccmclictr.automation.functions
 
             string sCode = string.Format("[System.Management.ManagementObject[]] $a = get-wmiobject -query \"SELECT * FROM CCM_SoftwareUpdate WHERE UpdateID like '{0}'\" -namespace \"ROOT\\ccm\\ClientSDK\";([wmiclass]'ROOT\\ccm\\ClientSDK:CCM_SoftwareUpdatesManager').InstallUpdates($a)", sIDs);
             baseClient.GetObjectsFromPS(sCode, true);
-
-            /*string sCode = string.Format("([wmiclass]'ROOT\\ccm\\ClientSDK:CCM_SoftwareUpdatesManager').InstallUpdates()");
-            baseClient.GetObjectsFromPS(sCode, true);*/
         }
 
     }
