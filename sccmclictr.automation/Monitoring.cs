@@ -132,7 +132,7 @@ namespace sccmclictr.automation.functions
                                             lOutput.Add(cts.ConvertFrom(PO, objectType, null, true));
                                             break;
                                         }
-                                        catch (Exception ex)
+                                        catch
                                         {
                                             try
                                             {

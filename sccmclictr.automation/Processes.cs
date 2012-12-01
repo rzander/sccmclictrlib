@@ -149,12 +149,12 @@ namespace sccmclictr.automation.functions
             remoteRunspace = RemoteRunspace;
             pSCode = PSCode;
 
-            oNewBase = new baseInit(remoteRunspace, pSCode);
+            //oNewBase = new baseInit(remoteRunspace, pSCode);
 
             this.Owner = WMIObject.Properties["Owner"].Value as string;
         }
 
-        internal baseInit oNewBase;
+        //internal baseInit oNewBase;
 
         #region Properties
 
@@ -215,13 +215,13 @@ namespace sccmclictr.automation.functions
 
         #region Properties
 
-        internal string __CLASS { get; set; }
-        internal string __NAMESPACE { get; set; }
-        internal bool __INSTANCE { get; set; }
-        internal string __RELPATH { get; set; }
-        internal PSObject WMIObject { get; set; }
-        internal Runspace remoteRunspace;
-        internal TraceSource pSCode;
+        //internal string __CLASS { get; set; }
+        //internal string __NAMESPACE { get; set; }
+        //internal bool __INSTANCE { get; set; }
+        //internal string __RELPATH { get; set; }
+        //internal PSObject WMIObject { get; set; }
+        //internal Runspace remoteRunspace;
+        //internal TraceSource pSCode;
         public String CommandLine { get; set; }
         public String ExecutablePath { get; set; }
         public UInt32? HandleCount { get; set; }
@@ -337,13 +337,13 @@ namespace sccmclictr.automation.functions
 
         #region Properties
 
-        internal string __CLASS { get; set; }
-        internal string __NAMESPACE { get; set; }
-        internal bool __INSTANCE { get; set; }
-        internal string __RELPATH { get; set; }
-        internal PSObject WMIObject { get; set; }
-        internal Runspace remoteRunspace;
-        internal TraceSource pSCode;
+        //internal string __CLASS { get; set; }
+        //internal string __NAMESPACE { get; set; }
+        //internal bool __INSTANCE { get; set; }
+        //internal string __RELPATH { get; set; }
+        //internal PSObject WMIObject { get; set; }
+        //internal Runspace remoteRunspace;
+        //internal TraceSource pSCode;
         public String CreationClassName { get; set; }
         public DateTime? CreationDate { get; set; }
         public String CSCreationClassName { get; set; }

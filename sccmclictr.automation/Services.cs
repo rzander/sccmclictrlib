@@ -143,13 +143,13 @@ namespace sccmclictr.automation.functions
 
         #region Properties
 
-        internal string __CLASS { get; set; }
-        internal string __NAMESPACE { get; set; }
-        internal bool __INSTANCE { get; set; }
-        internal string __RELPATH { get; set; }
-        internal PSObject WMIObject { get; set; }
-        internal Runspace remoteRunspace;
-        internal TraceSource pSCode;
+        //internal string __CLASS { get; set; }
+        //internal string __NAMESPACE { get; set; }
+        //internal bool __INSTANCE { get; set; }
+        //internal string __RELPATH { get; set; }
+        //internal PSObject WMIObject { get; set; }
+        //internal Runspace remoteRunspace;
+        //internal TraceSource pSCode;
         public UInt32? CheckPoint { get; set; }
         public UInt32? ProcessId { get; set; }
         public UInt32? WaitHint { get; set; }
@@ -317,13 +317,13 @@ namespace sccmclictr.automation.functions
 
         #region Properties
 
-        internal string __CLASS { get; set; }
-        internal string __NAMESPACE { get; set; }
-        internal bool __INSTANCE { get; set; }
-        internal string __RELPATH { get; set; }
-        internal PSObject WMIObject { get; set; }
-        internal Runspace remoteRunspace;
-        internal TraceSource pSCode;
+        //internal string __CLASS { get; set; }
+        //internal string __NAMESPACE { get; set; }
+        //internal bool __INSTANCE { get; set; }
+        //internal string __RELPATH { get; set; }
+        //internal PSObject WMIObject { get; set; }
+        //internal Runspace remoteRunspace;
+        //internal TraceSource pSCode;
         public Boolean? AcceptPause { get; set; }
         public Boolean? AcceptStop { get; set; }
         public Boolean? DesktopInteract { get; set; }
@@ -409,13 +409,13 @@ namespace sccmclictr.automation.functions
 
         #region Properties
 
-        internal string __CLASS { get; set; }
-        internal string __NAMESPACE { get; set; }
-        internal bool __INSTANCE { get; set; }
-        internal string __RELPATH { get; set; }
-        internal PSObject WMIObject { get; set; }
-        internal Runspace remoteRunspace;
-        internal TraceSource pSCode;
+        //internal string __CLASS { get; set; }
+        //internal string __NAMESPACE { get; set; }
+        //internal bool __INSTANCE { get; set; }
+        //internal string __RELPATH { get; set; }
+        //internal PSObject WMIObject { get; set; }
+        //internal Runspace remoteRunspace;
+        //internal TraceSource pSCode;
         public String CreationClassName { get; set; }
         public Boolean? Started { get; set; }
         public String StartMode { get; set; }
@@ -458,13 +458,13 @@ namespace sccmclictr.automation.functions
 
         #region Properties
 
-        internal string __CLASS { get; set; }
-        internal string __NAMESPACE { get; set; }
-        internal bool __INSTANCE { get; set; }
-        internal string __RELPATH { get; set; }
-        internal PSObject WMIObject { get; set; }
-        internal Runspace remoteRunspace;
-        internal TraceSource pSCode;
+        //internal string __CLASS { get; set; }
+        //internal string __NAMESPACE { get; set; }
+        //internal bool __INSTANCE { get; set; }
+        //internal string __RELPATH { get; set; }
+        //internal PSObject WMIObject { get; set; }
+        //internal Runspace remoteRunspace;
+        //internal TraceSource pSCode;
         #endregion
 
     }

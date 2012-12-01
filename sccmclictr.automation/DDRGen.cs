@@ -194,10 +194,7 @@ namespace sccmclictr.automation
             AddBegin();
             object[] args = new object[5];
             args[0] = Name;
-            if (Value != null)
-                args[1] = Value;
-            else
-                args[1] = "(null)";
+            args[1] = Value;
             args[2] = 4; //Length
             args[3] = ((int)DDRPropertyFlag).ToString();
             args[4] = "8";
