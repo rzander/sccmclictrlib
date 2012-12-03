@@ -840,6 +840,76 @@ namespace sccmclictr.automation.functions
             baseClient.GetObjectsFromPS(sCode, true);
         }
 
+        /// <summary>
+        /// Check if there are updates with pending reboot
+        /// </summary>
+        /// <returns></returns>
+        public Boolean UpdateWithPendingReboot()
+        {
+            //8 = ciJobStatePendingSoftReboot
+            //9 = ciJobStatePendingHardReboot
+            //10= ciJobStateWaitReboot
+            List<CCM_SoftwareUpdate> oPendingReboot = SoftwareUpdateReload.Where(t => (t.EvaluationState == 8) | (t.EvaluationState == 9) | (t.EvaluationState == 10)).ToList();
+
+            if (oPendingReboot.Count > 0)
+                return true;
+            else
+                return false;
+        }
+
+        /// <summary>
+        /// Check if there are pending Updates (Installation not started)
+        /// </summary>
+        /// <returns></returns>
+        public Boolean UpdatesInstallationNotStarted()
+        {
+            //0 = ciJobStateNone
+            //1 = ciJobStateAvailable
+            //14= ciJobStateWaitServiceWindow
+            //21= ciJobStateWaitingRetry
+            List<CCM_SoftwareUpdate> oUpdStat = SoftwareUpdateReload.Where(t => (t.EvaluationState == 1) | (t.EvaluationState == 0) | (t.EvaluationState == 14) | (t.EvaluationState == 21)).ToList();
+
+            if (oUpdStat.Count > 0)
+                return true;
+            else
+                return false;
+
+        }
+
+        /// <summary>
+        /// Chek if there an update installation is running
+        /// </summary>
+        /// <returns></returns>
+        public Boolean UpdateInstallationRunning()
+        {
+            //0 = ciJobStateNone
+            //1 = ciJobStateAvailable
+            List<CCM_SoftwareUpdate> oUpdStat = SoftwareUpdateReload.Where(t => (t.EvaluationState == 2) | (t.EvaluationState == 3) | (t.EvaluationState == 4)
+                | (t.EvaluationState == 5) | (t.EvaluationState == 6) | (t.EvaluationState == 7) | (t.EvaluationState == 11)).ToList();
+
+            if (oUpdStat.Count > 0)
+                return true;
+            else
+                return false;
+
+        }
+
+        /// <summary>
+        /// Check if there are failed updates
+        /// </summary>
+        /// <returns></returns>
+        public Boolean UpdateInstallationErrors()
+        {
+            //13= ciJobStateError
+            List<CCM_SoftwareUpdate> oUpdStat = SoftwareUpdateReload.Where(t => (t.EvaluationState == 13)).ToList();
+
+            if (oUpdStat.Count > 0)
+                return true;
+            else
+                return false;
+
+        }
+
         //Install List of Updates
         public void InstallUpdates(List<CCM_SoftwareUpdate> Updates)
         {
