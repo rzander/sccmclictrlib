@@ -43,8 +43,14 @@ namespace sccmclictr.automation
                 powershell.Runspace = remoteRunspace;
                 powershell.AddScript(scriptText);
                 //powershell.Invoke();
-                Collection<PSObject> results = powershell.Invoke();
-
+                Collection<PSObject> PSresults = powershell.Invoke();
+                List<PSObject> loRes = PSresults.Where(t => t != null).ToList();
+                Collection<PSObject> results = new Collection<PSObject>();
+                foreach(PSObject po in loRes)
+                {
+                    if (po != null)
+                        results.Add(po);
+                }
                 return results;
             }
         }

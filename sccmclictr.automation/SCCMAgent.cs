@@ -83,7 +83,7 @@ namespace sccmclictr.automation
         /// <param name="hostname">target computername</param>
         public SCCMAgent(string hostname)
         {
-            initialize(hostname, null, null, 5985);
+            initialize(hostname, null, null, 5985, true);
         }
 
         /// <summary>
@@ -94,7 +94,20 @@ namespace sccmclictr.automation
         /// <param name="password">password for the connection</param>
         public SCCMAgent(string hostname, string username, string password)
         {
-            initialize(hostname, username, password, 5985);
+            initialize(hostname, username, password, 5985, true);
+        }
+
+        /// <summary>
+        /// Connect to a remote SCCM Agent by using WSMan
+        /// </summary>
+        /// <param name="hostname">target computername</param>
+        /// <param name="username">username for the connection</param>
+        /// <param name="password">password for the connection</param>
+        /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
+        /// <param name="Connect">automatically connect after initializing</param>
+        public SCCMAgent(string hostname, string username, string password, int wsManPort, bool Connect)
+        {
+            initialize(hostname, username, password, wsManPort, Connect);
         }
 
         /// <summary>
@@ -106,7 +119,7 @@ namespace sccmclictr.automation
         /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
         public SCCMAgent(string hostname, string username, string password, int wsManPort)
         {
-            initialize(hostname, username, password, wsManPort);
+            initialize(hostname, username, password, wsManPort, true);
         }
 
         /// <summary>
@@ -117,7 +130,7 @@ namespace sccmclictr.automation
         /// <param name="password">password for the connection</param>
         /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
         /// <param name="doNotConnect">Only prepare the connection, connection must be initialized with 'reconnect'</param>
-        protected void initialize(string hostname, string username, string password, int wsManPort)
+        protected void initialize(string hostname, string username, string password, int wsManPort, bool bConnect)
         {
             Hostname = hostname;
             Username = username;
@@ -146,7 +159,8 @@ namespace sccmclictr.automation
             connectionInfo.AuthenticationMechanism = AuthenticationMechanism.Default;
             connectionInfo.ProxyAuthentication = AuthenticationMechanism.Negotiate;
 
-            connect();
+            if(bConnect)
+                connect();
 
             //Initialzie connection
             //Client = new ccm(remoteRunspace, PSCode);

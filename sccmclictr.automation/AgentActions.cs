@@ -1016,5 +1016,26 @@ namespace sccmclictr.automation.functions
             return true;
 
         }
+
+        public bool RepairAgent()
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Remove the SCCM/CM12 Agent
+        /// </summary>
+        /// <returns></returns>
+        public bool UninstallAgent()
+        {
+            string sProdCode = baseClient.AgentProperties.ProductCode;
+            if (sProdCode.StartsWith("{"))
+            {
+                string sResult = baseClient.GetStringFromPS("Invoke-Expression(\"msiexec.exe /x '" + sProdCode + "' REBOOT=ReallySuppress /q\")");
+                return true;
+            }
+
+            return false;
+        }
     }
 }

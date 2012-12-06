@@ -921,7 +921,6 @@ namespace sccmclictr.automation.functions
             }
         }
 
-
         /// <summary>
         /// Execution History
         /// </summary>

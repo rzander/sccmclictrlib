@@ -3,7 +3,7 @@
   <Class Name="sccmclictr.automation.functions.agentproperties">
     <Position X="0.5" Y="6.25" Width="3.75" />
     <TypeIdentifier>
-      <HashCode>AAEAAESG4UABAAIgyYBAEYBAiDACCQIACwABxMAMkAA=</HashCode>
+      <HashCode>AAFAAESG4UABAAIgyYBAEYBAiDACCQIACwABxMAMkAA=</HashCode>
       <FileName>AgentProperties.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -169,12 +169,22 @@
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
     <NestedTypes>
-      <Class Name="sccmclictr.automation.functions.softwaredistribution.CCM_SoftwareBase" Collapsed="true">
+      <Class Name="sccmclictr.automation.functions.softwaredistribution.CCM_Scheduler_ScheduledMessage" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>SoftwareDistribution.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="sccmclictr.automation.functions.softwaredistribution.CCM_AppDeploymentType" Collapsed="true">
+      <Class Name="sccmclictr.automation.functions.softwaredistribution.CCM_SoftwareDistribution" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareDistribution.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwaredistribution.AppPriority" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareDistribution.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwaredistribution.REG_ExecutionHistory" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>SoftwareDistribution.cs</NewMemberFileName>
         </TypeIdentifier>
@@ -184,7 +194,27 @@
           <NewMemberFileName>SoftwareDistribution.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="sccmclictr.automation.functions.softwaredistribution.REG_ExecutionHistory" Collapsed="true">
+      <Class Name="sccmclictr.automation.functions.softwaredistribution.CCM_Policy" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareDistribution.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwaredistribution.CCM_SoftwareBase" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareDistribution.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwaredistribution.CCM_TaskSequence" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareDistribution.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwaredistribution.CCM_AppDeploymentType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>SoftwareDistribution.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="sccmclictr.automation.functions.softwaredistribution.AppEnforcePreference" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>SoftwareDistribution.cs</NewMemberFileName>
         </TypeIdentifier>
@@ -268,7 +298,7 @@
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAQEAAAAAAIAKABAAAAAAAAAAAIAAAAAAAAAkAA=</HashCode>
+      <HashCode>AAAAIAQEQAAAgAIAKABAAAAAAAAAAAJAIAAAAAAAkAA=</HashCode>
       <FileName>SoftwareUpdates.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -302,7 +332,7 @@
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>gAAAAAAAAAAAAIAAAgACAAAAAAAAAAJAgAAAAkACAAI=</HashCode>
+      <HashCode>gAAACAAAAAAAAIACAgACAAAAAAAAAAJAgAAAAkACAAI=</HashCode>
       <FileName>BaseInit.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -436,6 +466,13 @@
     <TypeIdentifier>
       <HashCode>AAAAAAQABgAgACACCQACiAAQAAgCAUAAAAIIAAAAmAE=</HashCode>
       <FileName>Policy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="sccmclictr.automation.functions.agentactions">
+    <Position X="30.5" Y="6.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>EgCCGJSAGQIAAZAASBCDQUjEACpgEUAEgBBAQEASllI=</HashCode>
+      <FileName>AgentActions.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

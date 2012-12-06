@@ -762,5 +762,17 @@ namespace sccmclictr.automation.functions
                 }
             }
         }
+
+        /// <summary>
+        /// Get the MSI Product Code of the SCCM/CM12 Agent
+        /// </summary>
+        public string ProductCode
+        {
+            get
+            {
+                string sProductCode = base.GetStringFromPS("(Get-WmiObject -Class CCM_InstalledProduct -Namespace \"root\\ccm\").ProductCode");
+                return sProductCode;
+            }
+        }
     }
 }
