@@ -67,6 +67,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ScheduleDecoding.cs" />
     <Compile Include="Services.cs" />
     <Compile Include="SoftwareUpdates.cs" />
     <Compile Include="SWCache.cs" />

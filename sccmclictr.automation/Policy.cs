@@ -23,7 +23,7 @@ namespace sccmclictr.automation.policy
 {
     /// <summary>
     /// SCCM Requested Policy
-    /// </summary>
+    /// </summary>s
     public class requestedConfig : baseInit
     {
         internal Runspace remoteRunspace;
@@ -39,6 +39,25 @@ namespace sccmclictr.automation.policy
             baseClient = oClient;
         }
 
+        public string CreateServiceWindow(string Schedules, UInt32 ServiceWindowType)
+        {
+            string sPolicyID = System.Guid.NewGuid().ToString().Replace("{", "").Replace("}", "");
+            string sPSCommand = "$a = Set-WmiInstance -Class CCM_ServiceWindow -Namespace 'ROOT\\ccm\\Policy\\Machine\\RequestedConfig' -PutType 'CreateOnly' -argument @{PolicySource = 'LOCAL'; PolicyRuleID = 'NONE'; PolicyVersion = '1.0'; Schedules = '" + Schedules + "'; ServiceWindowType = " + ServiceWindowType.ToString() + "; ServiceWindowID = '" + sPolicyID + "'; PolicyID = '" + sPolicyID + "'; PolicyInstanceID = '"+sPolicyID+"'};$a.ServiceWindowID";
+            List<PSObject> oResults = baseClient.GetObjectsFromPS(sPSCommand);
+            foreach (PSObject oRes in oResults)
+            {
+                if (oRes != null)
+                    if (oRes.ToString().Length == 36)
+                        return oRes.ToString();
+            }
+
+            return null;
+        }
+
+        public void DeleteServiceWindow(string ServiceWindowID)
+        {
+            string sResult = baseClient.GetStringFromPS("Get-WMIObject -Namespace 'ROOT\\ccm\\Policy\\Machine\\RequestedConfig' -Query 'SELECT * FROM CCM_ServiceWindow WHERE ServiceWindowID = \"" + ServiceWindowID + "\"' | Remove-WmiObject");
+        }
 
         public List<CCM_ComponentClientConfig> ComponentClientConfig
         {
@@ -385,6 +404,24 @@ namespace sccmclictr.automation.policy
                     oCIEx.remoteRunspace = remoteRunspace;
                     oCIEx.pSCode = pSCode;
                     lCache.Add(oCIEx);
+                }
+                return lCache;
+            }
+        }
+
+        public List<CCM_ServiceWindow> ServiceWindow
+        {
+            get 
+            {
+                List<CCM_ServiceWindow> lCache = new List<CCM_ServiceWindow>();
+                List<PSObject> oObj = GetObjects(@"ROOT\ccm\Policy\Machine\RequestedConfig", "SELECT * FROM CCM_ServiceWindow", true);
+                foreach (PSObject PSObj in oObj)
+                {
+                    CCM_ServiceWindow oSW= new CCM_ServiceWindow(PSObj, remoteRunspace, pSCode, baseClient);
+
+                    oSW.remoteRunspace = remoteRunspace;
+                    oSW.pSCode = pSCode;
+                    lCache.Add(oSW);
                 }
                 return lCache;
             }
@@ -1125,6 +1162,67 @@ namespace sccmclictr.automation.policy
             #endregion
 
         }
+
+        /// <summary>
+        /// Source:ROOT\ccm\Policy\Machine\RequestedConfig
+        /// </summary>
+        public class CCM_ServiceWindow : CCM_Policy
+        {
+            //Constructor
+            public CCM_ServiceWindow(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
+                : base(WMIObject, RemoteRunspace, PSCode, oClient)
+            {
+                remoteRunspace = RemoteRunspace;
+                pSCode = PSCode;
+
+                this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
+                this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
+                this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
+                this.__INSTANCE = true;
+                this.WMIObject = WMIObject;
+                this.Schedules = WMIObject.Properties["Schedules"].Value as String;
+                this.ServiceWindowID = WMIObject.Properties["ServiceWindowID"].Value as String;
+                this.ServiceWindowType = WMIObject.Properties["ServiceWindowType"].Value as UInt32?;
+            }
+            
+            #region Properties
+
+            public String Schedules { get; set; }
+            public String ServiceWindowID { get; set; }
+            public UInt32? ServiceWindowType { get; set; }
+
+            /// <summary>
+            /// Decode ScheduleID to Object of type: SMS_ST_NonRecurring, SMS_ST_RecurInterval, SMS_ST_RecurWeekly, SMS_ST_RecurMonthlyByWeekday or SMS_ST_RecurMonthlyByDate
+            /// </summary>
+            public object DecodedSchedule
+            {
+                get 
+                {
+                    string sSchedule = Schedules;
+                    string[] aSchedules = schedule.ScheduleDecoding.GetScheduleIDs(Schedules);
+                    if (aSchedules.Length <=1)
+                    {
+                        if(aSchedules.Length == 1)
+                            return schedule.ScheduleDecoding.DecodeScheduleID(aSchedules[0]);
+                        else
+                            return null;
+                    }
+                    else
+                    {
+                        List<object> oResult = new List<object>();
+                        foreach (string s in aSchedules)
+                        {
+                            oResult.Add(schedule.ScheduleDecoding.DecodeScheduleID(s));
+                        }
+
+                        return oResult;
+                    }
+                }
+            }
+
+            #endregion
+
+        }
     }
 
     public class actualConfig : baseInit
@@ -1140,6 +1238,19 @@ namespace sccmclictr.automation.policy
             remoteRunspace = RemoteRunspace;
             pSCode = PSCode;
             baseClient = oClient;
+        }
+
+        public string CreateServiceWindow(string Schedules, UInt32 ServiceWindowType)
+        {
+            List<PSObject> oResults = baseClient.GetObjectsFromPS(string.Format("$a = Set-WmiInstance -Class CCM_ServiceWindow -Namespace 'ROOT\\ccm\\Policy\\Machine\\ActualConfig' -PutType 'CreateOnly';$a.ServiceWindowType = {0};$a.Schedules = '{1}';$a.Put() | Out-Null;$a.ServiceWindowID", ServiceWindowType.ToString(), Schedules));
+            foreach (PSObject oRes in oResults)
+            {
+                if (oRes != null)
+                    if(oRes.ToString().Length == 38)
+                        return oRes.ToString();
+            }
+
+            return null;
         }
 
 
@@ -1488,6 +1599,24 @@ namespace sccmclictr.automation.policy
                     oCIEx.remoteRunspace = remoteRunspace;
                     oCIEx.pSCode = pSCode;
                     lCache.Add(oCIEx);
+                }
+                return lCache;
+            }
+        }
+
+        public List<CCM_ServiceWindow> ServiceWindow
+        {
+            get
+            {
+                List<CCM_ServiceWindow> lCache = new List<CCM_ServiceWindow>();
+                List<PSObject> oObj = GetObjects(@"ROOT\ccm\Policy\Machine\ActualConfig", "SELECT * FROM CCM_ServiceWindow", true);
+                foreach (PSObject PSObj in oObj)
+                {
+                    CCM_ServiceWindow oSW = new CCM_ServiceWindow(PSObj, remoteRunspace, pSCode, baseClient);
+
+                    oSW.remoteRunspace = remoteRunspace;
+                    oSW.pSCode = pSCode;
+                    lCache.Add(oSW);
                 }
                 return lCache;
             }
@@ -2213,6 +2342,71 @@ namespace sccmclictr.automation.policy
             #region Properties
 
             public UInt32? SiteSettingsKey { get; set; }
+            #endregion
+
+        }
+
+        /// <summary>
+        /// Source:ROOT\ccm\Policy\Machine\ActualConfig
+        /// </summary>
+        public class CCM_ServiceWindow : CCM_Policy
+        {
+            internal ccm baseClient;
+            //Constructor
+            internal  CCM_ServiceWindow(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
+                : base(WMIObject, RemoteRunspace, PSCode, oClient)
+            {
+                remoteRunspace = RemoteRunspace;
+                pSCode = PSCode;
+                baseClient = oClient;
+
+                this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
+                this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
+                this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
+                this.__INSTANCE = true;
+                this.WMIObject = WMIObject;
+                this.Schedules = WMIObject.Properties["Schedules"].Value as String;
+                this.ServiceWindowID = WMIObject.Properties["ServiceWindowID"].Value as String;
+                this.ServiceWindowType = WMIObject.Properties["ServiceWindowType"].Value as UInt32?;
+            }
+
+
+
+            #region Properties
+
+            public String Schedules { get; set; }
+            public String ServiceWindowID { get; set; }
+            public UInt32? ServiceWindowType { get; set; }
+
+            /// <summary>
+            /// Decode ScheduleID to Object of type: SMS_ST_NonRecurring, SMS_ST_RecurInterval, SMS_ST_RecurWeekly, SMS_ST_RecurMonthlyByWeekday or SMS_ST_RecurMonthlyByDate
+            /// </summary>
+            public object DecodedSchedule
+            {
+                get
+                {
+                    string sSchedule = Schedules;
+                    string[] aSchedules = schedule.ScheduleDecoding.GetScheduleIDs(Schedules);
+                    if (aSchedules.Length <= 1)
+                    {
+                        if (aSchedules.Length == 1)
+                            return schedule.ScheduleDecoding.DecodeScheduleID(aSchedules[0]);
+                        else
+                            return null;
+                    }
+                    else
+                    {
+                        List<object> oResult = new List<object>();
+                        foreach (string s in aSchedules)
+                        {
+                            oResult.Add(schedule.ScheduleDecoding.DecodeScheduleID(s));
+                        }
+
+                        return oResult; 
+                    }
+                }
+            }
+
             #endregion
 
         }
