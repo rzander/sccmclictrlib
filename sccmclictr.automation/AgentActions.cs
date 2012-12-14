@@ -1019,7 +1019,14 @@ namespace sccmclictr.automation.functions
 
         public bool RepairAgent()
         {
-            return true;
+            string sProdCode = baseClient.AgentProperties.ProductCode;
+            if (sProdCode.StartsWith("{"))
+            {
+                string sResult = baseClient.GetStringFromPS("Invoke-Expression(\"msiexec.exe /fpecms '" + sProdCode + "'\")");
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>

@@ -47,7 +47,7 @@ namespace sccmclictr.automation.functions
             get
             {
                 List<AI_InstalledSoftwareCache> lCache = new List<AI_InstalledSoftwareCache>();
-                List<PSObject> oObj = GetObjects(@"ROOT\ccm\invagt", "SELECT * FROM AI_InstalledSoftwareCache");
+                List<PSObject> oObj = GetObjects(@"ROOT\ccm\invagt", "SELECT * FROM AI_InstalledSoftwareCache", true);
                 foreach (PSObject PSObj in oObj)
                 {
                     //Get AppDTs sub Objects
@@ -56,6 +56,19 @@ namespace sccmclictr.automation.functions
                     oCIEx.remoteRunspace = remoteRunspace;
                     oCIEx.pSCode = pSCode;
                     lCache.Add(oCIEx);
+                }
+                if (lCache.Count == 0)
+                {
+                    List<PSObject> oObj2 = GetObjects(@"root\CIMV2\sms", "SELECT * FROM SMS_InstalledSoftware", true);
+                    foreach (PSObject PSObj in oObj2)
+                    {
+                        //Get AppDTs sub Objects
+                        AI_InstalledSoftwareCache oCIEx = new AI_InstalledSoftwareCache(PSObj, remoteRunspace, pSCode);
+
+                        oCIEx.remoteRunspace = remoteRunspace;
+                        oCIEx.pSCode = pSCode;
+                        lCache.Add(oCIEx);
+                    }
                 }
                 return lCache; 
             } 
