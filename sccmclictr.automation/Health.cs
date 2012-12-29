@@ -154,5 +154,6 @@ namespace sccmclictr.automation.functions
             string sResult = base.GetStringFromPS(string.Format(Properties.Settings.Default.PSSetDCOMPerm, HKLMKey, RegValue, ACL), true);
             return "";
         }
+
     }
 }

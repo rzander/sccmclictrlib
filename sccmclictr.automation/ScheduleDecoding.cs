@@ -530,7 +530,7 @@ namespace sccmclictr.automation.schedule
             /// <summary>
             /// Get the next start time
             /// </summary>
-            public new DateTime NextStartTime
+            public DateTime NextStartTime
             {
                 get
                 {
@@ -545,6 +545,33 @@ namespace sccmclictr.automation.schedule
                             oNextStartTime = oNextStartTime + new TimeSpan(1, 0, 0, 0);
                         }
                         return oNextStartTime;
+                    }
+                }
+            }
+
+            /// <summary>
+            /// The last Start Time in the past...
+            /// </summary>
+            public DateTime PreviousStartTime
+            {
+                get
+                {
+                    if (base.StartTime > DateTime.Now)
+                        return base.StartTime;
+                    else
+                    {
+                        //determine the new start date-time
+                        DateTime oNextStartTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, StartTime.Hour, StartTime.Minute, 0);
+                        while (((int)oNextStartTime.DayOfWeek + 1 != Day) | (oNextStartTime < DateTime.Now))
+                        {
+                            oNextStartTime = oNextStartTime + new TimeSpan(1, 0, 0, 0);
+                            
+                        }
+                        DateTime oPrevStartTime = oNextStartTime.Subtract(new TimeSpan(ForNumberOfWeeks * 7, 0, 0, 0));
+                        if(oPrevStartTime < base.StartTime)
+                            return oNextStartTime;
+                        else
+                            return oPrevStartTime;
                     }
                 }
             }

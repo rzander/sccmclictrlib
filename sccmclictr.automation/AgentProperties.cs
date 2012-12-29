@@ -227,9 +227,9 @@ namespace sccmclictr.automation.functions
         #endregion
 
         /// <summary>
-        /// Restart Computer
+        /// Restart Computer from CM12 CCM_ClientUtilities function
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Return Code</returns>
         public UInt32 RestartComputer()
         {
             try
@@ -274,6 +274,10 @@ namespace sccmclictr.automation.functions
             return oResult;
         }
 
+        /// <summary>
+        /// Check if SCCM requires a reboot;
+        /// </summary>
+        /// <returns></returns>
         public Boolean RebootPending()
         {
             PSObject oResult = CallClassMethod(@"ROOT\ccm\ClientSDK:CCM_ClientUtilities", "DetermineIfRebootPending", "");
@@ -394,11 +398,25 @@ namespace sccmclictr.automation.functions
             }
         }
 
+        /// <summary>
+        /// Return Days Since last reboot
+        /// </summary>
         public int DaysSinceLastReboot
         {
             get
             {
                 return int.Parse(base.GetStringFromPS("$wmi = Get-WmiObject -Class Win32_OperatingSystem;$a = New-TimeSpan $wmi.ConvertToDateTime($wmi.LastBootUpTime) $(Get-Date);$a.Days"));
+            }
+        }
+
+        /// <summary>
+        /// DateTime of last reboot
+        /// </summary>
+        public DateTime LastReboot
+        {
+            get
+            {
+                return DateTime.ParseExact(base.GetStringFromPS("$wmi = Get-WmiObject -Class Win32_OperatingSystem;$a = $wmi.ConvertToDateTime($wmi.LastBootUpTime);$a.ToString(\"yyyy-MM-dd HH:mm\")"),"yyyy-MM-dd HH:mm", null);
             }
         }
 

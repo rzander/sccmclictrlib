@@ -391,6 +391,9 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// List of CCM_OutOfBandManagementClientConfig objects
+        /// </summary>
         public List<CCM_OutOfBandManagementClientConfig> OutOfBandManagementClientConfig
         {
             get
@@ -409,6 +412,9 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// List of CCM_ServiceWindow Objects
+        /// </summary>
         public List<CCM_ServiceWindow> ServiceWindow
         {
             get 

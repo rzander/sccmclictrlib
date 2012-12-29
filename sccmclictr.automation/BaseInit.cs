@@ -569,7 +569,6 @@ namespace sccmclictr.automation
             Process = new functions.processes(RemoteRunspace, PSCode, this);
             Monitoring = new functions.monitoring(RemoteRunspace, PSCode, this);
             Health = new functions.health(RemoteRunspace, PSCode, this);
-
         }
     }
 }
