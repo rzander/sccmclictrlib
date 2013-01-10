@@ -155,5 +155,16 @@ namespace sccmclictr.automation.functions
             return "";
         }
 
+        public string RunHealthCheck()
+        {
+            try
+            {
+                List<PSObject> res = base.GetObjectsFromPS(Properties.Resources.HealthCheck);
+                return res[0].ToString();
+            }
+            catch { }
+
+            return "";
+        }
     }
 }
