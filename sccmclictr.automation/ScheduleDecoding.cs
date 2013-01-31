@@ -508,6 +508,25 @@ namespace sccmclictr.automation.schedule
 
                 }
             }
+
+            /// <summary>
+            /// The last Start Time in the past...
+            /// </summary>
+            public DateTime PreviousStartTime
+            {
+                get
+                {
+                    //determine the new start date-time
+                    DateTime oNextStartTime = base.StartTime.Subtract(new TimeSpan(DaySpan, HourSpan, MinuteSpan, 0));
+
+                    while (oNextStartTime < DateTime.Now)
+                    {
+                        oNextStartTime = oNextStartTime + new TimeSpan(DaySpan, HourSpan, MinuteSpan, 0);
+                    }
+                    return oNextStartTime;
+
+                }
+            }
         }
 
         /// <summary>

@@ -31,6 +31,15 @@ namespace sccmclictr.automation.functions
         internal TraceSource pSCode;
         internal ccm baseClient;
 
+        public void Dispose()
+        {
+            if (remoteRunspace != null)
+                remoteRunspace.Dispose();
+            if (baseClient != null)
+                baseClient.Dispose();
+            AsynchronousScript = null;
+        }
+
         //Constructor
         public monitoring(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
@@ -43,12 +52,21 @@ namespace sccmclictr.automation.functions
 
         public runScriptAsync AsynchronousScript;
 
-        public class runScriptAsync
+        public class runScriptAsync : IDisposable
         {
             private AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
             internal Runspace _remoteRunspace;
             internal Pipeline pipeline;
             internal RunspaceConnectionInfo _connectionInfo;
+
+            public void Dispose()
+            {
+                if (_remoteRunspace != null)
+                    _remoteRunspace.Dispose();
+                if (pipeline != null)
+                    pipeline.Dispose();
+                _connectionInfo = null;
+            }
 
             public runScriptAsync(Runspace remoteRunspace)
             {

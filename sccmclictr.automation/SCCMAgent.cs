@@ -18,7 +18,7 @@ namespace sccmclictr.automation
     /// <summary>
     /// SCCMAgent Main Class
     /// </summary>
-    public class SCCMAgent
+    public class SCCMAgent : IDisposable
     {
         private WSManConnectionInfo connectionInfo;
         private string Username { get; set; }
@@ -26,6 +26,32 @@ namespace sccmclictr.automation
         private string Hostname { get; set; }
         private int WSManPort { get; set; }
         private Runspace remoteRunspace { get; set;}
+
+        public void Dispose()
+        {
+            try
+            {
+                if (isConnected)
+                {
+                    disconnect();
+                }
+            }
+            catch { }
+
+            connectionInfo = null;
+            Username = null;
+            Password = null;
+            Hostname = null;
+
+            if(Client != null)
+                Client.Dispose();
+
+            if (remoteRunspace != null)
+                remoteRunspace.Dispose();
+            
+
+
+        }
 
         //private agentProperties oAgentProperties;
         //private softwareDistribution oSoftwareDistribution;
@@ -205,7 +231,7 @@ namespace sccmclictr.automation
         /// <summary>
         /// Disconnect an open connection
         /// </summary>
-        public void diconnect()
+        public void disconnect()
         {
             remoteRunspace.Close();
         }

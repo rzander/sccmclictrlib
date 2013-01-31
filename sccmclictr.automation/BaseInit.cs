@@ -19,8 +19,32 @@ using System.Threading;
 
 namespace sccmclictr.automation
 {
-    public class baseInit
+    public class baseInit : IDisposable
     {
+        public void Dispose()
+        {
+            try
+            {
+                if(remoteRunspace != null)
+                    remoteRunspace.Dispose();
+                if (tsPSCode != null)
+                {
+                    try
+                    {
+                        tsPSCode.Close();
+                    }
+                    catch { }
+
+                    tsPSCode = null;
+                }
+
+                if(Cache != null)
+                    Cache.Dispose();
+            }
+            catch { }
+
+        }
+
         private Runspace remoteRunspace { get; set; }
 
         internal string CreateHash(string str)
@@ -548,6 +572,23 @@ namespace sccmclictr.automation
         public sccmclictr.automation.policy.actualConfig ActualConfig;
         public functions.monitoring Monitoring;
         public functions.health Health;
+
+        public void Dispose()
+        {
+            AgentProperties = null;
+            AgentActions = null;
+            Health = null;
+            Monitoring = null;
+            ActualConfig = null;
+            RequestedConfig = null;
+            Process = null;
+            Services = null;
+            Components = null;
+            Inventory = null;
+            SoftwareUpdates = null;
+            SWCache = null;
+            SoftwareDistribution = null;
+        }
 
         /// <summary>
         /// Constructor

@@ -35,6 +35,8 @@ namespace sccmclictr.automation.functions
             baseClient = oClient;
         }
 
+        
+
 #if CM2012
 
         /// <summary>

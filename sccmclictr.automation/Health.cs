@@ -36,6 +36,13 @@ namespace sccmclictr.automation.functions
             baseClient = oClient;
         }
 
+        public void Dispose()
+        {
+            baseClient.Dispose();
+            remoteRunspace.Dispose();
+            base.Dispose();
+        }
+
         /// <summary>
         /// Verify WMI Repository (winmgmt /verifyrepository).
         /// </summary>

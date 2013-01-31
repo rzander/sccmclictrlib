@@ -507,18 +507,28 @@ namespace sccmclictr.automation.functions
                 if (string.IsNullOrEmpty(sLastEvalTime))
                     this.LastEvalTime = null;
                 else
-                    this.LastEvalTime = ManagementDateTimeConverter.ToDateTime(sLastEvalTime) as DateTime?;
+                {
+                    try { this.LastEvalTime = ManagementDateTimeConverter.ToDateTime(sLastEvalTime) as DateTime?; }
+                    catch { }
+                }
+
                 string sLastInstallTime = WMIObject.Properties["LastInstallTime"].Value as string;
                 if (string.IsNullOrEmpty(sLastInstallTime))
                     this.LastInstallTime = null;
                 else
-                    this.LastInstallTime = ManagementDateTimeConverter.ToDateTime(sLastInstallTime) as DateTime?;
+                {
+                    try { this.LastInstallTime = ManagementDateTimeConverter.ToDateTime(sLastInstallTime) as DateTime?; }
+                    catch { }
+                }
                 this.NotifyUser = WMIObject.Properties["NotifyUser"].Value as Boolean?;
                 string sReleaseDate = WMIObject.Properties["ReleaseDate"].Value as string;
                 if (string.IsNullOrEmpty(sReleaseDate))
                     this.ReleaseDate = null;
                 else
-                    this.ReleaseDate = ManagementDateTimeConverter.ToDateTime(sReleaseDate) as DateTime?;
+                {
+                    try { this.ReleaseDate = ManagementDateTimeConverter.ToDateTime(sReleaseDate) as DateTime?; }
+                    catch { };
+                }
                 this.ResolvedState = WMIObject.Properties["ResolvedState"].Value as String;
                 this.Revision = WMIObject.Properties["Revision"].Value as String;
                 this.SoftwareVersion = WMIObject.Properties["SoftwareVersion"].Value as String;
@@ -526,47 +536,13 @@ namespace sccmclictr.automation.functions
                 if (string.IsNullOrEmpty(sStartTime))
                     this.StartTime = null;
                 else
-                    this.StartTime = ManagementDateTimeConverter.ToDateTime(sStartTime) as DateTime?;
+                {
+                    try { this.StartTime = ManagementDateTimeConverter.ToDateTime(sStartTime) as DateTime?; }
+                    catch { }
+                }
                 this.SupersessionState = WMIObject.Properties["SupersessionState"].Value as String;
                 this.UserUIExperience = WMIObject.Properties["UserUIExperience"].Value as Boolean?;
 
-                //sub
-                /*
-                this.ApplicabilityState = WMIObject.Properties["ApplicabilityState"].Value as string;
-                this.CurrentState = WMIObject.Properties["CurrentState"].Value as string;
-                this.DeploymentReport = WMIObject.Properties["DeploymentReport"].Value as string;
-                this.EnforcePreference = WMIObject.Properties["EnforcePreference"].Value as uint?;
-                this.FileTypes = WMIObject.Properties["FileTypes"].Value as string;
-                this.Icon = WMIObject.Properties["Icon"].Value as string;
-                this.Id = WMIObject.Properties["Id"].Value as string;
-                this.InformativeUrl = WMIObject.Properties["InformativeUrl"].Value as string;
-                this.IsMachineTarget = WMIObject.Properties["IsMachineTarget"].Value as bool?;
-
-                string sLastEvalTime = WMIObject.Properties["LastEvalTime"].Value as string;
-                if (string.IsNullOrEmpty(sLastEvalTime))
-                    this.LastEvalTime = null;
-                else
-                    this.LastEvalTime = ManagementDateTimeConverter.ToDateTime(sLastEvalTime) as DateTime?;
-
-                string sLastInstallTime = WMIObject.Properties["LastInstallTime"].Value as string;
-                if (string.IsNullOrEmpty(sLastInstallTime))
-                    this.LastInstallTime = null;
-                else
-                    this.LastInstallTime = ManagementDateTimeConverter.ToDateTime(sLastInstallTime) as DateTime?;
-
-                this.NotifyUser = WMIObject.Properties["NotifyUser"].Value as bool?;
-                this.ProgressState = WMIObject.Properties["ProgressState"].Value as string;
-
-                string sReleaseDate = WMIObject.Properties["ReleaseDate"].Value as string;
-                if (string.IsNullOrEmpty(sReleaseDate))
-                    this.ReleaseDate = null;
-                else
-                    this.ReleaseDate = ManagementDateTimeConverter.ToDateTime(sReleaseDate) as DateTime?;
-
-                this.ResolvedState = WMIObject.Properties["ResolvedState"].Value as string;
-                this.Revision = WMIObject.Properties["Revision"].Value as string;
-                this.SoftwareVersion = WMIObject.Properties["SoftwareVersion"].Value as string;
-                this.UserUIExperience = WMIObject.Properties["UserUIExperience"].Value as bool?; */
             }
         }
 
