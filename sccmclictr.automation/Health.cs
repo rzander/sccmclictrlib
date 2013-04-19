@@ -162,6 +162,10 @@ namespace sccmclictr.automation.functions
             return "";
         }
 
+        /// <summary>
+        /// Run a "basic" Powershell Health check 
+        /// </summary>
+        /// <returns></returns>
         public string RunHealthCheck()
         {
             try

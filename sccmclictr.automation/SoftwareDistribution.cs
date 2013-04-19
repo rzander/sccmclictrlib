@@ -43,6 +43,9 @@ namespace sccmclictr.automation.functions
             baseClient = oClient;
         }
 
+        /// <summary>
+        /// Get a list of Applications (SELECT * FROM CCM_Application)
+        /// </summary>
         public List<CCM_Application> Applications
         {
             get

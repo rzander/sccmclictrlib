@@ -422,7 +422,9 @@ namespace sccmclictr.automation.functions
             }
         }
 
-        //Assigned SCCM Agent Site Code
+        /// <summary>
+        /// Assigned SCCM Agent Site Code
+        /// </summary>
         public string AssignedSite
         {
             get
@@ -449,7 +451,9 @@ namespace sccmclictr.automation.functions
             }
         }
 
-        //Get the assigned Management Point
+        /// <summary>
+        /// Get the assigned Management Point
+        /// </summary>
         public string ManagementPoint
         {
             get
@@ -470,12 +474,14 @@ namespace sccmclictr.automation.functions
             }
         }
 
-        //Configure Internet Management Point
+        /// <summary>
+        /// Configure Internet Management Point
+        /// </summary>
         public string ManagementPointInternet
         {
             get
             {
-                if (baseClient.Inventory.isx64OS)
+                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
                 {
                     return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Client\\Internet Facing\")).$(\"Internet MP Hostname\")");
                 }
@@ -689,7 +695,7 @@ namespace sccmclictr.automation.functions
                     base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\")).$(\"HttpPort\")");
 
                     //Remove HTTP Port from Cache
-                    string sHash = CreateHash("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\")).$(\"HttpPort\")");
+                    string sHash = CreateHash("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\")).$(\"HttpPort\")");
                     base.Cache.Remove(sHash);
                 }
                 else
@@ -756,29 +762,14 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                List<PSObject> lResult = base.GetObjectsFromPS("(Get-ItemProperty(\"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\")).$(\"PendingFileRenameOperations\")");
+                if (lResult.Count > 0)
                 {
-                    List<PSObject> lResult = base.GetObjectsFromPS("(Get-ItemProperty(\"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\")).$(\"PendingFileRenameOperations\")");
-                    if (lResult.Count > 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return true;
                 }
                 else
                 {
-                    List<PSObject> lResult = base.GetObjectsFromPS("(Get-ItemProperty(\"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\")).$(\"PendingFileRenameOperations\")");
-                    if (lResult.Count > 0)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
         }
@@ -793,6 +784,17 @@ namespace sccmclictr.automation.functions
                 string sProductCode = base.GetStringFromPS("(Get-WmiObject -Class CCM_InstalledProduct -Namespace \"root\\ccm\").ProductCode");
                 return sProductCode;
             }
+        }
+
+        /// <summary>
+        /// Delete root\ccm Namespace 
+        /// Query from rchiav (https://sccmclictrlib.codeplex.com/discussions/349818)
+        /// </summary>
+        /// <returns></returns>
+        public string DeleteCCMNamespace()
+        {
+                string sProductCode = base.GetStringFromPS("gwmi -query \"SELECT * FROM __Namespace WHERE Name='CCM'\" -Namespace \"root\" | Remove-WmiObject");
+                return sProductCode;      
         }
     }
 }

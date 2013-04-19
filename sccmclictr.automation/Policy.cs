@@ -39,6 +39,12 @@ namespace sccmclictr.automation.policy
             baseClient = oClient;
         }
 
+        /// <summary>
+        /// Create a new ServiceWindows
+        /// </summary>
+        /// <param name="Schedules">ScheduleID</param>
+        /// <param name="ServiceWindowType">1 = All Programs Service Window, 2 = Program Service Window, 3 = Reboot Required Service Window, 4 = Software Update Service Window, 5 = OSD Service Window, 6 = Corresponds to non-working hours.</param>
+        /// <returns>Service Window ID (GUID)</returns>
         public string CreateServiceWindow(string Schedules, UInt32 ServiceWindowType)
         {
             string sPolicyID = System.Guid.NewGuid().ToString().Replace("{", "").Replace("}", "");

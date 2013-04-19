@@ -80,13 +80,16 @@ namespace sccmclictr.automation.functions
             return lResult;
         }
 
-        //Get all Package Directories in the SCCM Agent Cache Folder
+        /// <summary>
+        /// Get all Package Directories in the SCCM Agent Cache Folder
+        /// </summary>
+        /// <returns></returns>
         public List<string> GetPkgCacheDirs()
         {
             string sSiteCode = base.GetStringFromClassMethod(@"ROOT\ccm:SMS_Client", "GetAssignedSite()", "sSiteCode");
             
             List<string> lResult = new List<string>();
-            List<PSObject> lPSO = base.GetObjectsFromPS(@"dir '" + CachePath + "' | WHERE {$_.PsIsContainer -and $_.Name.StartsWith('" + sSiteCode + "')} | select Name");
+            List<PSObject> lPSO = base.GetObjectsFromPS(@"dir '" + CachePath + "' | WHERE {$_.PsIsContainer -and $_.Name[8] -eq '.'} | select Name");
             foreach (PSObject pso in lPSO)
             {
                 lResult.Add(pso.Members["Name"].Value.ToString());
