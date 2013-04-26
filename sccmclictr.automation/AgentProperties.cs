@@ -423,6 +423,17 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
+        /// Get TimeSpan of LastReboot
+        /// </summary>
+        public TimeSpan LastRebootTimeSpan
+        {
+            get
+            {
+                return TimeSpan.FromSeconds(double.Parse(base.GetStringFromPS("$wmi = Get-WmiObject -Class Win32_OperatingSystem;$a = New-TimeSpan $wmi.ConvertToDateTime($wmi.LastBootUpTime) $(Get-Date);$a.TotalSeconds").ToString()));
+            }
+        }
+
+        /// <summary>
         /// Assigned SCCM Agent Site Code
         /// </summary>
         public string AssignedSite
