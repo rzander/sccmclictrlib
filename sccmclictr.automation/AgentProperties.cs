@@ -247,7 +247,7 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Determine pending reboots
+        /// Determine pending reboots (from ConfigMgr. !)
         /// </summary>
         /// <returns></returns>
         public PSObject DetermineIfRebootPending()
@@ -257,7 +257,7 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Determine pending reboots
+        /// Determine pending reboots (from ConfigMgr. !)
         /// </summary>
         /// <param name="DisableHideTime"></param>
         /// <param name="InGracePeriod"></param>
@@ -277,7 +277,7 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Check if SCCM requires a reboot;
+        /// Check if ConfigMgr. requires a reboot;
         /// </summary>
         /// <returns></returns>
         public Boolean RebootPending()
@@ -774,6 +774,25 @@ namespace sccmclictr.automation.functions
             get
             {
                 List<PSObject> lResult = base.GetObjectsFromPS("(Get-ItemProperty(\"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\")).$(\"PendingFileRenameOperations\")");
+                if (lResult.Count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Determin if component chnage requires a reboot
+        /// </summary>
+        public bool ComponentServicingRebootPending
+        {
+            get
+            {
+                List<PSObject> lResult = base.GetObjectsFromPS("if(test-path \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Component Based Servicing\\RebootPending\"){ $true }");
                 if (lResult.Count > 0)
                 {
                     return true;

@@ -76,7 +76,7 @@ namespace sccmclictr.automation.functions
         /// <returns>Command results as string</returns>
         public string WMIResetRepository()
         {
-            string sResult = base.GetStringFromPS("winmgmt /resetrepository", true);
+            string sResult = base.GetStringFromPS("Stop-Service winmgmt -Force; winmgmt /resetrepository", true);
 
             return sResult;
         }
@@ -176,6 +176,14 @@ namespace sccmclictr.automation.functions
             catch { }
 
             return "";
+        }
+
+        /// <summary>
+        /// Delete root\ccm namespace in WMI
+        /// </summary>
+        public void DeleteCCMNamespace()
+        {
+            base.GetStringFromPS("gwmi -query \"SELECT * FROM __Namespace WHERE Name='CCM'\" -Namespace \"root\" | Remove-WmiObject");
         }
     }
 }
