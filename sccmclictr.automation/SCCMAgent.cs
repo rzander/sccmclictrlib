@@ -12,6 +12,7 @@ using System.Text;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace sccmclictr.automation
 {
@@ -26,6 +27,7 @@ namespace sccmclictr.automation
         private string Hostname { get; set; }
         private int WSManPort { get; set; }
         private Runspace remoteRunspace { get; set;}
+        private bool ipcconnected { get; set; }
 
         public void Dispose()
         {
@@ -163,12 +165,15 @@ namespace sccmclictr.automation
             Password = password;
             WSManPort = wsManPort;
 
+            ipcconnected = false;
+
             PSCode = new TraceSource("PSCode");
             PSCode.Switch.Level = SourceLevels.All;
 
             if (string.IsNullOrEmpty(username))
             {
                 connectionInfo = new WSManConnectionInfo(new Uri(string.Format("http://{0}:{1}/wsman", hostname, wsManPort)));
+                ipcconnected = true;
             }
             else
             {
@@ -235,6 +240,81 @@ namespace sccmclictr.automation
         {
             remoteRunspace.Close();
         }
+
+        #region IPCConnect
+        struct NETRESOURCE
+        {
+            internal int dwScope;
+            internal int dwType;
+            internal int dwDisplayType;
+            internal int dwUsage;
+            internal string LocalName;
+            internal string RemoteName;
+            internal string Comment;
+            internal string Provider;
+        }
+
+        internal const int RESOURCETYPE_ANY = 0x0;
+
+        /// <summary>
+        /// Connect the IPC$ share on a remote computer to preauthenticate.
+        /// </summary>
+        /// <param name="Hostname"></param>
+        /// <param name="UserName"></param>
+        /// <param name="Password"></param>
+        /// <returns></returns>
+        internal int connectIPC(string Hostname, string UserName, string Password)
+        {
+            NETRESOURCE ConnInf = new NETRESOURCE();
+            ConnInf.dwType = RESOURCETYPE_ANY;
+            ConnInf.RemoteName = @"\\" + Hostname;
+            IntPtr hWnd = IntPtr.Zero;
+            return WNetAddConnection3(hWnd, ref ConnInf, Password, UserName, 0);
+        }
+
+        /// <summary>
+        /// Connect the IPC$ Share if no integrated authentication is used
+        /// </summary>
+        public bool ConnectIPC
+        {
+            get { return ipcconnected; }
+            set
+            {
+                if (value)
+                {
+                    try
+                    {
+                        //Check if a Username is defined
+                        if (!string.IsNullOrEmpty(Username))
+                        {
+                            //Connect IPC$ share with username and password
+                            connectIPC(Hostname, Username, Password);
+                        }
+
+                        ipcconnected = true;
+
+                    }
+                    catch
+                    {
+                        ipcconnected = false;
+                    }
+                }
+                else
+                {
+                    //No option to disconnect at the moment
+                }
+
+            }
+        
+
+        }
+
+        [DllImport("mpr.dll")]
+        private static extern int WNetAddConnection3(IntPtr hWndOwner,
+            ref NETRESOURCE lpNetResource, string lpPassword,
+            string lpUserName, int dwFlags);
+
+        #endregion
 
         public ccm Client;
         

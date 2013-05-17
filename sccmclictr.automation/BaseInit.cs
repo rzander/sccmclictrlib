@@ -568,6 +568,7 @@ namespace sccmclictr.automation
         public functions.components Components;
         public functions.services Services;
         public functions.processes Process;
+        public functions.dcm DCM;
         public sccmclictr.automation.policy.requestedConfig RequestedConfig;
         public sccmclictr.automation.policy.actualConfig ActualConfig;
         public functions.monitoring Monitoring;
@@ -588,6 +589,7 @@ namespace sccmclictr.automation
             SoftwareUpdates = null;
             SWCache = null;
             SoftwareDistribution = null;
+            DCM = null;
         }
 
         /// <summary>
@@ -610,6 +612,7 @@ namespace sccmclictr.automation
             Process = new functions.processes(RemoteRunspace, PSCode, this);
             Monitoring = new functions.monitoring(RemoteRunspace, PSCode, this);
             Health = new functions.health(RemoteRunspace, PSCode, this);
+            DCM = new functions.dcm(RemoteRunspace, PSCode, this);
         }
     }
 }

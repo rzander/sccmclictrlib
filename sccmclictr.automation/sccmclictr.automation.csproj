@@ -58,6 +58,7 @@
     <Compile Include="Class_Template.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Components.cs" />
+    <Compile Include="DCM.cs" />
     <Compile Include="DDRGen.cs" />
     <Compile Include="Health.cs" />
     <Compile Include="Monitoring.cs" />
