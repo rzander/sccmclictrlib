@@ -87,6 +87,10 @@ namespace sccmclictr.automation.functions
                 this.Name = WMIObject.Properties["Name"].Value as String;
                 this.Status = WMIObject.Properties["Status"].Value as UInt32?;
                 this.Version = WMIObject.Properties["Version"].Value as String;
+                if (this.LastComplianceStatus == 1)
+                    this.isCompliant = true;
+                else
+                    this.isCompliant = false;
             }
 
             #region Properties
@@ -106,6 +110,7 @@ namespace sccmclictr.automation.functions
             public String Name { get; set; }
             public UInt32? Status { get; set; }
             public String Version { get; set; }
+            public Boolean isCompliant { get; set; }
             #endregion
 
             #region Methods
