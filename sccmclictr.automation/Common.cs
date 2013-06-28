@@ -24,8 +24,12 @@ namespace sccmclictr.automation
             try
             {
                 TripleDESCryptoServiceProvider objDES = new TripleDESCryptoServiceProvider();
-                MD5CryptoServiceProvider objMD5 = new MD5CryptoServiceProvider();
-                objDES.Key = objMD5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(strKey));
+                
+                //Change to be FIPS compliant 
+                SHA1CryptoServiceProvider objSHA1 = new SHA1CryptoServiceProvider();
+                objDES.Key = objSHA1.ComputeHash(ASCIIEncoding.ASCII.GetBytes(strKey));
+
+
                 objDES.Mode = CipherMode.ECB;
                 ICryptoTransform objDESEncrypt = objDES.CreateEncryptor();
                 byte[] arrBuffer = ASCIIEncoding.ASCII.GetBytes(strPlainText);
@@ -50,8 +54,11 @@ namespace sccmclictr.automation
             try
             {
                 TripleDESCryptoServiceProvider objDES = new TripleDESCryptoServiceProvider();
-                MD5CryptoServiceProvider objMD5 = new MD5CryptoServiceProvider();
-                objDES.Key = objMD5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(strKey));
+                
+                //Change to be FIPS compliant 
+                SHA1CryptoServiceProvider objSHA1 = new SHA1CryptoServiceProvider();
+                objDES.Key = objSHA1.ComputeHash(ASCIIEncoding.ASCII.GetBytes(strKey));
+
                 objDES.Mode = CipherMode.ECB;
                 ICryptoTransform objDESEncrypt = objDES.CreateDecryptor();
                 byte[] arrBuffer = Convert.FromBase64String(strBase64Text);

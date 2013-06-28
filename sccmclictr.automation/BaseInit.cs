@@ -57,9 +57,10 @@ namespace sccmclictr.automation
             byte[] unicodeText = new byte[str.Length * 2];
             enc.GetBytes(str.ToCharArray(), 0, str.Length, unicodeText, 0, true);
 
-            // Now that we have a byte array we can ask the CSP to hash it
-            System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-            byte[] result = md5.ComputeHash(unicodeText);
+            //Change to be FIPS compliant 
+            System.Security.Cryptography.SHA1 sha1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
+            byte[] result = sha1.ComputeHash(unicodeText);
+
 
             // Build the final string by converting each byte
             // into hex and appending it to a StringBuilder
