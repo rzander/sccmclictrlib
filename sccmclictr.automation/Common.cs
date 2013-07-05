@@ -25,16 +25,12 @@ namespace sccmclictr.automation
             {
                 TripleDESCryptoServiceProvider objDES = new TripleDESCryptoServiceProvider();
                 
-                //Change to be FIPS compliant 
                 SHA1CryptoServiceProvider objSHA1 = new SHA1CryptoServiceProvider();
-                objDES.Key = objSHA1.ComputeHash(ASCIIEncoding.ASCII.GetBytes(strKey));
+                byte[] bHash = objSHA1.ComputeHash(ASCIIEncoding.ASCII.GetBytes(strKey));
 
+                byte[] bRes = System.Security.Cryptography.ProtectedData.Protect(ASCIIEncoding.ASCII.GetBytes(strPlainText), bHash, DataProtectionScope.CurrentUser);
 
-                objDES.Mode = CipherMode.ECB;
-                ICryptoTransform objDESEncrypt = objDES.CreateEncryptor();
-                byte[] arrBuffer = ASCIIEncoding.ASCII.GetBytes(strPlainText);
-                return Convert.ToBase64String(objDESEncrypt.TransformFinalBlock(arrBuffer, 0, arrBuffer.Length));
-
+                return Convert.ToBase64String(bRes);
             }
             catch (System.Exception ex)
             {
@@ -55,14 +51,11 @@ namespace sccmclictr.automation
             {
                 TripleDESCryptoServiceProvider objDES = new TripleDESCryptoServiceProvider();
                 
-                //Change to be FIPS compliant 
                 SHA1CryptoServiceProvider objSHA1 = new SHA1CryptoServiceProvider();
-                objDES.Key = objSHA1.ComputeHash(ASCIIEncoding.ASCII.GetBytes(strKey));
+                byte[] bHash = objSHA1.ComputeHash(ASCIIEncoding.ASCII.GetBytes(strKey));
 
-                objDES.Mode = CipherMode.ECB;
-                ICryptoTransform objDESEncrypt = objDES.CreateDecryptor();
                 byte[] arrBuffer = Convert.FromBase64String(strBase64Text);
-                return ASCIIEncoding.ASCII.GetString(objDESEncrypt.TransformFinalBlock(arrBuffer, 0, arrBuffer.Length));
+                return ASCIIEncoding.ASCII.GetString(System.Security.Cryptography.ProtectedData.Unprotect(arrBuffer, bHash, DataProtectionScope.CurrentUser));
             }
             catch (System.Exception ex)
             {
@@ -71,6 +64,20 @@ namespace sccmclictr.automation
             return "";
 
         }
+
+        public static string GetSha1(string value)
+        {
+            var data = Encoding.ASCII.GetBytes(value);
+            var hashData = new SHA1Managed().ComputeHash(data);
+
+            var hash = string.Empty;
+
+            foreach (var b in hashData)
+                hash += b.ToString("X2");
+
+            return hash;
+        }
+
 
         // Image converter functions found here: http://www.dailycoding.com/Posts/convert_image_to_base64_string_and_base64_string_to_image.aspx
 
