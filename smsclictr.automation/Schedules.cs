@@ -1785,7 +1785,15 @@ namespace smsclictr.automation
 
             //Convert to HEX
             lSchedID = (((long)hi) << 32) | ((uint)lo);
-            return lSchedID.ToString("X");
+            string sResult =  lSchedID.ToString("X");
+            
+            //Result must always have 16 Characters, otherwise ConfigMgr does not understand the Format ! 
+            while (sResult.Length < 16)
+            {
+                sResult = '0' + sResult;
+            }
+            return sResult;
+            
         }
 
         /// <summary>
