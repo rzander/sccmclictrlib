@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.Web;
 
 using System.Drawing;
+using System.Xml;
 
 namespace sccmclictr.automation.functions
 {
@@ -112,7 +113,7 @@ namespace sccmclictr.automation.functions
             get
             {
                 List<CCM_SoftwareDistribution> lApps = new List<CCM_SoftwareDistribution>();
-                List<PSObject> oObj = GetObjects(@"root\ccm\policy\machine", "SELECT * FROM CCM_SoftwareDistribution");
+                List<PSObject> oObj = GetObjects(@"root\ccm\policy\machine\actualconfig", "SELECT * FROM CCM_SoftwareDistribution");
                 foreach (PSObject PSObj in oObj)
                 {
                     //Get AppDTs sub Objects
@@ -126,6 +127,9 @@ namespace sccmclictr.automation.functions
             }
         }
 
+        /// <summary>
+        /// ROOT\ccm\ClientSDK:CCM_SoftwareBase
+        /// </summary>
         public class CCM_SoftwareBase
         {
             #region Properties
@@ -289,6 +293,9 @@ namespace sccmclictr.automation.functions
 
         }
 
+        /// <summary>
+        /// CCM_Application from ROOT\ccm\ClientSDK
+        /// </summary>
         public class CCM_Application : CCM_SoftwareBase
         {
             internal baseInit oNewBase;
@@ -704,11 +711,14 @@ namespace sccmclictr.automation.functions
         /// </summary>
         public class CCM_SoftwareDistribution : CCM_Policy
         {
+            internal baseInit oNewBase;
+
             //Constructor
             public CCM_SoftwareDistribution(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode) : base(WMIObject)
             {
                 remoteRunspace = RemoteRunspace;
                 pSCode = PSCode;
+                oNewBase = new baseInit(remoteRunspace, pSCode);
 
                 this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
                 this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
@@ -797,6 +807,8 @@ namespace sccmclictr.automation.functions
                 this.PRG_Requirements = WMIObject.Properties["PRG_Requirements"].Value as String;
                 this.PRG_ReturnCodesSource = WMIObject.Properties["PRG_ReturnCodesSource"].Value as String;
                 this.PRG_WorkingDirectory = WMIObject.Properties["PRG_WorkingDirectory"].Value as String;
+
+                this._RawObject = WMIObject;
             }
 
             #region Properties
@@ -867,6 +879,32 @@ namespace sccmclictr.automation.functions
             public String PRG_Requirements { get; set; }
             public String PRG_ReturnCodesSource { get; set; }
             public String PRG_WorkingDirectory { get; set; }
+
+            public PSObject _RawObject { get; set; }
+
+            #endregion
+
+            #region Methods
+
+            public CCM_Scheduler_ScheduledMessage _ScheduledMessage()
+            {
+                XmlDocument xDoc = new XmlDocument();
+                xDoc.LoadXml(PRG_Requirements);
+                string sSchedID =  xDoc.SelectSingleNode("/SWDReserved/ScheduledMessageID").InnerText.ToString();
+                foreach (PSObject oObj in oNewBase.GetObjects(WMIObject.Properties["__NAMESPACE"].Value.ToString(), "SELECT * FROM CCM_Scheduler_ScheduledMessage WHERE ScheduledMessageID='" + sSchedID + "'"))
+                {
+                    try
+                    {
+                        CCM_Scheduler_ScheduledMessage oMsg = new CCM_Scheduler_ScheduledMessage(oObj, remoteRunspace, pSCode);
+                        oMsg.remoteRunspace = remoteRunspace;
+                        oMsg.pSCode = pSCode;
+                        return oMsg;
+                    }
+                    catch { }
+                }
+                return null;
+            }
+
             #endregion
 
         }
@@ -956,6 +994,8 @@ namespace sccmclictr.automation.functions
                 this.TargetEndpoint = WMIObject.Properties["TargetEndpoint"].Value as String;
                 this.TriggerMessage = WMIObject.Properties["TriggerMessage"].Value as String;
                 this.Triggers = WMIObject.Properties["Triggers"].Value as String[];
+
+                this._RawObject = WMIObject;
             }
 
             #region Properties
@@ -974,6 +1014,73 @@ namespace sccmclictr.automation.functions
             public String TargetEndpoint { get; set; }
             public String TriggerMessage { get; set; }
             public String[] Triggers { get; set; }
+
+            public PSObject _RawObject { get; set; }
+            #endregion
+
+        }
+
+        /// <summary>
+        /// Source:ROOT\ccm\Scheduler
+        /// </summary>
+        public class CCM_Scheduler_History
+        {
+            //Constructor
+            public CCM_Scheduler_History(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
+            {
+                remoteRunspace = RemoteRunspace;
+                pSCode = PSCode;
+
+                this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
+                this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
+                this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
+                this.__INSTANCE = true;
+                this.WMIObject = WMIObject;
+                string sActivationMessageSent = WMIObject.Properties["ActivationMessageSent"].Value as string;
+                if (string.IsNullOrEmpty(sActivationMessageSent))
+                    this.ActivationMessageSent = null;
+                else
+                    this.ActivationMessageSent = ManagementDateTimeConverter.ToDateTime(sActivationMessageSent) as DateTime?;
+                this.ActivationMessageSentIsGMT = WMIObject.Properties["ActivationMessageSentIsGMT"].Value as Boolean?;
+                string sExpirationMessageSent = WMIObject.Properties["ExpirationMessageSent"].Value as string;
+                if (string.IsNullOrEmpty(sExpirationMessageSent))
+                    this.ExpirationMessageSent = null;
+                else
+                    this.ExpirationMessageSent = ManagementDateTimeConverter.ToDateTime(sExpirationMessageSent) as DateTime?;
+                this.ExpirationMessageSentIsGMT = WMIObject.Properties["ExpirationMessageSentIsGMT"].Value as Boolean?;
+                string sFirstEvalTime = WMIObject.Properties["FirstEvalTime"].Value as string;
+                if (string.IsNullOrEmpty(sFirstEvalTime))
+                    this.FirstEvalTime = null;
+                else
+                    this.FirstEvalTime = ManagementDateTimeConverter.ToDateTime(sFirstEvalTime) as DateTime?;
+                string sLastTriggerTime = WMIObject.Properties["LastTriggerTime"].Value as string;
+                if (string.IsNullOrEmpty(sLastTriggerTime))
+                    this.LastTriggerTime = null;
+                else
+                    this.LastTriggerTime = ManagementDateTimeConverter.ToDateTime(sLastTriggerTime) as DateTime?;
+                this.ScheduleID = WMIObject.Properties["ScheduleID"].Value as String;
+                this.TriggerState = WMIObject.Properties["TriggerState"].Value as String;
+                this.UserSID = WMIObject.Properties["UserSID"].Value as String;
+            }
+
+            #region Properties
+
+            internal string __CLASS { get; set; }
+            internal string __NAMESPACE { get; set; }
+            internal bool __INSTANCE { get; set; }
+            internal string __RELPATH { get; set; }
+            internal PSObject WMIObject { get; set; }
+            internal Runspace remoteRunspace;
+            internal TraceSource pSCode;
+            public DateTime? ActivationMessageSent { get; set; }
+            public Boolean? ActivationMessageSentIsGMT { get; set; }
+            public DateTime? ExpirationMessageSent { get; set; }
+            public Boolean? ExpirationMessageSentIsGMT { get; set; }
+            public DateTime? FirstEvalTime { get; set; }
+            public DateTime? LastTriggerTime { get; set; }
+            public String ScheduleID { get; set; }
+            public String TriggerState { get; set; }
+            public String UserSID { get; set; }
             #endregion
 
         }
@@ -1004,6 +1111,9 @@ namespace sccmclictr.automation.functions
             }
         }
 
+        /// <summary>
+        /// AppEnforcePreference
+        /// </summary>
         public static class AppEnforcePreference
         {
             public static UInt32 Immediate
