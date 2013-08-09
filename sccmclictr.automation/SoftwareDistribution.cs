@@ -66,16 +66,19 @@ namespace sccmclictr.automation.functions
             }
         }
 
-        public List<CCM_SoftwareBase> Software
+        /// <summary>
+        /// Get a list of Programs
+        /// </summary>
+        public List<CCM_Program> Programs
         {
             get
             {
-                List<CCM_SoftwareBase> lApps = new List<CCM_SoftwareBase>();
-                List<PSObject> oObj = GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_SoftwareBase");
+                List<CCM_Program> lApps = new List<CCM_Program>();
+                List<PSObject> oObj = GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_Program");
                 foreach (PSObject PSObj in oObj)
                 {
                     //Get AppDTs sub Objects
-                    CCM_SoftwareBase oApp = new CCM_SoftwareBase(PSObj);
+                    CCM_Program oApp = new CCM_Program(PSObj, remoteRunspace, pSCode);
 
                     oApp.remoteRunspace = remoteRunspace;
                     oApp.pSCode = pSCode;
@@ -1006,6 +1009,111 @@ namespace sccmclictr.automation.functions
             public UInt32? TS_UserNotificationFlags { get; set; }
             #endregion
 
+        }
+
+        /// <summary>
+        /// Source:ROOT\ccm\ClientSDK
+        /// </summary>
+        public class CCM_Program : CCM_SoftwareBase
+        {
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            /// <param name="WMIObject"></param>
+            /// <param name="RemoteRunspace"></param>
+            /// <param name="PSCode"></param>
+            public CCM_Program(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode): base(WMIObject)
+            {
+                remoteRunspace = RemoteRunspace;
+                pSCode = PSCode;
+
+                this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
+                this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
+                this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
+                this.__INSTANCE = true;
+                this.WMIObject = WMIObject;
+                string sActivationTime = WMIObject.Properties["ActivationTime"].Value as string;
+                if (string.IsNullOrEmpty(sActivationTime))
+                    this.ActivationTime = null;
+                else
+                    this.ActivationTime = ManagementDateTimeConverter.ToDateTime(sActivationTime) as DateTime?;
+                this.AdvertisedDirectly = WMIObject.Properties["AdvertisedDirectly"].Value as Boolean?;
+                this.Categories = WMIObject.Properties["Categories"].Value as String[];
+                this.CompletionAction = WMIObject.Properties["CompletionAction"].Value as UInt32?;
+                this.Dependencies = WMIObject.Properties["Dependencies"].Value as CCM_Program[];
+                this.DependentPackageID = WMIObject.Properties["DependentPackageID"].Value as String;
+                this.DependentProgramID = WMIObject.Properties["DependentProgramID"].Value as String;
+                this.DiskSpaceRequired = WMIObject.Properties["DiskSpaceRequired"].Value as String;
+                this.Duration = WMIObject.Properties["Duration"].Value as UInt32?;
+                string sExpirationTime = WMIObject.Properties["ExpirationTime"].Value as string;
+                if (string.IsNullOrEmpty(sExpirationTime))
+                    this.ExpirationTime = null;
+                else
+                    this.ExpirationTime = ManagementDateTimeConverter.ToDateTime(sExpirationTime) as DateTime?;
+                this.ForceDependencyToRun = WMIObject.Properties["ForceDependencyToRun"].Value as Boolean?;
+                this.HighImpact = WMIObject.Properties["HighImpact"].Value as Boolean?;
+                this.LastExitCode = WMIObject.Properties["LastExitCode"].Value as UInt32?;
+                this.LastRunStatus = WMIObject.Properties["LastRunStatus"].Value as String;
+                string sLastRunTime = WMIObject.Properties["LastRunTime"].Value as string;
+                if (string.IsNullOrEmpty(sLastRunTime))
+                    this.LastRunTime = null;
+                else
+                    this.LastRunTime = ManagementDateTimeConverter.ToDateTime(sLastRunTime) as DateTime?;
+                this.Level = WMIObject.Properties["Level"].Value as UInt32?;
+                this.NotifyUser = WMIObject.Properties["NotifyUser"].Value as Boolean?;
+                this.PackageID = WMIObject.Properties["PackageID"].Value as String;
+                this.PackageLanguage = WMIObject.Properties["PackageLanguage"].Value as String;
+                this.PackageName = WMIObject.Properties["PackageName"].Value as String;
+                this.ProgramID = WMIObject.Properties["ProgramID"].Value as String;
+                this.Published = WMIObject.Properties["Published"].Value as Boolean?;
+                this.RepeatRunBehavior = WMIObject.Properties["RepeatRunBehavior"].Value as String;
+                this.RequiresUserInput = WMIObject.Properties["RequiresUserInput"].Value as Boolean?;
+                this.RunAtLogoff = WMIObject.Properties["RunAtLogoff"].Value as Boolean?;
+                this.RunAtLogon = WMIObject.Properties["RunAtLogon"].Value as Boolean?;
+                this.RunDependent = WMIObject.Properties["RunDependent"].Value as Boolean?;
+                this.TaskSequence = WMIObject.Properties["TaskSequence"].Value as Boolean?;
+                this.Version = WMIObject.Properties["Version"].Value as String;
+            }
+
+            #region Properties
+
+            internal string __CLASS { get; set; }
+            internal string __NAMESPACE { get; set; }
+            internal bool __INSTANCE { get; set; }
+            internal string __RELPATH { get; set; }
+            internal PSObject WMIObject { get; set; }
+            internal Runspace remoteRunspace;
+            internal TraceSource pSCode;
+            public DateTime? ActivationTime { get; set; }
+            public Boolean? AdvertisedDirectly { get; set; }
+            public String[] Categories { get; set; }
+            public UInt32? CompletionAction { get; set; }
+            public CCM_Program[] Dependencies { get; set; }
+            public String DependentPackageID { get; set; }
+            public String DependentProgramID { get; set; }
+            public String DiskSpaceRequired { get; set; }
+            public UInt32? Duration { get; set; }
+            public DateTime? ExpirationTime { get; set; }
+            public Boolean? ForceDependencyToRun { get; set; }
+            public Boolean? HighImpact { get; set; }
+            public UInt32? LastExitCode { get; set; }
+            public String LastRunStatus { get; set; }
+            public DateTime? LastRunTime { get; set; }
+            public UInt32? Level { get; set; }
+            public Boolean? NotifyUser { get; set; }
+            public String PackageID { get; set; }
+            public String PackageLanguage { get; set; }
+            public String PackageName { get; set; }
+            public String ProgramID { get; set; }
+            public Boolean? Published { get; set; }
+            public String RepeatRunBehavior { get; set; }
+            public Boolean? RequiresUserInput { get; set; }
+            public Boolean? RunAtLogoff { get; set; }
+            public Boolean? RunAtLogon { get; set; }
+            public Boolean? RunDependent { get; set; }
+            public Boolean? TaskSequence { get; set; }
+            public String Version { get; set; }
+            #endregion
         }
 
 
