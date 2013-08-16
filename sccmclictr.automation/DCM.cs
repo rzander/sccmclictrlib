@@ -83,7 +83,13 @@ namespace sccmclictr.automation.functions
                 if (string.IsNullOrEmpty(sLastEvalTime))
                     this.LastEvalTime = null;
                 else
-                    this.LastEvalTime = ManagementDateTimeConverter.ToDateTime(sLastEvalTime) as DateTime?;
+                {
+                    try
+                    {
+                        this.LastEvalTime = ManagementDateTimeConverter.ToDateTime(sLastEvalTime) as DateTime?;
+                    }
+                    catch { }
+                }
                 this.Name = WMIObject.Properties["Name"].Value as String;
                 this.Status = WMIObject.Properties["Status"].Value as UInt32?;
                 this.Version = WMIObject.Properties["Version"].Value as String;
@@ -91,6 +97,8 @@ namespace sccmclictr.automation.functions
                     this.isCompliant = true;
                 else
                     this.isCompliant = false;
+
+                _RawObject = WMIObject;
             }
 
             #region Properties
@@ -111,6 +119,8 @@ namespace sccmclictr.automation.functions
             public UInt32? Status { get; set; }
             public String Version { get; set; }
             public Boolean isCompliant { get; set; }
+
+            public PSObject _RawObject { get; set; }
             #endregion
 
             #region Methods
