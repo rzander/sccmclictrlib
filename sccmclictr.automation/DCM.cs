@@ -219,7 +219,13 @@ namespace sccmclictr.automation.functions
                         oItem.LogicalName = xNode.Attributes["LogicalName"].Value.ToString();
                         oItem.Applicable = (xNode.Attributes["CIApplicablityState"].Value == "Applicable");
                         oItem.Compliant = (xNode.Attributes["CIComplianceState"].Value == "Compliant");
-                        oItem.Detected = bool.Parse(xNode.Attributes["IsDetected"].Value.ToString());
+
+                        try
+                        {
+                            oItem.Detected = bool.Parse(xNode.Attributes["IsDetected"].Value.ToString());
+                        }
+                        catch { oItem.Detected = true; }
+
                         oItem.Type = xNode.Attributes["Type"].Value.ToString();
                         oItem.Version = xNode.Attributes["Version"].Value.ToString();
 

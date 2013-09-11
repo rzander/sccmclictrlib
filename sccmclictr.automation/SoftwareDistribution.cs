@@ -95,17 +95,17 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                
+
                 List<REG_ExecutionHistory> lExec = new List<REG_ExecutionHistory>();
                 List<PSObject> oObj = new List<PSObject>();
                 Boolean bisSCCM2012 = baseClient.AgentProperties.isSCCM2012;
                 Boolean bisx64OS = true;
-                
+
                 //Only Get Architecture if SCCM < 2012
-                if(!bisSCCM2012)
+                if (!bisSCCM2012)
                     bisx64OS = baseClient.Inventory.isx64OS;
-                
-                if(bisSCCM2012)
+
+                if (bisSCCM2012)
                     oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\\System\" -Recurse | % { get-itemproperty -path  $_.PsPath }", false, new TimeSpan(0, 0, 10));
                 if (!bisSCCM2012 & bisx64OS)
                     oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\\System\" -Recurse | % { get-itemproperty -path  $_.PsPath }", false, new TimeSpan(0, 0, 10));
@@ -146,6 +146,31 @@ namespace sccmclictr.automation.functions
                     lApps.Add(oApp);
                 }
                 return lApps;
+            }
+        }
+
+        public List<SoftwareStatus> SoftwareSummary
+        {
+            get
+            {
+                List<SoftwareStatus> lSW = new List<SoftwareStatus>();
+                List<PSObject> oObj = GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_SoftwareBase");
+                foreach (PSObject PSObj in oObj)
+                {
+                    try
+                    {
+                        //Get AppDTs sub Objects
+                        SoftwareStatus oApp = new SoftwareStatus(PSObj, remoteRunspace, pSCode);
+                        if (!string.IsNullOrEmpty(oApp.Type))
+                        {
+                            oApp.remoteRunspace = remoteRunspace;
+                            oApp.pSCode = pSCode;
+                            lSW.Add(oApp);
+                        }
+                    }
+                    catch { }
+                }
+                return lSW;
             }
         }
 
@@ -366,7 +391,7 @@ namespace sccmclictr.automation.functions
                         this.Dependencies = lAppDTs.ToArray();
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     ex.Message.ToString();
                 }
@@ -736,7 +761,8 @@ namespace sccmclictr.automation.functions
             internal baseInit oNewBase;
 
             //Constructor
-            public CCM_SoftwareDistribution(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode) : base(WMIObject)
+            public CCM_SoftwareDistribution(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
+                : base(WMIObject)
             {
                 remoteRunspace = RemoteRunspace;
                 pSCode = PSCode;
@@ -916,7 +942,7 @@ namespace sccmclictr.automation.functions
             {
                 XmlDocument xDoc = new XmlDocument();
                 xDoc.LoadXml(PRG_Requirements);
-                string sSchedID =  xDoc.SelectSingleNode("/SWDReserved/ScheduledMessageID").InnerText.ToString();
+                string sSchedID = xDoc.SelectSingleNode("/SWDReserved/ScheduledMessageID").InnerText.ToString();
                 foreach (PSObject oObj in oNewBase.GetObjects(WMIObject.Properties["__NAMESPACE"].Value.ToString(), "SELECT * FROM CCM_Scheduler_ScheduledMessage WHERE ScheduledMessageID='" + sSchedID + "'"))
                 {
                     try
@@ -938,24 +964,36 @@ namespace sccmclictr.automation.functions
             {
                 string sSchedule = _ScheduledMessage().ScheduledMessageID;
 
-                if (enforce)
+                try
                 {
-                    string sPrgReq = PRG_Requirements;
-                    sPrgReq = sPrgReq.Replace("<OverrideServiceWindows>FALSE</OverrideServiceWindows>", "<OverrideServiceWindows>TRUE</OverrideServiceWindows>");
-                    sPrgReq = sPrgReq.Replace("\r", "");
-                    sPrgReq = sPrgReq.Replace("\n", "");
-                    sPrgReq = sPrgReq.Replace("\t", "");
-                    oNewBase.SetProperty(this.__NAMESPACE + ":" + this.__RELPATH.Replace("\"", "'"), "ADV_RepeatRunBehavior", "RerunAlways");
-                    oNewBase.SetProperty(this.__NAMESPACE + ":" + this.__RELPATH.Replace("\"", "'"), "ADV_MandatoryAssignments", "$True");
-                    oNewBase.SetProperty(this.__NAMESPACE + ":" + this.__RELPATH.Replace("\"", "'"), "PRG_Requirements", "\"" + sPrgReq + "\"");
+                    if (enforce)
+                    {
+                        string sPrgReq = PRG_Requirements;
+                        sPrgReq = sPrgReq.Replace("<OverrideServiceWindows>FALSE</OverrideServiceWindows>", "<OverrideServiceWindows>TRUE</OverrideServiceWindows>");
+                        sPrgReq = sPrgReq.Replace("\r", "");
+                        sPrgReq = sPrgReq.Replace("\n", "");
+                        sPrgReq = sPrgReq.Replace("\t", "");
+                        oNewBase.SetProperty(this.__NAMESPACE + ":" + this.__RELPATH.Replace("\"", "'"), "ADV_RepeatRunBehavior", "'RerunAlways'");
+                        oNewBase.SetProperty(this.__NAMESPACE + ":" + this.__RELPATH.Replace("\"", "'"), "ADV_MandatoryAssignments", "$True");
+                        try
+                        {
+                            oNewBase.SetProperty(this.__NAMESPACE + ":" + this.__RELPATH.Replace("\"", "'"), "PRG_Requirements", "'" + sPrgReq + "'");
+                        }
+                        catch { }
 
-                    this.ADV_RepeatRunBehavior = "RerunAlways";
-                    this.ADV_MandatoryAssignments = true;
-                    this.PRG_Requirements = sPrgReq;
+                        this.ADV_RepeatRunBehavior = "RerunAlways";
+                        this.ADV_MandatoryAssignments = true;
+                        this.PRG_Requirements = sPrgReq;
 
-                    //Wait 2s and hope that to policy is updated...
-                    System.Threading.Thread.Sleep(2000); 
+                        //Evaluate machine policy...
+                        //oNewBase.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000022}'", true);
+
+                        //Wait 2s and hope that to policy is updated...
+                        //System.Threading.Thread.Sleep(2000);
+
+                    }
                 }
+                catch { }
 
                 //this.oNewBase.CallClassMethod(@"root\ccm\ClientSDK:CCM_ProgramsManager", "ExecuteProgram", "'" + PRG_ProgramID + "', '" + PKG_PackageID + "'");
                 this.oNewBase.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'" + sSchedule + "'");
@@ -971,7 +1009,8 @@ namespace sccmclictr.automation.functions
         public class CCM_TaskSequence : CCM_SoftwareDistribution
         {
             //Constructor
-            public CCM_TaskSequence(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode) : base(WMIObject, RemoteRunspace, PSCode)
+            public CCM_TaskSequence(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
+                : base(WMIObject, RemoteRunspace, PSCode)
             {
                 remoteRunspace = RemoteRunspace;
                 pSCode = PSCode;
@@ -1022,7 +1061,8 @@ namespace sccmclictr.automation.functions
             /// <param name="WMIObject"></param>
             /// <param name="RemoteRunspace"></param>
             /// <param name="PSCode"></param>
-            public CCM_Program(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode): base(WMIObject)
+            public CCM_Program(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
+                : base(WMIObject)
             {
                 remoteRunspace = RemoteRunspace;
                 pSCode = PSCode;
@@ -1116,14 +1156,14 @@ namespace sccmclictr.automation.functions
             #endregion
         }
 
-
         /// <summary>
         /// Source:ROOT\ccm\Policy\Machine\ActualConfig
         /// </summary>
         public class CCM_Scheduler_ScheduledMessage : CCM_Policy
         {
             //Constructor
-            public CCM_Scheduler_ScheduledMessage(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode) : base(WMIObject)
+            public CCM_Scheduler_ScheduledMessage(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
+                : base(WMIObject)
             {
                 remoteRunspace = RemoteRunspace;
                 pSCode = PSCode;
@@ -1247,6 +1287,72 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
+        /// Source:ROOT\ccm\ClientSDK
+        /// </summary>
+        public class CCM_SoftwareUpdate : CCM_SoftwareBase
+        {
+            //Constructor
+            public CCM_SoftwareUpdate(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
+                : base(WMIObject)
+            {
+                remoteRunspace = RemoteRunspace;
+                pSCode = PSCode;
+
+                this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
+                this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
+                this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
+                this.__INSTANCE = true;
+                this.WMIObject = WMIObject;
+                this.ArticleID = WMIObject.Properties["ArticleID"].Value as String;
+                this.BulletinID = WMIObject.Properties["BulletinID"].Value as String;
+                this.ComplianceState = WMIObject.Properties["ComplianceState"].Value as UInt32?;
+                this.ExclusiveUpdate = WMIObject.Properties["ExclusiveUpdate"].Value as Boolean?;
+                this.MaxExecutionTime = WMIObject.Properties["MaxExecutionTime"].Value as UInt32?;
+                this.NotifyUser = WMIObject.Properties["NotifyUser"].Value as Boolean?;
+                this.OverrideServiceWindows = WMIObject.Properties["OverrideServiceWindows"].Value as Boolean?;
+                this.RebootOutsideServiceWindows = WMIObject.Properties["RebootOutsideServiceWindows"].Value as Boolean?;
+                string sRestartDeadline = WMIObject.Properties["RestartDeadline"].Value as string;
+                if (string.IsNullOrEmpty(sRestartDeadline))
+                    this.RestartDeadline = null;
+                else
+                    this.RestartDeadline = ManagementDateTimeConverter.ToDateTime(sRestartDeadline) as DateTime?;
+                string sStartTime = WMIObject.Properties["StartTime"].Value as string;
+                if (string.IsNullOrEmpty(sStartTime))
+                    this.StartTime = null;
+                else
+                    this.StartTime = ManagementDateTimeConverter.ToDateTime(sStartTime) as DateTime?;
+                this.UpdateID = WMIObject.Properties["UpdateID"].Value as String;
+                this.URL = WMIObject.Properties["URL"].Value as String;
+                this.UserUIExperience = WMIObject.Properties["UserUIExperience"].Value as Boolean?;
+            }
+
+            #region Properties
+
+            internal string __CLASS { get; set; }
+            internal string __NAMESPACE { get; set; }
+            internal bool __INSTANCE { get; set; }
+            internal string __RELPATH { get; set; }
+            internal PSObject WMIObject { get; set; }
+            internal Runspace remoteRunspace;
+            internal TraceSource pSCode;
+            public String ArticleID { get; set; }
+            public String BulletinID { get; set; }
+            public UInt32? ComplianceState { get; set; }
+            public Boolean? ExclusiveUpdate { get; set; }
+            public UInt32? MaxExecutionTime { get; set; }
+            public Boolean? NotifyUser { get; set; }
+            public Boolean? OverrideServiceWindows { get; set; }
+            public Boolean? RebootOutsideServiceWindows { get; set; }
+            public DateTime? RestartDeadline { get; set; }
+            public DateTime? StartTime { get; set; }
+            public String UpdateID { get; set; }
+            public String URL { get; set; }
+            public Boolean? UserUIExperience { get; set; }
+            #endregion
+
+        }
+
+        /// <summary>
         /// Application Priorities
         /// </summary>
         public static class AppPriority
@@ -1355,6 +1461,234 @@ namespace sccmclictr.automation.functions
             }
 
         }
+
+        public class SoftwareStatus
+        {
+            public string Icon { get; set; }
+            public string Name { get; set; }
+            public string Type { get; set; }
+            public string Publisher { get; set; }
+            public DateTime? AvailableAfter { get; set; }
+            public string Status { get; set; }
+            public UInt32 PercentComplete { get; set; }
+            public UInt32 ErrorCode { get; set; }
+
+            private CCM_SoftwareBase _rawObject { get; set; }
+
+            internal Runspace remoteRunspace;
+            internal TraceSource pSCode;
+            internal baseInit oNewBase;
+
+            public SoftwareStatus(PSObject SWObject, Runspace RemoteRunspace, TraceSource PSCode)
+            {
+                try
+                {
+                    remoteRunspace = RemoteRunspace;
+                    pSCode = PSCode;
+                    oNewBase = new baseInit(remoteRunspace, pSCode);
+                    int iType =0;
+                    try
+                    {
+                        if (SWObject.Properties["Type"].Value == null)
+                            Type = "";
+                        string sType = SWObject.Properties["Type"].Value.ToString();
+                        if (string.IsNullOrEmpty(sType))
+                            sType = "99";
+
+                        iType = int.Parse(sType);
+                        switch (iType)
+                        {
+                            case 0:
+                                Type = "Program";
+                                _rawObject = new CCM_Program(SWObject, RemoteRunspace, PSCode);
+                                Icon = "";
+                                AvailableAfter = ((CCM_Program)_rawObject).ActivationTime;
+                                Status = ((CCM_Program)_rawObject).LastRunStatus;
+                                if (Status == "Succeeded")
+                                    Status = "Installed";
+                                if (((CCM_Program)_rawObject).RepeatRunBehavior == "RerunAlways")
+                                {
+                                    if (((CCM_Program)_rawObject).Deadline != null)
+                                    {
+                                        if (((CCM_Program)_rawObject).Deadline > DateTime.Now)
+                                        {
+                                            Status = Status + "; waiting to install again at " + ((CCM_Program)_rawObject).Deadline.ToString();
+                                        }
+                                    }
+                                }
+                                
+                                break;
+                            case 1:
+                                Type = "Application";
+                                _rawObject = new CCM_Application(SWObject, RemoteRunspace, PSCode);
+                                Icon = SWObject.Properties["Icon"].Value as string;
+                                AvailableAfter = ((CCM_Application)_rawObject).StartTime;
+                                break;
+                            case 2:
+                                Type = "Software Update";
+                                _rawObject = new CCM_SoftwareUpdate(SWObject, RemoteRunspace, PSCode);
+                                Icon = "Updates";
+                                AvailableAfter = ((CCM_SoftwareUpdate)_rawObject).StartTime;
+                                break;
+                            case 3:
+                                Type = "Program";
+                                _rawObject = new CCM_Program(SWObject, RemoteRunspace, PSCode);
+                                Icon = "";
+                                if (((CCM_Program)_rawObject).TaskSequence == true)
+                                {
+                                    Type = "Operating System";
+                                }
+                                Status = ((CCM_Program)_rawObject).LastRunStatus;
+                                AvailableAfter = ((CCM_Program)_rawObject).ActivationTime;
+                                if (Status == "Succeeded")
+                                    Status = "Installed";
+                                if (((CCM_Program)_rawObject).RepeatRunBehavior == "RerunAlways")
+                                {
+                                    if (((CCM_Program)_rawObject).Deadline != null)
+                                    {
+                                        if (((CCM_Program)_rawObject).Deadline > DateTime.Now)
+                                        {
+                                            Status = Status + "; waiting to install again at " + ((CCM_Program)_rawObject).Deadline.ToString();
+                                        }
+                                    }
+                                }
+                                break;
+                            default:
+                                Type = "Unknown";
+                                Icon = "";
+                                break;
+                        }
+                    }
+                    catch { }
+
+                    Name = SWObject.Properties["Name"].Value as string;
+                    Publisher = SWObject.Properties["Publisher"].Value as string;
+                    
+                    try
+                    {
+                        ErrorCode = UInt32.Parse(SWObject.Properties["ErrorCode"].Value.ToString());
+                    }
+                    catch { }
+
+                    try
+                    {
+                        PercentComplete = UInt32.Parse(SWObject.Properties["PercentComplete"].Value.ToString());
+                    }
+                    catch { }
+
+                    try
+                    {
+                        if (SWObject.Properties["EvaluationState"].Value != null)
+                        {
+                            int EvaluationState = int.Parse(SWObject.Properties["EvaluationState"].Value.ToString());
+                            switch (EvaluationState)
+                            {
+                                case 0:
+                                    Status = "Not Installed";
+                                    break;
+                                case 1:
+                                    Status = "Installed";
+                                    break;
+                                case 2:
+                                    Status = "Not required";
+                                    break;
+                                case 3:
+                                    Status = "Ready";
+                                    break;
+                                case 4:
+                                    Status = "Failed";
+                                    break;
+                                case 5:
+                                    Status = "Downloading content";
+                                    break;
+                                case 6:
+                                    Status = "Downloading content";
+                                    break;
+                                case 7:
+                                    Status = "Waiting";
+                                    break;
+                                case 8:
+                                    Status = "Waiting";
+                                    break;
+                                case 9:
+                                    Status = "Waiting";
+                                    break;
+                                case 10:
+                                    Status = "Waiting";
+                                    break;
+                                case 11:
+                                    Status = "Waiting";
+                                    break;
+                                case 12:
+                                    Status = "Installing";
+                                    break;
+                                case 13:
+                                    Status = "Reboot pending";
+                                    break;
+                                case 14:
+                                    Status = "Reboot pending";
+                                    break;
+                                case 15:
+                                    Status = "Waiting";
+                                    break;
+                                case 16:
+                                    Status = "Failed";
+                                    break;
+                                case 17:
+                                    if (iType == 0 | iType == 3)
+                                    {
+                                        //Status = "Installed";
+                                    }
+                                    else
+                                        Status = "Waiting";
+                                    break;
+                                case 18:
+                                    Status = "Waiting";
+                                    break;
+                                case 19:
+                                    Status = "Waiting";
+                                    break;
+                                case 20:
+                                    Status = "Waiting";
+                                    break;
+                                case 21:
+                                    Status = "Waiting";
+                                    break;
+                                case 22:
+                                    Status = "Downloading content";
+                                    break;
+                                case 23:
+                                    Status = "Downloading content";
+                                    break;
+                                case 24:
+                                    Status = "Failed";
+                                    break;
+                                case 25:
+                                    Status = "Failed";
+                                    break;
+                                case 26:
+                                    Status = "Waiting"; ;
+                                    break;
+                                case 27:
+                                    Status = "Waiting";
+                                    break;
+                                case 28:
+                                    Status = "Waiting";
+                                    break;
+                                default:
+                                    Status = "Unknown state information.";
+                                    break;
+
+                            }
+                        }
+                    }
+                    catch { }
+
+                }
+                catch { }
+            }
+        }
+
     }
 
 

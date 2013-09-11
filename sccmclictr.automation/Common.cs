@@ -8,6 +8,7 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
 //using System.Windows.Media.Imaging;
+using System.Management;
 
 namespace sccmclictr.automation
 {
@@ -118,6 +119,20 @@ namespace sccmclictr.automation
                 string base64String = Convert.ToBase64String(imageBytes);
                 return base64String;
             }
+        }
+
+        public static DateTime? WMIDateToDateTime(string ManagementDateTime)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(ManagementDateTime))
+                    return null;
+                else
+                    return ManagementDateTimeConverter.ToDateTime(ManagementDateTime) as DateTime?;
+            }
+            catch { }
+
+            return null;
         }
 
 
