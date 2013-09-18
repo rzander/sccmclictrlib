@@ -826,5 +826,24 @@ namespace sccmclictr.automation.functions
                 string sProductCode = base.GetStringFromPS("gwmi -query \"SELECT * FROM __Namespace WHERE Name='CCM'\" -Namespace \"root\" | Remove-WmiObject");
                 return sProductCode;      
         }
+
+        /// <summary>
+        /// Get the SID's of all logged on Users
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetLoggedOnUserSIDs()
+        {
+            List<string> oResult = new List<string>();
+            foreach (PSObject oUsr in base.GetObjectsFromPS("get-wmiobject -query \"SELECT UserSID FROM CCM_UserLogonEvents WHERE LogoffTime = NULL\" -namespace \"ROOT\\ccm\""))
+            {
+                try
+                {
+                    oResult.Add(oUsr.Properties["UserSID"].Value.ToString());
+                }
+                catch { }
+            }
+
+            return oResult;
+        }
     }
 }

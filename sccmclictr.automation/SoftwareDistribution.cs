@@ -1504,6 +1504,7 @@ namespace sccmclictr.automation.functions
                                 Icon = "";
                                 AvailableAfter = ((CCM_Program)_rawObject).ActivationTime;
                                 Status = ((CCM_Program)_rawObject).LastRunStatus;
+                                Name = ((CCM_Program)_rawObject).PackageName + ";" + ((CCM_Program)_rawObject).ProgramID;
                                 if (Status == "Succeeded")
                                     Status = "Installed";
                                 if (((CCM_Program)_rawObject).RepeatRunBehavior == "RerunAlways")
@@ -1523,12 +1524,14 @@ namespace sccmclictr.automation.functions
                                 _rawObject = new CCM_Application(SWObject, RemoteRunspace, PSCode);
                                 Icon = SWObject.Properties["Icon"].Value as string;
                                 AvailableAfter = ((CCM_Application)_rawObject).StartTime;
+                                Name = SWObject.Properties["Name"].Value as string;
                                 break;
                             case 2:
                                 Type = "Software Update";
                                 _rawObject = new CCM_SoftwareUpdate(SWObject, RemoteRunspace, PSCode);
                                 Icon = "Updates";
                                 AvailableAfter = ((CCM_SoftwareUpdate)_rawObject).StartTime;
+                                Name = SWObject.Properties["Name"].Value as string;
                                 break;
                             case 3:
                                 Type = "Program";
@@ -1540,6 +1543,7 @@ namespace sccmclictr.automation.functions
                                 }
                                 Status = ((CCM_Program)_rawObject).LastRunStatus;
                                 AvailableAfter = ((CCM_Program)_rawObject).ActivationTime;
+                                Name = SWObject.Properties["Name"].Value as string;
                                 if (Status == "Succeeded")
                                     Status = "Installed";
                                 if (((CCM_Program)_rawObject).RepeatRunBehavior == "RerunAlways")
@@ -1561,7 +1565,7 @@ namespace sccmclictr.automation.functions
                     }
                     catch { }
 
-                    Name = SWObject.Properties["Name"].Value as string;
+
                     Publisher = SWObject.Properties["Publisher"].Value as string;
                     
                     try

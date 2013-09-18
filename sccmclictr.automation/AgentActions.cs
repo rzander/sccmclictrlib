@@ -289,7 +289,15 @@ namespace sccmclictr.automation.functions
         {
             try
             {
-                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000026}'");
+                foreach(string sSID in baseClient.AgentProperties.GetLoggedOnUserSIDs())
+                {
+                    try
+                    {
+                        string sPath = "root\\ccm\\Policy\\" + sSID.Replace('-', '_') + "\\ActualConfig:CCM_Scheduler_ScheduledMessage.ScheduledMessageID='{00000000-0000-0000-0000-000000000026}'";
+                        baseClient.SetProperty(sPath, "Triggers", "@('SimpleInterval;Minutes=1;MaxRandomDelayMinutes=0')");
+                    }
+                    catch { }
+                }
             }
             catch
             {
@@ -300,14 +308,22 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Policy Agent Evaluate Assignment (User)</
+        /// Policy Agent Evaluate Assignment (User)
         /// </summary>
         /// <returns></returns>
         public bool EvaluateUserPolicies()
         {
             try
             {
-                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000027}'");
+                foreach (string sSID in baseClient.AgentProperties.GetLoggedOnUserSIDs())
+                {
+                    try
+                    {
+                        string sPath = "root\\ccm\\Policy\\" + sSID.Replace('-', '_') + "\\ActualConfig:CCM_Scheduler_ScheduledMessage.ScheduledMessageID='{00000000-0000-0000-0000-000000000027}'";
+                        baseClient.SetProperty(sPath, "Triggers", "@('SimpleInterval;Minutes=1')");
+                    }
+                    catch { }
+                }
             }
             catch
             {
