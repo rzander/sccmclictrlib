@@ -1,0 +1,20 @@
+$MissingUpdates = $false;
+$FileRenamePending = $false;
+$CM12RebootPending = $false;
+$CM12HardRebootPending = $false;
+$PatchRebootPending = $false;
+$RebootRequired = $false;
+$RunningUpdates = $false;
+$UserLoggedOn = $false;
+$CCMUpdate = get-wmiobject -query "SELECT * FROM CCM_SoftwareUpdate" -namespace "ROOT\ccm\ClientSDK";
+$CM12RebootPending = ([wmiclass]'ROOT\ccm\ClientSDK:CCM_ClientUtilities').DetermineIfRebootPending().RebootPending;
+$CM12HardRebootPending = ([wmiclass]'ROOT\ccm\ClientSDK:CCM_ClientUtilities').DetermineIfRebootPending().IsHardRebootPending;
+$ComponentRebootPending = if(test-path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending"){ $true } else { $false }
+if(@(((Get-ItemProperty("HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager")).$("PendingFileRenameOperations")) | where { $_ }).length -ne 0) { $FileRenamePending = $true };
+if(@($CCMUpdate | where { $_.EvaluationState -eq 0 -or $_.EvaluationState -eq 1 -or $_.EvaluationState -eq 14  }).length -ne 0) { $MissingUpdates = $true };
+if(@($CCMUpdate | where { $_.EvaluationState -eq 8 -or $_.EvaluationState -eq 9 -or $_.EvaluationState -eq 10  }).length -ne 0) { $PatchRebootPending = $true };
+if(@($CCMUpdate | where { $_.EvaluationState -eq 2 -or $_.EvaluationState -eq 3 -or $_.EvaluationState -eq 4 -or $_.EvaluationState -eq 5 -or $_.EvaluationState -eq 6 -or $_.EvaluationState -eq 7 -or $_.EvaluationState -eq 11 }).length -ne 0) { $RunningUpdates  = $true };
+if($FileRenamePending -or $CM12RebootPending -or $CM12HardRebootPending -or $PatchRebootPending -or $ComponentRebootPending) { $RebootRequired = $true };
+$proc = @(gwmi win32_process -Filter "Name = 'explorer.exe'");
+if($proc.Length -gt 0) { $UserLoggedOn = $true };
+$RebootRequired.ToString() + ";" +$MissingUpdates.ToString() +";" + $RunningUpdates.ToString() + ";" + $UserLoggedOn.ToString();
