@@ -834,15 +834,28 @@ namespace sccmclictr.automation.functions
         public List<string> GetLoggedOnUserSIDs()
         {
             List<string> oResult = new List<string>();
-            foreach (PSObject oUsr in base.GetObjectsFromPS("get-wmiobject -query \"SELECT UserSID FROM CCM_UserLogonEvents WHERE LogoffTime = NULL\" -namespace \"ROOT\\ccm\""))
+            if (ClientVersion.StartsWith("5.00.78"))
             {
                 try
                 {
-                    oResult.Add(oUsr.Properties["UserSID"].Value.ToString());
+                    string sSidQuery = "$username = (get-wmiobject -query \"SELECT Username FROM Win32_ComputerSystem\" -namespace \"root\\cimv2\").Username;$user = New-Object System.Security.Principal.NTAccount($username.split('\\')[0],$username.split('\\')[1]);$sid = $user.Translate([System.Security.Principal.SecurityIdentifier]);$sid.Value";
+                    oResult.Add(base.GetStringFromPS(sSidQuery));
                 }
                 catch { }
             }
+            else
+            {
+                //Does only work with CM12 R2 or later...
+                foreach (PSObject oUsr in base.GetObjectsFromPS("get-wmiobject -query \"SELECT UserSID FROM CCM_UserLogonEvents WHERE LogoffTime = NULL\" -namespace \"ROOT\\ccm\""))
+                {
+                    try
+                    {
+                        oResult.Add(oUsr.Properties["UserSID"].Value.ToString());
+                    }
+                    catch { }
+                }
 
+            }
             return oResult;
         }
     }
