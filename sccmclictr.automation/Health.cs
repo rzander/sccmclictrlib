@@ -185,5 +185,19 @@ namespace sccmclictr.automation.functions
         {
             base.GetStringFromPS("gwmi -query \"SELECT * FROM __Namespace WHERE Name='CCM'\" -Namespace \"root\" | Remove-WmiObject");
         }
+
+        /// <summary>
+        /// Delete all machine certificates from the SMS Folder
+        /// </summary>
+        public void DeleteSMSCertificates()
+        {
+            try
+            {
+                base.GetStringFromPS(@"Remove-Item -path HKLM:\SOFTWARE\Microsoft\SystemCertificates\SMS\* -Recurse");
+            }
+            catch
+            {
+            }
+        }
     }
 }

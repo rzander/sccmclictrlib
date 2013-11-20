@@ -18,6 +18,8 @@ using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Diagnostics;
 using System.Web;
+using System.IO;
+using System.Xml;
 
 namespace sccmclictr.automation.policy
 {
@@ -2424,5 +2426,90 @@ namespace sccmclictr.automation.policy
         }
     }
 
+    public class localpolicy
+    {
+        /// <summary>
+        /// Download policy from URL (or File)
+        /// </summary>
+        /// <param name="URL">e.g. http://win-29hctu7qses.corp.lab/SMS_MP/.sms_pol?{ce839d51-8469-42b2-ae09-c5a8faaa1ef7}.7_00</param>
+        /// <returns>XML Body</returns>
+        public static string DownloadPolicyFromURL(string URL)
+        {
+            //http://win-29hctu7qses.corp.lab/SMS_MP/.sms_pol?{ce839d51-8469-42b2-ae09-c5a8faaa1ef7}.7_00
 
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.Load(URL);
+
+            //Check if it's a compressed policy
+            try
+            {
+                XmlNode xNode = xDoc.SelectSingleNode("PolicyXML");
+                if (string.Compare(xNode.Attributes["Compression"].Value, "zlib", true) == 0)
+                {
+                    return DecompressPolicy(xNode.InnerText);
+                }
+            }
+            catch { }
+
+            return xDoc.InnerXml;
+        }
+
+        /// <summary>
+        /// Decompress the hexstring of compressed policies...
+        /// </summary>
+        /// <param name="PolicyHexData">a string like: 789CDD96CB6EDA501086675DA9EF80B2A7...</param>
+        /// <returns>the decompressed data (normaly XML) as string.</returns>
+        public static string DecompressPolicy(string PolicyHexData)
+        {
+            //string zLib = "789CDD96CB6EDA501086675DA9EF80B2A7401C30A6AE239B8B6AA949A380D2EE9063885A89400449D5AAEAABB7F96670C038A052299BA2239FCBDCFE99FF78307F7EFB722ADFE5562652926F3296B92CE4ABCC642AEFE4486AF246AAACA712C86B7925BE5CA09B6091CA0F3CF2A701CF1D11D4EF4C12645FD04C911C61D9B7F318A444AE76E02892A2940A238F124BC73C34DECCF06219C950DA722C27E2495342D648CAE22273885CE65C47AB32D52E77BA76787476B10BA5875D552AECEE184BBC44EEB32C8758D588EFC835AB0B66195F079B86213490388670CD5E651E92136CEBCC89DCE0A3A7110857E4AC737F8F7A9F73F5779F3EFB07BCD2EC36B67B042BE9E6AD5EE23BC1B3B455FAC4FFCF9564782077F18BAA820DA6367909999F3228EDD4E4BBE0137D1083FE99F5C32ABA6F5DB1C023614D8DE9945809B285F9B51967C6635CB8FF98E786DD3A531FB479C6FE9C98DA955362DDAE3A71469D63E29F6752EDC6FB5C964D8BE6D3FD09560F4883FFF8467D30F295E8B9C8D0BEDC6D725FE44DF37DCE5C8DF1923974D0A5C4D1F314FDFA0D38E45BAC188F15DEDE90F73606B74B350369216DB17B6FB9D589D142A739360CB14744CF6AD22A22CE2E67D72A88B06992BDD6EF60D363D69CAAE8AB565795881E7154A6D5B6B174410E796A567B883C329B0E3AC58CE4ED01F07CC1AFF947E62EEB802A94ED16318B5CBBC6D09209ADBF678C36B28C1D74C7F8AA54990FADDA1A16CAA06BFC6A067A174B3E551F5974CF18732D7A97E119678AAC95768D29EF453BEB9275613AFDDF33DAB3BFEBFF90836A8ABFF5C52F4C65E79724FF7DAE6CFD16AF51F2DA401E01942A69CD"; 
+            string sResult = "";
+            try
+            {
+                //remove the first two bytes ("789C")
+                byte[] polBytes = _stringToByteArray(PolicyHexData.Substring(4));
+
+                System.IO.Compression.DeflateStream df = new System.IO.Compression.DeflateStream(new MemoryStream(polBytes), System.IO.Compression.CompressionMode.Decompress);
+
+                
+                using (StreamReader reader = new StreamReader(df))
+                {
+                    sResult = reader.ReadToEnd();
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.Message);
+            }
+            return sResult; 
+        }
+
+        //copied from: http://stackoverflow.com/questions/321370/convert-hex-string-to-byte-array
+        internal static byte[] _stringToByteArray(string hex)
+        {
+            if (hex.Length % 2 == 1)
+                throw new Exception("The binary key cannot have an odd number of digits");
+
+            byte[] arr = new byte[hex.Length >> 1];
+
+            for (int i = 0; i < hex.Length >> 1; ++i)
+            {
+                arr[i] = (byte)((_getHexVal(hex[i << 1]) << 4) + (_getHexVal(hex[(i << 1) + 1])));
+            }
+
+            return arr;
+        }
+
+        //copied from: http://stackoverflow.com/questions/321370/convert-hex-string-to-byte-array
+        internal static int _getHexVal(char hex)
+        {
+            int val = (int)hex;
+            //For uppercase A-F letters:
+            return val - (val < 58 ? 48 : 55);
+            //For lowercase a-f letters:
+            //return val - (val < 58 ? 48 : 87);
+            //Or the two combined, but a bit slower:
+            //return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
+        }
+        
+    }
 }
