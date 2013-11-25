@@ -2510,6 +2510,28 @@ namespace sccmclictr.automation.policy
             //Or the two combined, but a bit slower:
             //return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
         }
-        
+
+        /// <summary>
+        /// Format xml string into a formated xml structure
+        /// </summary>
+        /// <param name="xmlstring">xml string</param>
+        /// <returns>formated xml string</returns>
+        public static string FormatXML(string xmlstring)
+        {
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.LoadXml(xmlstring);
+            StringBuilder sb = new StringBuilder();
+            System.IO.TextWriter tr = new System.IO.StringWriter(sb);
+
+            System.Xml.XmlTextWriter wr = new XmlTextWriter(tr);
+
+            wr.Formatting = Formatting.Indented;
+
+            xDoc.Save(wr);
+
+            wr.Close();
+
+            return sb.ToString();
+        }
     }
 }

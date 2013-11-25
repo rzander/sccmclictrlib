@@ -256,7 +256,7 @@ namespace sccmclictr.automation.functions
         public UInt32 Terminate()
         {
             //Remove cached results
-            string sHash1 = oNewBase.CreateHash(@"Get-Process | Where { $_.Id -Eq " + ProcessId + @" } | Kill");
+            string sHash1 = oNewBase.CreateHash(@"Get-Process | Where { $_.Id -Eq " + ProcessId + @" } | Kill -Force");
             oNewBase.Cache.Remove(sHash1);
 
             oNewBase.GetStringFromPS(@"Get-Process | Where { $_.Id -Eq '" + ProcessId + @"' } | Kill");
