@@ -106,11 +106,11 @@ namespace sccmclictr.automation.functions
                     bisx64OS = baseClient.Inventory.isx64OS;
 
                 if (bisSCCM2012)
-                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\\System\" -Recurse | % { get-itemproperty -path  $_.PsPath }", false, new TimeSpan(0, 0, 10));
+                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\" -Recurse | % { get-itemproperty -path  $_.PsPath }", false, new TimeSpan(0, 0, 10));
                 if (!bisSCCM2012 & bisx64OS)
-                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\\System\" -Recurse | % { get-itemproperty -path  $_.PsPath }", false, new TimeSpan(0, 0, 10));
+                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\" -Recurse | % { get-itemproperty -path  $_.PsPath }", false, new TimeSpan(0, 0, 10));
                 if (!bisSCCM2012 & !bisx64OS)
-                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\\System\" -Recurse | % { get-itemproperty -path  $_.PsPath }", false, new TimeSpan(0, 0, 10));
+                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\" -Recurse | % { get-itemproperty -path  $_.PsPath }", false, new TimeSpan(0, 0, 10));
 
                 foreach (PSObject PSObj in oObj)
                 {
@@ -1458,6 +1458,19 @@ namespace sccmclictr.automation.functions
                     oNewBase.GetObjectsFromPS("Remove-Item \"" + sReg + "\" -Recurse", true, new TimeSpan(0, 0, 1));
                 }
                 catch { }
+            }
+
+            /// <summary>
+            /// Translate the SID to a readable Username
+            /// </summary>
+            public void GetUserFromSID()
+            {
+                if(this.UserID.StartsWith("S-1-5-21-"))
+                {
+                    //((New-Object System.Security.Principal.SecurityIdentifier("S-1-5-21-57989841-2025429265-839522115-65754")).Translate( [System.Security.Principal.NTAccount])).value 
+                    string sUser = oNewBase.GetStringFromPS(string.Format("((New-Object System.Security.Principal.SecurityIdentifier(\"{0}\")).Translate([System.Security.Principal.NTAccount])).value", this.UserID), false);
+                    this.UserID = sUser;
+                }
             }
 
         }

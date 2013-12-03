@@ -259,7 +259,7 @@ namespace sccmclictr.automation.functions
             string sHash1 = oNewBase.CreateHash(@"Get-Process | Where { $_.Id -Eq " + ProcessId + @" } | Kill -Force");
             oNewBase.Cache.Remove(sHash1);
 
-            oNewBase.GetStringFromPS(@"Get-Process | Where { $_.Id -Eq '" + ProcessId + @"' } | Kill");
+            oNewBase.GetStringFromPS(@"Get-Process | Where { $_.Id -Eq '" + ProcessId + @"' } | Kill -Force");
 
             //Remove cached results
             oNewBase.Cache.Remove(sHash1);
