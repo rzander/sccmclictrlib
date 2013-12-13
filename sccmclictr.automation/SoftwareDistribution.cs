@@ -44,26 +44,38 @@ namespace sccmclictr.automation.functions
             baseClient = oClient;
         }
 
-        /// <summary>
+                /// <summary>
         /// Get a list of Applications (SELECT * FROM CCM_Application)
         /// </summary>
         public List<CCM_Application> Applications
         {
             get
             {
-                List<CCM_Application> lApps = new List<CCM_Application>();
-                List<PSObject> oObj = GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_Application");
-                foreach (PSObject PSObj in oObj)
-                {
-                    //Get AppDTs sub Objects
-                    CCM_Application oApp = new CCM_Application(PSObj, remoteRunspace, pSCode);
-
-                    oApp.remoteRunspace = remoteRunspace;
-                    oApp.pSCode = pSCode;
-                    lApps.Add(oApp);
-                }
-                return lApps;
+                return Applications_(false);
             }
+        }
+        /// <summary>
+        /// Get a list of Applications (SELECT * FROM CCM_Application)
+        /// </summary>
+        public List<CCM_Application> Applications_(Boolean bReload)
+        {
+
+            List<CCM_Application> lApps = new List<CCM_Application>();
+            List<PSObject> oObj = new List<PSObject>();
+
+            oObj = GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_Application", bReload);
+            
+            foreach (PSObject PSObj in oObj)
+            {
+                //Get AppDTs sub Objects
+                CCM_Application oApp = new CCM_Application(PSObj, remoteRunspace, pSCode);
+
+                oApp.remoteRunspace = remoteRunspace;
+                oApp.pSCode = pSCode;
+                lApps.Add(oApp);
+            }
+            return lApps;
+
         }
 
         /// <summary>
@@ -88,13 +100,18 @@ namespace sccmclictr.automation.functions
             }
         }
 
-        /// <summary>
+                /// <summary>
         /// List of the System Execution History (only Machine based !)
         /// </summary>
         public List<REG_ExecutionHistory> ExecutionHistory
         {
-            get
-            {
+            get { return ExecutionHistory_(false); }
+        }
+        /// <summary>
+        /// List of the System Execution History (only Machine based !)
+        /// </summary>
+        public List<REG_ExecutionHistory> ExecutionHistory_(Boolean bReload)
+        {
 
                 List<REG_ExecutionHistory> lExec = new List<REG_ExecutionHistory>();
                 List<PSObject> oObj = new List<PSObject>();
@@ -106,11 +123,11 @@ namespace sccmclictr.automation.functions
                     bisx64OS = baseClient.Inventory.isx64OS;
 
                 if (bisSCCM2012)
-                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\" -Recurse | % { get-itemproperty -path  $_.PsPath }", false, new TimeSpan(0, 0, 10));
+                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\" -Recurse | % { get-itemproperty -path  $_.PsPath }", bReload, new TimeSpan(0, 0, 10));
                 if (!bisSCCM2012 & bisx64OS)
-                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\" -Recurse | % { get-itemproperty -path  $_.PsPath }", false, new TimeSpan(0, 0, 10));
+                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\" -Recurse | % { get-itemproperty -path  $_.PsPath }", bReload, new TimeSpan(0, 0, 10));
                 if (!bisSCCM2012 & !bisx64OS)
-                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\" -Recurse | % { get-itemproperty -path  $_.PsPath }", false, new TimeSpan(0, 0, 10));
+                    oObj = GetObjectsFromPS("Get-ChildItem -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\Execution History\" -Recurse | % { get-itemproperty -path  $_.PsPath }", bReload, new TimeSpan(0, 0, 10));
 
                 foreach (PSObject PSObj in oObj)
                 {
@@ -122,20 +139,26 @@ namespace sccmclictr.automation.functions
                     lExec.Add(oReg);
                 }
 
-
                 return lExec;
-            }
         }
 
-        /// <summary>
+                /// <summary>
         /// List of Package-Deployments (old Package-Model)
         /// </summary>
         public List<CCM_SoftwareDistribution> Advertisements
         {
             get
             {
+                return Advertisements_(false);
+            }
+        }
+        /// <summary>
+        /// List of Package-Deployments (old Package-Model)
+        /// </summary>
+        public List<CCM_SoftwareDistribution> Advertisements_(Boolean bReload)
+        {
                 List<CCM_SoftwareDistribution> lApps = new List<CCM_SoftwareDistribution>();
-                List<PSObject> oObj = GetObjects(@"root\ccm\policy\machine\actualconfig", "SELECT * FROM CCM_SoftwareDistribution");
+                List<PSObject> oObj = GetObjects(@"root\ccm\policy\machine\actualconfig", "SELECT * FROM CCM_SoftwareDistribution", bReload);
                 foreach (PSObject PSObj in oObj)
                 {
                     //Get AppDTs sub Objects
@@ -146,32 +169,49 @@ namespace sccmclictr.automation.functions
                     lApps.Add(oApp);
                 }
                 return lApps;
+        }
+
+        /// <summary>
+        /// List of Applications, Updates and Acvertisements
+        /// </summary>
+        public List<SoftwareStatus> SoftwareSummary
+        {
+            get 
+            {
+                return SoftwareSummary_(false);
             }
         }
 
-        public List<SoftwareStatus> SoftwareSummary
+        /// <summary>
+        /// List of Applications, Updates and Acvertisements
+        /// </summary>
+        /// <param name="bReload">enforce a reload, otherwise it will use the data from cache</param>
+        /// <returns></returns>
+        public List<SoftwareStatus> SoftwareSummary_(Boolean bReload)
         {
-            get
+
+            List<SoftwareStatus> lSW = new List<SoftwareStatus>();
+            List<PSObject> oObj = new List<PSObject>();
+
+            oObj = GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_SoftwareBase", bReload); 
+            
+            foreach (PSObject PSObj in oObj)
             {
-                List<SoftwareStatus> lSW = new List<SoftwareStatus>();
-                List<PSObject> oObj = GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_SoftwareBase");
-                foreach (PSObject PSObj in oObj)
+                try
                 {
-                    try
+                    //Get AppDTs sub Objects
+                    SoftwareStatus oApp = new SoftwareStatus(PSObj, remoteRunspace, pSCode);
+                    if (!string.IsNullOrEmpty(oApp.Type))
                     {
-                        //Get AppDTs sub Objects
-                        SoftwareStatus oApp = new SoftwareStatus(PSObj, remoteRunspace, pSCode);
-                        if (!string.IsNullOrEmpty(oApp.Type))
-                        {
-                            oApp.remoteRunspace = remoteRunspace;
-                            oApp.pSCode = pSCode;
-                            lSW.Add(oApp);
-                        }
+                        oApp.remoteRunspace = remoteRunspace;
+                        oApp.pSCode = pSCode;
+                        lSW.Add(oApp);
                     }
-                    catch { }
                 }
-                return lSW;
+                catch { }
             }
+            return lSW;
+
         }
 
         /// <summary>
@@ -1467,7 +1507,6 @@ namespace sccmclictr.automation.functions
             {
                 if(this.UserID.StartsWith("S-1-5-21-"))
                 {
-                    //((New-Object System.Security.Principal.SecurityIdentifier("S-1-5-21-57989841-2025429265-839522115-65754")).Translate( [System.Security.Principal.NTAccount])).value 
                     string sUser = oNewBase.GetStringFromPS(string.Format("((New-Object System.Security.Principal.SecurityIdentifier(\"{0}\")).Translate([System.Security.Principal.NTAccount])).value", this.UserID), false);
                     this.UserID = sUser;
                 }

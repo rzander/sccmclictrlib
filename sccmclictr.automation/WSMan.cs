@@ -38,21 +38,26 @@ namespace sccmclictr.automation
         /// <returns></returns>
         internal static Collection<PSObject> RunPSScript(string scriptText, Runspace remoteRunspace)
         {
-            using (PowerShell powershell = PowerShell.Create())
+            try
             {
-                powershell.Runspace = remoteRunspace;
-                powershell.AddScript(scriptText);
-                //powershell.Invoke();
-                Collection<PSObject> PSresults = powershell.Invoke();
-                List<PSObject> loRes = PSresults.Where(t => t != null).ToList();
-                Collection<PSObject> results = new Collection<PSObject>();
-                foreach(PSObject po in loRes)
+                using (PowerShell powershell = PowerShell.Create())
                 {
-                    if (po != null)
-                        results.Add(po);
+                    powershell.Runspace = remoteRunspace;
+                    powershell.AddScript(scriptText);
+                    Collection<PSObject> PSresults = powershell.Invoke();
+                    List<PSObject> loRes = PSresults.Where(t => t != null).ToList();
+                    Collection<PSObject> results = new Collection<PSObject>();
+                    foreach (PSObject po in loRes)
+                    {
+                        if (po != null)
+                            results.Add(po);
+                    }
+                    return results;
                 }
-                return results;
             }
+            catch { }
+
+            return null;
         }
 
         /// <summary>
@@ -69,10 +74,14 @@ namespace sccmclictr.automation
 
             foreach (PSObject obj in results)
             {
-                if (obj != null)
+                try
                 {
-                    stringBuilder.AppendLine(obj.ToString());
+                    if (obj != null)
+                    {
+                        stringBuilder.AppendLine(obj.ToString());
+                    }
                 }
+                catch { }
             }
 
 
@@ -130,7 +139,6 @@ namespace sccmclictr.automation
             using (PowerShell powershell = PowerShell.Create())
             {
                 powershell.Runspace = remoteRunspace;
-                //powershell.AddCommand("get-process");
                 powershell.AddScript(scriptText);
                 powershell.Invoke();
                 Collection<PSObject> results = powershell.Invoke();
@@ -139,7 +147,11 @@ namespace sccmclictr.automation
 
                 foreach (PSObject obj in results)
                 {
-                    stringBuilder.AppendLine(obj.ToString());
+                    try
+                    {
+                        stringBuilder.AppendLine(obj.ToString());
+                    }
+                    catch { }
                 }
             }
 
