@@ -879,9 +879,26 @@ namespace sccmclictr.automation.functions
         /// <returns></returns>
         public bool AppManUserPolicyAction()
         {
-            try
+            /*try
             {
                 base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000122}'");
+            }
+            catch
+            {
+                return false;
+            } */
+
+            try
+            {
+                foreach (string sSID in baseClient.AgentProperties.GetLoggedOnUserSIDs())
+                {
+                    try
+                    {
+                        string sPath = "root\\ccm\\Policy\\" + sSID.Replace('-', '_') + "\\ActualConfig:CCM_Scheduler_ScheduledMessage.ScheduledMessageID='{00000000-0000-0000-0000-000000000122}'";
+                        baseClient.SetProperty(sPath, "Triggers", "@('SimpleInterval;Minutes=1;MaxRandomDelayMinutes=0')");
+                    }
+                    catch { }
+                }
             }
             catch
             {
