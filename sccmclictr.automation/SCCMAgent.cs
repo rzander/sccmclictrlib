@@ -218,6 +218,15 @@ namespace sccmclictr.automation
         {
             Runspace RemoteRunspace = null;
 
+            if (Client != null)
+            {
+                Client.Dispose();
+            }
+
+            //Clean memory from previous connections
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
             //suppress exceptions
             try
             {

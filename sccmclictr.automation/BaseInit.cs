@@ -74,8 +74,11 @@ namespace sccmclictr.automation
             return sb.ToString();
         }
 
-        internal MemoryCache Cache = new MemoryCache("baseInit", new System.Collections.Specialized.NameValueCollection(99));
-        
+        //internal MemoryCache Cache = new MemoryCache("baseInit", new System.Collections.Specialized.NameValueCollection(99));
+        //based on http://syscntrblogger.wordpress.com/2013/12/09/sccmclictr-automation-assembly/
+        internal MemoryCache Cache = MemoryCache.Default;
+
+
         internal bool bShowPSCodeOnly = false;
         internal TimeSpan cacheTime = new TimeSpan(0, 0, 30);
 
