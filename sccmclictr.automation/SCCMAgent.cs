@@ -223,10 +223,6 @@ namespace sccmclictr.automation
                 Client.Dispose();
             }
 
-            //Clean memory from previous connections
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
             //suppress exceptions
             try
             {
@@ -261,6 +257,7 @@ namespace sccmclictr.automation
         public void disconnect()
         {
             remoteRunspace.Close();
+            GC.Collect();
         }
 
         #region IPCConnect

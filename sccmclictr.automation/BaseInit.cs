@@ -32,6 +32,7 @@ namespace sccmclictr.automation
                     try
                     {
                         tsPSCode.Close();
+                        Cache.Dispose();
                     }
                     catch { }
 
@@ -74,10 +75,9 @@ namespace sccmclictr.automation
             return sb.ToString();
         }
 
+        //This initialization is required in a multithreaded environment (e.g. Collection commander and orchestrator) !
         //internal MemoryCache Cache = new MemoryCache("baseInit", new System.Collections.Specialized.NameValueCollection(99));
-        //based on http://syscntrblogger.wordpress.com/2013/12/09/sccmclictr-automation-assembly/
-        internal MemoryCache Cache = MemoryCache.Default;
-
+        internal MemoryCache Cache;
 
         internal bool bShowPSCodeOnly = false;
         internal TimeSpan cacheTime = new TimeSpan(0, 0, 30);
@@ -105,6 +105,8 @@ namespace sccmclictr.automation
         {
             remoteRunspace = RemoteRunspace;
             tsPSCode = PSCode;
+
+            Cache = new MemoryCache(RemoteRunspace.ConnectionInfo.ComputerName, new System.Collections.Specialized.NameValueCollection(99));
         }
 
         public string GetStringFromClassMethod(string WMIPath, string WMIMethod, string ResultProperty)
