@@ -19,8 +19,14 @@ using System.Threading;
 
 namespace sccmclictr.automation
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class baseInit : IDisposable
     {
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             try
@@ -109,11 +115,26 @@ namespace sccmclictr.automation
             Cache = new MemoryCache(RemoteRunspace.ConnectionInfo.ComputerName, new System.Collections.Specialized.NameValueCollection(99));
         }
 
+        /// <summary>
+        /// Gets a string from cache or from a WMI class method.
+        /// </summary>
+        /// <param name="WMIPath">The WMI path.</param>
+        /// <param name="WMIMethod">The WMI method.</param>
+        /// <param name="ResultProperty">The result property.</param>
+        /// <returns>Command results as a string.</returns>
         public string GetStringFromClassMethod(string WMIPath, string WMIMethod, string ResultProperty)
         {
             return GetStringFromClassMethod(WMIPath, WMIMethod, ResultProperty, false);
         }
 
+        /// <summary>
+        /// Gets a string from cache(if Reload==False) or from a WMI class method.
+        /// </summary>
+        /// <param name="WMIPath">The WMI path.</param>
+        /// <param name="WMIMethod">The WMI method.</param>
+        /// <param name="ResultProperty">The result property.</param>
+        /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
+        /// <returns>Command results as a string.</returns>
         public string GetStringFromClassMethod(string WMIPath, string WMIMethod, string ResultProperty, bool Reload)
         {
             if (!ResultProperty.StartsWith("."))
@@ -152,12 +173,27 @@ namespace sccmclictr.automation
             tsPSCode.TraceInformation(sPSCode);
             return sResult;
         }
-        
+
+        /// <summary>
+        /// Gets a string from cache or from a WMI method.
+        /// </summary>
+        /// <param name="WMIPath">The WMI path.</param>
+        /// <param name="WMIMethod">The WMI method.</param>
+        /// <param name="ResultProperty">The result property.</param>
+        /// <returns>Command results a as string.</returns>
         public string GetStringFromMethod(string WMIPath, string WMIMethod, string ResultProperty)
         {
             return GetStringFromMethod(WMIPath, WMIMethod, ResultProperty, false);
         }
 
+        /// <summary>
+        /// Gets a string from cache(if Reload==False) or from a WMI method.
+        /// </summary>
+        /// <param name="WMIPath">The WMI path.</param>
+        /// <param name="WMIMethod">The WMI method.</param>
+        /// <param name="ResultProperty">The result property.</param>
+        /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
+        /// <returns>Command results as a string.</returns>
         public string GetStringFromMethod(string WMIPath, string WMIMethod, string ResultProperty, bool Reload)
         {
             if (!ResultProperty.StartsWith("("))
@@ -198,12 +234,27 @@ namespace sccmclictr.automation
             return sResult;
         }
 
+        /// <summary>
+        /// Gets a PSObject from a WMI class method.
+        /// </summary>
+        /// <param name="WMIPath">The WMI path.</param>
+        /// <param name="WMIMethod">The WMI method.</param>
+        /// <param name="MethodParams">The method parameters.</param>
+        /// <returns>Command results as a PSObject.</returns>
         public PSObject CallClassMethod(string WMIPath, string WMIMethod, string MethodParams)
         {
             //do not cache per default.
             return CallClassMethod(WMIPath, WMIMethod, MethodParams, true);
         }
 
+        /// <summary>
+        /// Gets a PSObject from cache(if Reload==False) or from a WMI class method.
+        /// </summary>
+        /// <param name="WMIPath">The WMI path.</param>
+        /// <param name="WMIMethod">The WMI method.</param>
+        /// <param name="MethodParams">The method parameters.</param>
+        /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
+        /// <returns>Command results as a PSObject.</returns>
         public PSObject CallClassMethod(string WMIPath, string WMIMethod, string MethodParams, bool Reload)
         {
             PSObject pResult = null;
@@ -243,12 +294,27 @@ namespace sccmclictr.automation
             return pResult;
         }
 
+        /// <summary>
+        /// Gets a PSObject from a WMI instance method.
+        /// </summary>
+        /// <param name="WMIPath">The WMI path.</param>
+        /// <param name="WMIMethod">The WMI method.</param>
+        /// <param name="MethodParams">The method parameters.</param>
+        /// <returns>Command results as a PSObject.</returns>
         public PSObject CallInstanceMethod(string WMIPath, string WMIMethod, string MethodParams)
         {
             //Do not cache per default
             return CallInstanceMethod(WMIPath, WMIMethod, MethodParams, true);
         }
 
+        /// <summary>
+        /// Gets a PSObject from cache(if Reload==False) of from a WMI instance method.
+        /// </summary>
+        /// <param name="WMIPath">The WMI path.</param>
+        /// <param name="WMIMethod">The WMI method.</param>
+        /// <param name="MethodParams">The method parameters.</param>
+        /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
+        /// <returns>Command results as a PSObject.</returns>
         public PSObject CallInstanceMethod(string WMIPath, string WMIMethod, string MethodParams, bool Reload)
         {
             PSObject pResult = null;
@@ -286,11 +352,22 @@ namespace sccmclictr.automation
             return pResult;
         }
 
+        /// <summary>
+        /// Gets a string from cache or from a PowerShell command.
+        /// </summary>
+        /// <param name="PSCode">The ps code.</param>
+        /// <returns>Command results as a string.</returns>
         public string GetStringFromPS(string PSCode)
         {
             return GetStringFromPS(PSCode, false);
         }
 
+        /// <summary>
+        /// Gets a string from cache(if Reload==False) or from a PowerShell command.
+        /// </summary>
+        /// <param name="PSCode">The ps code.</param>
+        /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
+        /// <returns>Command results as a string.</returns>
         public string GetStringFromPS(string PSCode, bool Reload)
         {
             string sResult = "";
@@ -328,11 +405,24 @@ namespace sccmclictr.automation
             return sResult;
         }
 
+        /// <summary>
+        /// Gets a string from cache or from a WMI property.
+        /// </summary>
+        /// <param name="WMIPath">The WMI path.</param>
+        /// <param name="ResultProperty">The result property.</param>
+        /// <returns>Command results as a string.</returns>
         public string GetProperty(string WMIPath, string ResultProperty)
         {
             return GetProperty(WMIPath, ResultProperty, false);
         }
 
+        /// <summary>
+        /// Gets a string from cache(if Reload==False) or from a WMI property.
+        /// </summary>
+        /// <param name="WMIPath">The WMI path.</param>
+        /// <param name="ResultProperty">The result property.</param>
+        /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
+        /// <returns>Command results as a string.</returns>
         public string GetProperty(string WMIPath, string ResultProperty, bool Reload)
         {
             //(Get-Wmiobject -class CCM_Client -namespace 'ROOT\CCM').ClientIDChangeDate
@@ -377,11 +467,24 @@ namespace sccmclictr.automation
             return sResult;
         }
 
+        /// <summary>
+        /// Gets a list of PSObjects from cache or from a WMI property.
+        /// </summary>
+        /// <param name="WMIPath">The WMI path.</param>
+        /// <param name="ResultProperty">The result property.</param>
+        /// <returns>Command results as a list of PSObjects.</returns>
         public List<PSObject> GetProperties(string WMIPath, string ResultProperty)
         {
             return GetProperties(WMIPath, ResultProperty, false);
         }
 
+        /// <summary>
+        /// Gets a list of PSObjects from cache(if Reload==False) or from a WMI property.
+        /// </summary>
+        /// <param name="WMIPath">The WMI path.</param>
+        /// <param name="ResultProperty">The result property.</param>
+        /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
+        /// <returns>Command results as a list of PSObjects.</returns>
         public List<PSObject> GetProperties(string WMIPath, string ResultProperty, bool Reload)
         {
             //$a=([wmi]"ROOT\ccm:SMS_Client=@").ClientVersion
@@ -425,6 +528,12 @@ namespace sccmclictr.automation
             return lResult;
         }
 
+        /// <summary>
+        /// Sets a WMI property.
+        /// </summary>
+        /// <param name="WMIPath">The WMI path.</param>
+        /// <param name="Property">The property.</param>
+        /// <param name="Value">The value.</param>
         public void SetProperty(string WMIPath, string Property, string Value)
         {
             //$a=([wmi]"ROOT\ccm:SMS_Client=@");$a.AllowLocalAdminOverride=$false;$a.Put()
@@ -459,17 +568,38 @@ namespace sccmclictr.automation
             tsPSCode.TraceInformation(sPSCode);
         }
 
+        /// <summary>
+        /// Gets a list of PSObjects from cache or from a given WMI namespace using a given WQL query
+        /// </summary>
+        /// <param name="WMINamespace">The WMI namespace.</param>
+        /// <param name="WQLQuery">The WQL query.</param>
+        /// <returns>Command results as list of PSObjects.</returns>
         public List<PSObject> GetObjects(string WMINamespace, string WQLQuery)
         {
             //return cached Items
             return GetObjects(WMINamespace, WQLQuery, false);
         }
 
+        /// <summary>
+        /// Gets a list of PSObjects from cache(if Reload==False) or from a given WMI namespace using a given WQL query
+        /// </summary>
+        /// <param name="WMINamespace">The WMI namespace.</param>
+        /// <param name="WQLQuery">The WQL query.</param>
+        /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
+        /// <returns>Command results as a list of PSObjects.</returns>
         public List<PSObject> GetObjects(string WMINamespace, string WQLQuery, bool Reload)
         {
             return GetObjects(WMINamespace, WQLQuery, Reload, cacheTime);
         }
 
+        /// <summary>
+        /// Gets a list of PSObjects from cache(if Reload==False) or from a given WMI namespace using a given WQL query
+        /// </summary>
+        /// <param name="WMINamespace">The WMI namespace.</param>
+        /// <param name="WQLQuery">The WQL query.</param>
+        /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
+        /// <param name="tCacheTime">Custom cache time.</param>
+        /// <returns>Command results as a list of PSObjects.</returns>
         public List<PSObject> GetObjects(string WMINamespace, string WQLQuery, bool Reload, TimeSpan tCacheTime)
         {
             //get-wmiobject -query "SELECT * FROM CacheInfoEx" -namespace "root\ccm\SoftMgmtAgent"
@@ -512,7 +642,7 @@ namespace sccmclictr.automation
         /// Get Object from Powershell Command
         /// </summary>
         /// <param name="PSCode"></param>
-        /// <returns></returns>
+        /// <returns>Command results as a list of PSObjects.</returns>
         public List<PSObject> GetObjectsFromPS(string PSCode)
         {
             return GetObjectsFromPS(PSCode, false, cacheTime);
@@ -523,7 +653,7 @@ namespace sccmclictr.automation
         /// </summary>
         /// <param name="PSCode"></param>
         /// <param name="Reload">Ignore cached results, always reload Objects</param>
-        /// <returns></returns>
+        /// <returns>Command results as a list of PSObjects.</returns>
         public List<PSObject> GetObjectsFromPS(string PSCode, bool Reload)
         {
             return GetObjectsFromPS(PSCode, Reload, cacheTime);
@@ -535,7 +665,7 @@ namespace sccmclictr.automation
         /// <param name="PSCode">Powershell code</param>
         /// <param name="Reload">enforce reload</param>
         /// <param name="tCacheTime">custom cache time</param>
-        /// <returns></returns>
+        /// <returns>Command results as list of PSObjects.</returns>
         public List<PSObject> GetObjectsFromPS(string PSCode, bool Reload, TimeSpan tCacheTime)
         {
             List<PSObject> lResult = new List<PSObject>();
@@ -563,8 +693,13 @@ namespace sccmclictr.automation
 
    }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class ccm : baseInit
     {
+        #pragma warning disable 1591 // Disable warnings about missing XML comments
+
         public functions.agentproperties AgentProperties;
         public functions.agentactions AgentActions;
         public functions.softwaredistribution SoftwareDistribution;
@@ -580,7 +715,12 @@ namespace sccmclictr.automation
         public functions.monitoring Monitoring;
         public functions.health Health;
 
-        public void Dispose()
+        #pragma warning restore 1591 // Enable warnings about missing XML comments
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public new void Dispose()
         {
             AgentProperties = null;
             AgentActions = null;
