@@ -81,7 +81,7 @@ namespace sccmclictr.automation
             return sb.ToString();
         }
 
-        //This initialization is required in a multithreaded environment (e.g. Collection commander and orchestrator) !
+        //This initialization is required in a multi threaded environment (e.g. Collection commander and orchestrator) !
         //internal MemoryCache Cache = new MemoryCache("baseInit", new System.Collections.Specialized.NameValueCollection(99));
         internal MemoryCache Cache;
 
@@ -120,8 +120,9 @@ namespace sccmclictr.automation
         /// </summary>
         /// <param name="WMIPath">The WMI path.</param>
         /// <param name="WMIMethod">The WMI method.</param>
-        /// <param name="ResultProperty">The result property.</param>
+        /// <param name="ResultProperty">The name of the property you are trying to retrieve.</param>
         /// <returns>Command results as a string.</returns>
+        /// <example><code>string siteCode = base.GetStringFromClassMethod(@"ROOT\ccm:SMS_Client", "GetAssignedSite()", "sSiteCode");</code></example>
         public string GetStringFromClassMethod(string WMIPath, string WMIMethod, string ResultProperty)
         {
             return GetStringFromClassMethod(WMIPath, WMIMethod, ResultProperty, false);
@@ -132,9 +133,10 @@ namespace sccmclictr.automation
         /// </summary>
         /// <param name="WMIPath">The WMI path.</param>
         /// <param name="WMIMethod">The WMI method.</param>
-        /// <param name="ResultProperty">The result property.</param>
+        /// <param name="ResultProperty">The name of the property you are trying to retrieve.</param>
         /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
         /// <returns>Command results as a string.</returns>
+        /// <example><code>string siteCode = base.GetStringFromClassMethod(@"ROOT\ccm:SMS_Client", "GetAssignedSite()", "sSiteCode", True);</code></example>
         public string GetStringFromClassMethod(string WMIPath, string WMIMethod, string ResultProperty, bool Reload)
         {
             if (!ResultProperty.StartsWith("."))
@@ -179,8 +181,9 @@ namespace sccmclictr.automation
         /// </summary>
         /// <param name="WMIPath">The WMI path.</param>
         /// <param name="WMIMethod">The WMI method.</param>
-        /// <param name="ResultProperty">The result property.</param>
+        /// <param name="ResultProperty">The name of the property you are trying to retrieve.</param>
         /// <returns>Command results a as string.</returns>
+        /// <example><code>bool multiUser = Boolean.Parse(GetStringFromMethod(@"ROOT\ccm\ClientSDK:CCM_ClientInternalUtilities=@", "AreMultiUsersLoggedOn", "MultiUsersLoggedOn"));</code></example>
         public string GetStringFromMethod(string WMIPath, string WMIMethod, string ResultProperty)
         {
             return GetStringFromMethod(WMIPath, WMIMethod, ResultProperty, false);
@@ -191,9 +194,10 @@ namespace sccmclictr.automation
         /// </summary>
         /// <param name="WMIPath">The WMI path.</param>
         /// <param name="WMIMethod">The WMI method.</param>
-        /// <param name="ResultProperty">The result property.</param>
+        /// <param name="ResultProperty">The name of the property you are trying to retrieve.</param>
         /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
         /// <returns>Command results as a string.</returns>
+        /// <example><code>bool multiUser = Boolean.Parse(GetStringFromMethod(@"ROOT\ccm\ClientSDK:CCM_ClientInternalUtilities=@", "AreMultiUsersLoggedOn", "MultiUsersLoggedOn", True));</code></example>
         public string GetStringFromMethod(string WMIPath, string WMIMethod, string ResultProperty, bool Reload)
         {
             if (!ResultProperty.StartsWith("("))
@@ -241,6 +245,7 @@ namespace sccmclictr.automation
         /// <param name="WMIMethod">The WMI method.</param>
         /// <param name="MethodParams">The method parameters.</param>
         /// <returns>Command results as a PSObject.</returns>
+        /// <example><code>base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000001}'");</code></example>
         public PSObject CallClassMethod(string WMIPath, string WMIMethod, string MethodParams)
         {
             //do not cache per default.
@@ -255,6 +260,7 @@ namespace sccmclictr.automation
         /// <param name="MethodParams">The method parameters.</param>
         /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
         /// <returns>Command results as a PSObject.</returns>
+        /// <example><code>base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000001}'", True);</code></example>
         public PSObject CallClassMethod(string WMIPath, string WMIMethod, string MethodParams, bool Reload)
         {
             PSObject pResult = null;
@@ -357,6 +363,7 @@ namespace sccmclictr.automation
         /// </summary>
         /// <param name="PSCode">The ps code.</param>
         /// <returns>Command results as a string.</returns>
+        /// <example><code>string sPort = base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\")).$(\"HttpPort\")");</code></example>
         public string GetStringFromPS(string PSCode)
         {
             return GetStringFromPS(PSCode, false);
@@ -368,6 +375,7 @@ namespace sccmclictr.automation
         /// <param name="PSCode">The ps code.</param>
         /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
         /// <returns>Command results as a string.</returns>
+        /// <example><code>string sPort = base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\")).$(\"HttpPort\")", True);</code></example>
         public string GetStringFromPS(string PSCode, bool Reload)
         {
             string sResult = "";
@@ -409,8 +417,9 @@ namespace sccmclictr.automation
         /// Gets a string from cache or from a WMI property.
         /// </summary>
         /// <param name="WMIPath">The WMI path.</param>
-        /// <param name="ResultProperty">The result property.</param>
+        /// <param name="ResultProperty">The name of the property you are trying to retrieve.</param>
         /// <returns>Command results as a string.</returns>
+        /// <example><code>string siteCode = base.GetStringFromClassMethod(@"ROOT\ccm:CCM_Client=@", "ClientVersion");</code></example>
         public string GetProperty(string WMIPath, string ResultProperty)
         {
             return GetProperty(WMIPath, ResultProperty, false);
@@ -420,9 +429,10 @@ namespace sccmclictr.automation
         /// Gets a string from cache(if Reload==False) or from a WMI property.
         /// </summary>
         /// <param name="WMIPath">The WMI path.</param>
-        /// <param name="ResultProperty">The result property.</param>
+        /// <param name="ResultProperty">The name of the property you are trying to retrieve.</param>
         /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
         /// <returns>Command results as a string.</returns>
+        /// <example><code>string siteCode = base.GetStringFromClassMethod(@"ROOT\ccm:CCM_Client=@", "ClientVersion", True);</code></example>
         public string GetProperty(string WMIPath, string ResultProperty, bool Reload)
         {
             //(Get-Wmiobject -class CCM_Client -namespace 'ROOT\CCM').ClientIDChangeDate
@@ -471,8 +481,9 @@ namespace sccmclictr.automation
         /// Gets a list of PSObjects from cache or from a WMI property.
         /// </summary>
         /// <param name="WMIPath">The WMI path.</param>
-        /// <param name="ResultProperty">The result property.</param>
+        /// <param name="ResultProperty">The name of the property you are trying to retrieve.</param>
         /// <returns>Command results as a list of PSObjects.</returns>
+        /// <example><code>List<PSObject> lPSAppDts = base.GetProperties(@"ROOT\ccm\clientsdk:CCM_Application", "AppDTs");</code></example>
         public List<PSObject> GetProperties(string WMIPath, string ResultProperty)
         {
             return GetProperties(WMIPath, ResultProperty, false);
@@ -482,9 +493,10 @@ namespace sccmclictr.automation
         /// Gets a list of PSObjects from cache(if Reload==False) or from a WMI property.
         /// </summary>
         /// <param name="WMIPath">The WMI path.</param>
-        /// <param name="ResultProperty">The result property.</param>
+        /// <param name="ResultProperty">The name of the property you are trying to retrieve.</param>
         /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
         /// <returns>Command results as a list of PSObjects.</returns>
+        /// <example><code>List<PSObject> lPSAppDts = base.GetProperties(@"ROOT\ccm\clientsdk:CCM_Application", "AppDTs", True);</code></example>
         public List<PSObject> GetProperties(string WMIPath, string ResultProperty, bool Reload)
         {
             //$a=([wmi]"ROOT\ccm:SMS_Client=@").ClientVersion
@@ -534,6 +546,7 @@ namespace sccmclictr.automation
         /// <param name="WMIPath">The WMI path.</param>
         /// <param name="Property">The property.</param>
         /// <param name="Value">The value.</param>
+        /// <example><code>base.SetProperty(@"ROOT\ccm:SMS_Client=@", "EnableAutoAssignment", "$True");</code></example>
         public void SetProperty(string WMIPath, string Property, string Value)
         {
             //$a=([wmi]"ROOT\ccm:SMS_Client=@");$a.AllowLocalAdminOverride=$false;$a.Put()
@@ -574,6 +587,7 @@ namespace sccmclictr.automation
         /// <param name="WMINamespace">The WMI namespace.</param>
         /// <param name="WQLQuery">The WQL query.</param>
         /// <returns>Command results as list of PSObjects.</returns>
+        /// <example><code>List<PSObject> lResult = base.GetObjects(@"ROOT\CCM", "SELECT * FROM SMS_MPProxyInformation Where State = 'Active'");</code></example>
         public List<PSObject> GetObjects(string WMINamespace, string WQLQuery)
         {
             //return cached Items
@@ -587,6 +601,7 @@ namespace sccmclictr.automation
         /// <param name="WQLQuery">The WQL query.</param>
         /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
         /// <returns>Command results as a list of PSObjects.</returns>
+        /// <example><code>List<PSObject> lResult = base.GetObjects(@"ROOT\CCM", "SELECT * FROM SMS_MPProxyInformation Where State = 'Active'", True);</code></example>
         public List<PSObject> GetObjects(string WMINamespace, string WQLQuery, bool Reload)
         {
             return GetObjects(WMINamespace, WQLQuery, Reload, cacheTime);
@@ -600,6 +615,7 @@ namespace sccmclictr.automation
         /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
         /// <param name="tCacheTime">Custom cache time.</param>
         /// <returns>Command results as a list of PSObjects.</returns>
+        /// <example><code>List<PSObject> lResult = base.GetObjects(@"ROOT\CCM", "SELECT * FROM SMS_MPProxyInformation Where State = 'Active'", True, new TimeSpan(0,0,30));</code></example>
         public List<PSObject> GetObjects(string WMINamespace, string WQLQuery, bool Reload, TimeSpan tCacheTime)
         {
             //get-wmiobject -query "SELECT * FROM CacheInfoEx" -namespace "root\ccm\SoftMgmtAgent"
@@ -639,33 +655,36 @@ namespace sccmclictr.automation
         }
 
         /// <summary>
-        /// Get Object from Powershell Command
+        /// Get Object from PowerShell Command
         /// </summary>
-        /// <param name="PSCode"></param>
+        /// <param name="PSCode">PowerShell code</param>
         /// <returns>Command results as a list of PSObjects.</returns>
+        /// <example><code>List<PSObject> lResult = base.GetObjectsFromPS("(Get-ItemProperty(\"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\")).$(\"PendingFileRenameOperations\")");</code></example>
         public List<PSObject> GetObjectsFromPS(string PSCode)
         {
             return GetObjectsFromPS(PSCode, false, cacheTime);
         }
 
         /// <summary>
-        /// Get Object from Powershell Command
+        /// Get Object from PowerShell Command
         /// </summary>
-        /// <param name="PSCode"></param>
+        /// <param name="PSCode">PowerShell code</param>
         /// <param name="Reload">Ignore cached results, always reload Objects</param>
         /// <returns>Command results as a list of PSObjects.</returns>
+        /// <example><code>List<PSObject> lResult = base.GetObjectsFromPS("(Get-ItemProperty(\"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\")).$(\"PendingFileRenameOperations\")", True);</code></example>
         public List<PSObject> GetObjectsFromPS(string PSCode, bool Reload)
         {
             return GetObjectsFromPS(PSCode, Reload, cacheTime);
         }
 
         /// <summary>
-        /// Get Object from Powershell Command
+        /// Get Object from PowerShell Command
         /// </summary>
-        /// <param name="PSCode">Powershell code</param>
+        /// <param name="PSCode">PowerShell code</param>
         /// <param name="Reload">enforce reload</param>
         /// <param name="tCacheTime">custom cache time</param>
         /// <returns>Command results as list of PSObjects.</returns>
+        /// <example><code>List<PSObject> lResult = base.GetObjectsFromPS("(Get-ItemProperty(\"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\")).$(\"PendingFileRenameOperations\")", True, new TimeSpan(0,0,30));</code></example>
         public List<PSObject> GetObjectsFromPS(string PSCode, bool Reload, TimeSpan tCacheTime)
         {
             List<PSObject> lResult = new List<PSObject>();
