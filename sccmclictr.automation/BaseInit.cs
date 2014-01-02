@@ -7,15 +7,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using sccmclictr.automation;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Diagnostics;
 using System.Runtime.Caching;
-using System.Threading;
-
 
 namespace sccmclictr.automation
 {
@@ -58,7 +54,7 @@ namespace sccmclictr.automation
         {
             // First we need to convert the string into bytes, which
             // means using a text encoder.
-            Encoder enc = System.Text.Encoding.Unicode.GetEncoder();
+            Encoder enc = Encoding.Unicode.GetEncoder();
 
             // Create a buffer large enough to hold the string
             byte[] unicodeText = new byte[str.Length * 2];
@@ -80,6 +76,14 @@ namespace sccmclictr.automation
             // And return it
             return sb.ToString();
         }
+
+//        // Alternate Create Hash method for testing and consideration
+//        internal string CreateHash(string stringToHash)
+//        {
+//            // This method is used for generating a hash for caching not security, so an int32 precision will suffice and is a little faster than a 160 byte digest.
+//            System.Security.Cryptography.SHA1 sha1 = new System.Security.Cryptography.SHA1CryptoServiceProvider();
+//            return BitConverter.ToInt32(sha1.ComputeHash(Encoding.Default.GetBytes(stringToHash)), 0).ToString(("X"));
+//        }
 
         //This initialization is required in a multi threaded environment (e.g. Collection commander and orchestrator) !
         //internal MemoryCache Cache = new MemoryCache("baseInit", new System.Collections.Specialized.NameValueCollection(99));
@@ -165,7 +169,7 @@ namespace sccmclictr.automation
                         }
                         catch (Exception ex)
                         {
-                            System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
+                            Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
                         }
                     }
                 }
@@ -226,7 +230,7 @@ namespace sccmclictr.automation
                         }
                         catch (Exception ex)
                         {
-                            System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
+                            Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
                         }
                     }
                 }
@@ -263,9 +267,10 @@ namespace sccmclictr.automation
         /// <example><code>base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000001}'", True);</code></example>
         public PSObject CallClassMethod(string WMIPath, string WMIMethod, string MethodParams, bool Reload)
         {
-            PSObject pResult = null;
             if (!MethodParams.StartsWith("("))
                 MethodParams = "(" + MethodParams + ")";
+
+            PSObject pResult = null; 
             string sPSCode = string.Format("([wmiclass]'{0}').{1}{2}", WMIPath, WMIMethod, MethodParams);
 
             if (!bShowPSCodeOnly)
@@ -288,7 +293,7 @@ namespace sccmclictr.automation
                         }
                         catch (Exception ex)
                         {
-                            System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
+                            Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
                         }
                     }
                 }
@@ -346,7 +351,7 @@ namespace sccmclictr.automation
                         }
                         catch (Exception ex)
                         {
-                            System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
+                            Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
                         }
                     }
                 }
@@ -401,7 +406,7 @@ namespace sccmclictr.automation
                         }
                         catch (Exception ex)
                         {
-                            System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
+                            Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
                         }
                     }
                 }
@@ -447,8 +452,6 @@ namespace sccmclictr.automation
             {
                 string sHash = CreateHash(WMIPath + ResultProperty);
 
-
-
                 if ((Cache.Get(sHash) != null) & !Reload)
                 {
                     sResult = Cache.Get(sHash) as string;
@@ -465,7 +468,7 @@ namespace sccmclictr.automation
                         }
                         catch (Exception ex)
                         {
-                            System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
+                            Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
                         }
                     }
                 }
@@ -504,14 +507,11 @@ namespace sccmclictr.automation
                 ResultProperty = "." + ResultProperty;
 
             List<PSObject> lResult = new List<PSObject>();
-
             string sPSCode = string.Format("([wmi]'{0}'){1}", WMIPath, ResultProperty);
 
             if (!bShowPSCodeOnly)
             {
                 string sHash = CreateHash(WMIPath + ResultProperty);
-
-
 
                 if ((Cache.Get(sHash) != null) & !Reload)
                 {
@@ -527,7 +527,7 @@ namespace sccmclictr.automation
                         }
                         catch (Exception ex)
                         {
-                            System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
+                            Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
                         }
                     }
                  Cache.Add(sHash, lResult, DateTime.Now + cacheTime);
@@ -551,7 +551,6 @@ namespace sccmclictr.automation
         {
             //$a=([wmi]"ROOT\ccm:SMS_Client=@");$a.AllowLocalAdminOverride=$false;$a.Put()
 
-            string sResult = "";
             string sPSCode = string.Format("$a=([wmi]\"{0}\");$a.{1}={2};$a.Put()", WMIPath, Property, Value);
             if (!bShowPSCodeOnly)
             {
@@ -566,12 +565,12 @@ namespace sccmclictr.automation
                 {
                     try
                     {
-                        sResult = obj.BaseObject.ToString();
+                        string sResult = obj.BaseObject.ToString();
                         break;
                     }
                     catch (Exception ex)
                     {
-                        System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
+                        Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
                     }
                 }
 
@@ -636,14 +635,12 @@ namespace sccmclictr.automation
                         try
                         {
                             lResult.Add(obj);
-
                         }
                         catch (Exception ex)
                         {
-                            System.Diagnostics.Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
+                            Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
                         }
                     }
-
                     Cache.Add(sHash, lResult, DateTime.Now + cacheTime);
                 }
             }
@@ -699,7 +696,17 @@ namespace sccmclictr.automation
                 }
                 else
                 {
-                    lResult = WSMan.RunPSScript(PSCode, remoteRunspace).ToList<PSObject>();
+                    foreach (PSObject obj in WSMan.RunPSScript(PSCode, remoteRunspace))
+                    {
+                        try
+                        {
+                            lResult.Add(obj);
+                        }
+                        catch (Exception ex)
+                        {
+                            Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
+                        }
+                    }
                     Cache.Add(sHash, lResult, DateTime.Now + tCacheTime);
                 }
             }
@@ -729,8 +736,8 @@ namespace sccmclictr.automation
         public functions.services Services;
         public functions.processes Process;
         public functions.dcm DCM;
-        public sccmclictr.automation.policy.requestedConfig RequestedConfig;
-        public sccmclictr.automation.policy.actualConfig ActualConfig;
+        public policy.requestedConfig RequestedConfig;
+        public policy.actualConfig ActualConfig;
         public functions.monitoring Monitoring;
         public functions.health Health;
 
@@ -771,8 +778,8 @@ namespace sccmclictr.automation
             SoftwareUpdates = new functions.softwareupdates(RemoteRunspace, PSCode, this);
             Inventory = new functions.inventory(RemoteRunspace, PSCode, this);
             Components = new functions.components(RemoteRunspace, PSCode, this);
-            RequestedConfig = new sccmclictr.automation.policy.requestedConfig(RemoteRunspace, PSCode, this);
-            ActualConfig = new sccmclictr.automation.policy.actualConfig(RemoteRunspace, PSCode, this);
+            RequestedConfig = new policy.requestedConfig(RemoteRunspace, PSCode, this);
+            ActualConfig = new policy.actualConfig(RemoteRunspace, PSCode, this);
             Services = new functions.services(RemoteRunspace, PSCode, this);
             Process = new functions.processes(RemoteRunspace, PSCode, this);
             Monitoring = new functions.monitoring(RemoteRunspace, PSCode, this);
