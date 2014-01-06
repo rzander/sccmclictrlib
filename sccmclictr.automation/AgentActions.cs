@@ -22,12 +22,21 @@ using System.Web;
 namespace sccmclictr.automation.functions
 {
 
+    /// <summary>
+    /// Class agentactions.
+    /// </summary>
     public class agentactions: baseInit
     {
         internal Runspace remoteRunspace;
         internal TraceSource pSCode;
         internal ccm baseClient;
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="agentactions"/> class.
+        /// </summary>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The ps code.</param>
+        /// <param name="oClient">The CCM client object.</param>
         public agentactions(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
@@ -46,9 +55,8 @@ namespace sccmclictr.automation.functions
             {
                 base.GetStringFromPS(string.Format("[wmi]\"ROOT\\ccm\\invagt:InventoryActionStatus.InventoryActionID='{0}'\" | remove-wmiobject", ScheduleID));
             }
-            catch
-            {
-            }
+            catch { }
+
         }
 
         /// <summary>
@@ -280,11 +288,9 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Policy Agent Request Assignment (User)</
+        /// Policy Agent Request Assignment (User)
         /// </summary>
-        /// <typeparam name="?"></typeparam>
-        /// <param name="?"></param>
-        /// <returns></returns>
+        /// <returns>false=Error</returns>
         public bool RequestUserAssignments()
         {
             try
@@ -310,7 +316,7 @@ namespace sccmclictr.automation.functions
         /// <summary>
         /// Policy Agent Evaluate Assignment (User)
         /// </summary>
-        /// <returns></returns>
+        /// <returns>false=Error</returns>
         public bool EvaluateUserPolicies()
         {
             try
@@ -1050,6 +1056,10 @@ namespace sccmclictr.automation.functions
 
         }
 
+        /// <summary>
+        /// Repairs the SCCM/CM12 agent.
+        /// </summary>
+        /// <returns><c>true</c> if method attempted to repair the agent, <c>false</c> otherwise.</returns>
         public bool RepairAgent()
         {
             string sProdCode = baseClient.AgentProperties.ProductCode;

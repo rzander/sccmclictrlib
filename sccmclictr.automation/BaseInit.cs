@@ -486,7 +486,7 @@ namespace sccmclictr.automation
         /// <param name="WMIPath">The WMI path.</param>
         /// <param name="ResultProperty">The name of the property you are trying to retrieve.</param>
         /// <returns>Command results as a list of PSObjects.</returns>
-        /// <example><code>List<PSObject> lPSAppDts = base.GetProperties(@"ROOT\ccm\clientsdk:CCM_Application", "AppDTs");</code></example>
+        /// <example><code>List&lt;PSObject&gt; lPSAppDts = base.GetProperties(@"ROOT\ccm\clientsdk:CCM_Application", "AppDTs");</code></example>
         public List<PSObject> GetProperties(string WMIPath, string ResultProperty)
         {
             return GetProperties(WMIPath, ResultProperty, false);
@@ -499,7 +499,7 @@ namespace sccmclictr.automation
         /// <param name="ResultProperty">The name of the property you are trying to retrieve.</param>
         /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
         /// <returns>Command results as a list of PSObjects.</returns>
-        /// <example><code>List<PSObject> lPSAppDts = base.GetProperties(@"ROOT\ccm\clientsdk:CCM_Application", "AppDTs", True);</code></example>
+        /// <example><code>List&lt;PSObject&gt; lPSAppDts = base.GetProperties(@"ROOT\ccm\clientsdk:CCM_Application", "AppDTs", True);</code></example>
         public List<PSObject> GetProperties(string WMIPath, string ResultProperty, bool Reload)
         {
             //$a=([wmi]"ROOT\ccm:SMS_Client=@").ClientVersion
@@ -586,7 +586,7 @@ namespace sccmclictr.automation
         /// <param name="WMINamespace">The WMI namespace.</param>
         /// <param name="WQLQuery">The WQL query.</param>
         /// <returns>Command results as list of PSObjects.</returns>
-        /// <example><code>List<PSObject> lResult = base.GetObjects(@"ROOT\CCM", "SELECT * FROM SMS_MPProxyInformation Where State = 'Active'");</code></example>
+        /// <example><code>List&lt;PSObject&gt; lResult = base.GetObjects(@"ROOT\CCM", "SELECT * FROM SMS_MPProxyInformation Where State = 'Active'");</code></example>
         public List<PSObject> GetObjects(string WMINamespace, string WQLQuery)
         {
             //return cached Items
@@ -600,7 +600,7 @@ namespace sccmclictr.automation
         /// <param name="WQLQuery">The WQL query.</param>
         /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
         /// <returns>Command results as a list of PSObjects.</returns>
-        /// <example><code>List<PSObject> lResult = base.GetObjects(@"ROOT\CCM", "SELECT * FROM SMS_MPProxyInformation Where State = 'Active'", True);</code></example>
+        /// <example><code>List&lt;PSObject&gt; lResult = base.GetObjects(@"ROOT\CCM", "SELECT * FROM SMS_MPProxyInformation Where State = 'Active'", True);</code></example>
         public List<PSObject> GetObjects(string WMINamespace, string WQLQuery, bool Reload)
         {
             return GetObjects(WMINamespace, WQLQuery, Reload, cacheTime);
@@ -614,7 +614,7 @@ namespace sccmclictr.automation
         /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
         /// <param name="tCacheTime">Custom cache time.</param>
         /// <returns>Command results as a list of PSObjects.</returns>
-        /// <example><code>List<PSObject> lResult = base.GetObjects(@"ROOT\CCM", "SELECT * FROM SMS_MPProxyInformation Where State = 'Active'", True, new TimeSpan(0,0,30));</code></example>
+        /// <example><code>List&lt;PSObject&gt; lResult = base.GetObjects(@"ROOT\CCM", "SELECT * FROM SMS_MPProxyInformation Where State = 'Active'", True, new TimeSpan(0,0,30));</code></example>
         public List<PSObject> GetObjects(string WMINamespace, string WQLQuery, bool Reload, TimeSpan tCacheTime)
         {
             //get-wmiobject -query "SELECT * FROM CacheInfoEx" -namespace "root\ccm\SoftMgmtAgent"
@@ -656,7 +656,7 @@ namespace sccmclictr.automation
         /// </summary>
         /// <param name="PSCode">PowerShell code</param>
         /// <returns>Command results as a list of PSObjects.</returns>
-        /// <example><code>List<PSObject> lResult = base.GetObjectsFromPS("(Get-ItemProperty(\"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\")).$(\"PendingFileRenameOperations\")");</code></example>
+        /// <example><code>List&lt;PSObject&gt; lResult = base.GetObjectsFromPS("(Get-ItemProperty(\"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\")).$(\"PendingFileRenameOperations\")");</code></example>
         public List<PSObject> GetObjectsFromPS(string PSCode)
         {
             return GetObjectsFromPS(PSCode, false, cacheTime);
@@ -668,7 +668,7 @@ namespace sccmclictr.automation
         /// <param name="PSCode">PowerShell code</param>
         /// <param name="Reload">Ignore cached results, always reload Objects</param>
         /// <returns>Command results as a list of PSObjects.</returns>
-        /// <example><code>List<PSObject> lResult = base.GetObjectsFromPS("(Get-ItemProperty(\"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\")).$(\"PendingFileRenameOperations\")", True);</code></example>
+        /// <example><code>List&lt;PSObject&gt; lResult = base.GetObjectsFromPS("(Get-ItemProperty(\"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\")).$(\"PendingFileRenameOperations\")", True);</code></example>
         public List<PSObject> GetObjectsFromPS(string PSCode, bool Reload)
         {
             return GetObjectsFromPS(PSCode, Reload, cacheTime);
@@ -681,7 +681,7 @@ namespace sccmclictr.automation
         /// <param name="Reload">enforce reload</param>
         /// <param name="tCacheTime">custom cache time</param>
         /// <returns>Command results as list of PSObjects.</returns>
-        /// <example><code>List<PSObject> lResult = base.GetObjectsFromPS("(Get-ItemProperty(\"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\")).$(\"PendingFileRenameOperations\")", True, new TimeSpan(0,0,30));</code></example>
+        /// <example><code>List&lt;PSObject&gt; lResult = base.GetObjectsFromPS("(Get-ItemProperty(\"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\")).$(\"PendingFileRenameOperations\")", True, new TimeSpan(0,0,30));</code></example>
         public List<PSObject> GetObjectsFromPS(string PSCode, bool Reload, TimeSpan tCacheTime)
         {
             List<PSObject> lResult = new List<PSObject>();

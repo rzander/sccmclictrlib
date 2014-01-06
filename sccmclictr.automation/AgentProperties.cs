@@ -22,11 +22,22 @@ using System.Web;
 namespace sccmclictr.automation.functions
 {
 
+    /// <summary>
+    /// Class agentproperties.
+    /// </summary>
     public class agentproperties : baseInit
     {
         internal Runspace remoteRunspace;
         internal TraceSource pSCode;
         internal ccm baseClient;
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="agentproperties"/> class.
+        /// </summary>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The ps code.</param>
+        /// <param name="oClient">The CCM client object.</param>
         public agentproperties(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
@@ -73,6 +84,10 @@ namespace sccmclictr.automation.functions
         }
 
         #region CCM_ClientAgentSettings
+        /// <summary>
+        /// Gets the branding title.
+        /// </summary>
+        /// <value>The branding title.</value>
         public String BrandingTitle
         {
             get
@@ -80,6 +95,11 @@ namespace sccmclictr.automation.functions
                 return base.GetProperty(@"ROOT\ccm\ClientSDK:CCM_ClientAgentSettings=@", "BrandingTitle");
             }
         }
+
+        /// <summary>
+        /// Gets the day reminder interval.
+        /// </summary>
+        /// <value>The day reminder interval.</value>
         public UInt32 DayReminderInterval
         {
             get
@@ -87,6 +107,11 @@ namespace sccmclictr.automation.functions
                 return UInt32.Parse(base.GetProperty(@"ROOT\ccm\ClientSDK:CCM_ClientAgentSettings=@", "DayReminderInterval"));
             }
         }
+
+        /// <summary>
+        /// Gets the display new program notification.
+        /// </summary>
+        /// <value>True if the display new program notification is enabled, otherewise false</value>
         public Boolean DisplayNewProgramNotification
         {
             get
@@ -94,6 +119,11 @@ namespace sccmclictr.automation.functions
                 return Boolean.Parse(base.GetProperty(@"ROOT\ccm\ClientSDK:CCM_ClientAgentSettings=@", "DisplayNewProgramNotification"));
             }
         }
+
+        /// <summary>
+        /// Gets the enable third party orchestration.
+        /// </summary>
+        /// <value>The enable third party orchestration.</value>
         public UInt32 EnableThirdPartyOrchestration
         {
             get
@@ -101,6 +131,11 @@ namespace sccmclictr.automation.functions
                 return UInt32.Parse(base.GetProperty(@"ROOT\ccm\ClientSDK:CCM_ClientAgentSettings=@", "EnableThirdPartyOrchestration"));
             }
         }
+
+        /// <summary>
+        /// Gets the hour reminder interval.
+        /// </summary>
+        /// <value>The hour reminder interval.</value>
         public UInt32 HourReminderInterval
         {
             get
@@ -108,6 +143,11 @@ namespace sccmclictr.automation.functions
                 return UInt32.Parse(base.GetProperty(@"ROOT\ccm\ClientSDK:CCM_ClientAgentSettings=@", "HourReminderInterval"));
             }
         }
+
+        /// <summary>
+        /// Gets the install restriction.
+        /// </summary>
+        /// <value>The install restriction.</value>
         public UInt32 InstallRestriction
         {
             get
@@ -115,6 +155,11 @@ namespace sccmclictr.automation.functions
                 return UInt32.Parse(base.GetProperty(@"ROOT\ccm\ClientSDK:CCM_ClientAgentSettings=@", "InstallRestriction"));
             }
         }
+
+        /// <summary>
+        /// Gets the osd branding subtitle.
+        /// </summary>
+        /// <value>The osd branding subtitle.</value>
         public String OSDBrandingSubtitle
         {
             get
@@ -122,6 +167,11 @@ namespace sccmclictr.automation.functions
                 return base.GetProperty(@"ROOT\ccm\ClientSDK:CCM_ClientAgentSettings=@", "OSDBrandingSubtitle");
             }
         }
+
+        /// <summary>
+        /// Gets the reminder interval.
+        /// </summary>
+        /// <value>The reminder interval.</value>
         public UInt32 ReminderInterval
         {
             get
@@ -129,6 +179,11 @@ namespace sccmclictr.automation.functions
                 return UInt32.Parse(base.GetProperty(@"ROOT\ccm\ClientSDK:CCM_ClientAgentSettings=@", "ReminderInterval"));
             }
         }
+
+        /// <summary>
+        /// Gets the sum branding subtitle.
+        /// </summary>
+        /// <value>The sum branding subtitle.</value>
         public String SUMBrandingSubtitle
         {
             get
@@ -136,6 +191,11 @@ namespace sccmclictr.automation.functions
                 return base.GetProperty(@"ROOT\ccm\ClientSDK:CCM_ClientAgentSettings=@", "SUMBrandingSubtitle");
             }
         }
+
+        /// <summary>
+        /// Gets the suspend bit locker.
+        /// </summary>
+        /// <value>The suspend bit locker.</value>
         public UInt32 SuspendBitLocker
         {
             get
@@ -143,6 +203,11 @@ namespace sccmclictr.automation.functions
                 return UInt32.Parse(base.GetProperty(@"ROOT\ccm\ClientSDK:CCM_ClientAgentSettings=@", "SuspendBitLocker"));
             }
         }
+
+        /// <summary>
+        /// Gets the SWD branding subtitle.
+        /// </summary>
+        /// <value>The SWD branding subtitle.</value>
         public String SWDBrandingSubtitle
         {
             get
@@ -150,6 +215,11 @@ namespace sccmclictr.automation.functions
                 return base.GetProperty(@"ROOT\ccm\ClientSDK:CCM_ClientAgentSettings=@", "SWDBarndingSubtitle");
             }
         }
+
+        /// <summary>
+        /// Gets the system restart turnaround time.
+        /// </summary>
+        /// <value>The system restart turnaround time.</value>
         public UInt32 SystemRestartTurnaroundTime
         {
             get
@@ -161,6 +231,10 @@ namespace sccmclictr.automation.functions
 
         #region CCM_ClientInternalUtilities
 
+        /// <summary>
+        /// Gets the are multi users logged on.
+        /// </summary>
+        /// <value>True if there are multiple users logged on, otherwise false.</value>
         public Boolean AreMultiUsersLoggedOn
         {
             get
@@ -169,25 +243,52 @@ namespace sccmclictr.automation.functions
             }
         }
 
+        /// <summary>
+        /// Notifies the presentation mode changed.
+        /// </summary>
+        /// <returns>UInt32.</returns>
         public UInt32 NotifyPresentationModeChanged()
         {
             return UInt32.Parse(GetStringFromMethod(@"ROOT\ccm\ClientSDK:CCM_ClientInternalUtilities=@", "NotifyPresentationModeChanged", "ReturnValue"));
         }
 
+        /// <summary>
+        /// Raises the event.
+        /// </summary>
+        /// <param name="ActionType">Type of the action.</param>
+        /// <param name="ClassName">Name of the class.</param>
+        /// <param name="MessageLevel">The message level.</param>
+        /// <param name="SessionID">The session identifier.</param>
+        /// <param name="TargetInstancePath">The target instance path.</param>
+        /// <param name="UserSID">The user sid.</param>
+        /// <param name="Value">The value.</param>
+        /// <param name="Verbosity">The verbosity.</param>
+        /// <returns>UInt32.</returns>
         public UInt32 RaiseEvent(UInt32 ActionType, String ClassName, UInt32 MessageLevel, UInt32 SessionID, String TargetInstancePath, String UserSID, String Value, UInt32 Verbosity)
         {
-            return UInt32.Parse(GetStringFromMethod(@"ROOT\ccm\ClientSDK:CCM_ClientInternalUtilities=@", string.Format("RaiseEvent({0},{1},{2},{3},{4],{6},{7}", new object[] { ClassName, TargetInstancePath, ActionType, UserSID, SessionID, MessageLevel, Value, Verbosity  }), "ReturnValue"));
+            return UInt32.Parse(GetStringFromMethod(@"ROOT\ccm\ClientSDK:CCM_ClientInternalUtilities=@", string.Format("RaiseEvent({0},{1},{2},{3},{4},{5},{6},{7}", new object[] { ClassName, TargetInstancePath, ActionType, UserSID, SessionID, MessageLevel, Value, Verbosity  }), "ReturnValue"));
         }
 
         #endregion
 
         #region CCM_ClientUXSettings
+        /// <summary>
+        /// Gets the business hours.
+        /// </summary>
+        /// <returns>PSObject.</returns>
         public PSObject GetBusinessHours()
         {
             PSObject oResult = CallClassMethod(@"ROOT\ccm\ClientSDK:CCM_ClientUXSettings", "GetBusinessHours", "");
             return oResult;
         }
 
+        /// <summary>
+        /// Gets the business hours.
+        /// </summary>
+        /// <param name="EndTime">The end time.</param>
+        /// <param name="StartTime">The start time.</param>
+        /// <param name="WorkingDays">The working days.</param>
+        /// <returns>PSObject.</returns>
         public PSObject GetBusinessHours(out UInt32 EndTime, out UInt32 StartTime, out UInt32 WorkingDays)
         {
             PSObject oResult = CallClassMethod(@"ROOT\ccm\ClientSDK:CCM_ClientUXSettings", "GetBusinessHours", "");
@@ -197,17 +298,34 @@ namespace sccmclictr.automation.functions
             return oResult;
         }
 
+        /// <summary>
+        /// Sets the business hours.
+        /// </summary>
+        /// <param name="EndTime">The end time.</param>
+        /// <param name="StartTime">The start time.</param>
+        /// <param name="WorkingDays">The working days.</param>
+        /// <returns>0 = Success, non zero for failure</returns>
         public UInt32 SetBusinessHours(UInt32 EndTime, UInt32 StartTime, UInt32 WorkingDays)
         {
             PSObject oResult = CallClassMethod(@"ROOT\ccm\ClientSDK:CCM_ClientUXSettings", "GetBusinessHours", string.Format("{0}, {1}, {2}", new object[] { WorkingDays, StartTime, EndTime }));
             return UInt32.Parse(oResult.Properties["ReturnValue"].Value.ToString());
         }
 
+        /// <summary>
+        /// Sets the automatic install required software to non business hours.
+        /// </summary>
+        /// <param name="AutomaticallyInstallSoftware">True to enable this otherwise false</param>
+        /// <returns>0 = Success, non zero for failure</returns>
         public UInt32 SetAutoInstallRequiredSoftwaretoNonBusinessHours(Boolean AutomaticallyInstallSoftware)
         {
             return UInt32.Parse(GetStringFromClassMethod(@"ROOT\ccm\ClientSDK:CCM_ClientUXSettings", "SetAutoInstallRequiredSoftwaretoNonBusinessHours(" + AutomaticallyInstallSoftware.ToString() + ")", "ReturnValue"));
         }
 
+        /// <summary>
+        /// Gets the automatic install required software to non business hours setting.
+        /// </summary>
+        /// <param name="AutomaticallyInstallSoftware">Gets the settings.</param>
+        /// <returns>0 = Success, non zero for failure</returns>
         public UInt32 GetAutoInstallRequiredSoftwaretoNonBusinessHours(out Boolean AutomaticallyInstallSoftware)
         {
             PSObject oResult = CallClassMethod(@"ROOT\ccm\ClientSDK:CCM_ClientUXSettings", "GetAutoInstallRequiredSoftwaretoNonBusinessHours", "");
@@ -215,11 +333,21 @@ namespace sccmclictr.automation.functions
             return UInt32.Parse(oResult.Properties["ReturnValue"].Value.ToString());
         }
 
+        /// <summary>
+        /// Sets the suppress computer activity in presentation mode.
+        /// </summary>
+        /// <param name="SuppressComputerActivityInPresentationMode">The suppress computer activity in presentation mode.</param>
+        /// <returns>0 = Success, non zero for failure</returns>
         public UInt32 SetSuppressComputerActivityInPresentationMode(Boolean SuppressComputerActivityInPresentationMode)
         {
             return UInt32.Parse(GetStringFromClassMethod(@"ROOT\ccm\ClientSDK:CCM_ClientUXSettings", "SetSuppressComputerActivityInPresentationMode(" + SuppressComputerActivityInPresentationMode.ToString() + ")", "ReturnValue"));
         }
 
+        /// <summary>
+        /// Gets the suppress computer activity in presentation mode.
+        /// </summary>
+        /// <param name="SuppressComputerActivityInPresentationMode">Gets the setting. True  means suppress computer activity in presentation mode. </param>
+        /// <returns>0 = Success, non zero for failure</returns>
         public UInt32 GetSuppressComputerActivityInPresentationMode(out Boolean SuppressComputerActivityInPresentationMode)
         {
             PSObject oResult = CallClassMethod(@"ROOT\ccm\ClientSDK:CCM_ClientUXSettings", "GetSuppressComputerActivityInPresentationMode", "");
