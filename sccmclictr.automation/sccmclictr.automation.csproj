@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgentActions.cs" />
+    <Compile Include="AppV.cs" />
     <Compile Include="BaseInit.cs" />
     <Compile Include="Class_Template.cs" />
     <Compile Include="Common.cs" />

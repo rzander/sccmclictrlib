@@ -231,6 +231,7 @@ namespace sccmclictr.automation
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                PSCode.TraceInformation(ex.Message);
             }
 
             //Check if connection was successful...
