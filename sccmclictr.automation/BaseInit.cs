@@ -741,6 +741,7 @@ namespace sccmclictr.automation
         public functions.monitoring Monitoring;
         public functions.health Health;
         public functions.appv5 AppV5;
+        public functions.appv4 AppV4;
 
         #pragma warning restore 1591 // Enable warnings about missing XML comments
 
@@ -787,6 +788,7 @@ namespace sccmclictr.automation
             Health = new functions.health(RemoteRunspace, PSCode, this);
             DCM = new functions.dcm(RemoteRunspace, PSCode, this);
             AppV5 = new functions.appv5(RemoteRunspace, PSCode, this);
+            AppV4 = new functions.appv4(RemoteRunspace, PSCode, this);
         }
     }
 }

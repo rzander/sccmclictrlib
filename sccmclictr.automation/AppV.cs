@@ -39,6 +39,96 @@ namespace sccmclictr.automation.functions
             baseClient = oClient;
         }
 
+        public List<AppvClientApplication> Appv5ClientApplications
+        {
+            get
+            {
+                List<AppvClientApplication> lApps = new List<AppvClientApplication>();
+                List<PSObject> oObj = GetObjects(@"ROOT\Appv", "SELECT * FROM AppvClientApplication");
+                foreach (PSObject PSObj in oObj)
+                {
+                    AppvClientApplication oCIEx = new AppvClientApplication(PSObj, remoteRunspace, pSCode);
+
+                    oCIEx.remoteRunspace = remoteRunspace;
+                    oCIEx.pSCode = pSCode;
+                    lApps.Add(oCIEx);
+                }
+                return lApps;
+            }
+        }
+
+        public List<AppvClientAsset> Appv5AppvClientAssets
+        {
+            get
+            {
+                List<AppvClientAsset> lApps = new List<AppvClientAsset>();
+                List<PSObject> oObj = GetObjects(@"ROOT\Appv", "SELECT * FROM AppvClientAsset");
+                foreach (PSObject PSObj in oObj)
+                {
+                    AppvClientAsset oCIEx = new AppvClientAsset(PSObj, remoteRunspace, pSCode);
+
+                    oCIEx.remoteRunspace = remoteRunspace;
+                    oCIEx.pSCode = pSCode;
+                    lApps.Add(oCIEx);
+                }
+                return lApps;
+            }
+        }
+
+        public List<AppvClientConnectionGroup> Appv5AppvClientConnectionGroups
+        {
+            get
+            {
+                List<AppvClientConnectionGroup> lApps = new List<AppvClientConnectionGroup>();
+                List<PSObject> oObj = GetObjects(@"ROOT\Appv", "SELECT * FROM AppvClientConnectionGroup");
+                foreach (PSObject PSObj in oObj)
+                {
+                    AppvClientConnectionGroup oCIEx = new AppvClientConnectionGroup(PSObj, remoteRunspace, pSCode);
+
+                    oCIEx.remoteRunspace = remoteRunspace;
+                    oCIEx.pSCode = pSCode;
+                    lApps.Add(oCIEx);
+                }
+                return lApps;
+            }
+        }
+
+        public List<AppvClientPackage> Appv5AppvClientPackages
+        {
+            get
+            {
+                List<AppvClientPackage> lApps = new List<AppvClientPackage>();
+                List<PSObject> oObj = GetObjects(@"ROOT\Appv", "SELECT * FROM AppvClientPackage");
+                foreach (PSObject PSObj in oObj)
+                {
+                    AppvClientPackage oCIEx = new AppvClientPackage(PSObj, remoteRunspace, pSCode);
+
+                    oCIEx.remoteRunspace = remoteRunspace;
+                    oCIEx.pSCode = pSCode;
+                    lApps.Add(oCIEx);
+                }
+                return lApps;
+            }
+        }
+
+        public List<AppvPublishingServer> Appv5AppvPublishingServers
+        {
+            get
+            {
+                List<AppvPublishingServer> lApps = new List<AppvPublishingServer>();
+                List<PSObject> oObj = GetObjects(@"ROOT\Appv", "SELECT * FROM AppvPublishingServer");
+                foreach (PSObject PSObj in oObj)
+                {
+                    AppvPublishingServer oCIEx = new AppvPublishingServer(PSObj, remoteRunspace, pSCode);
+
+                    oCIEx.remoteRunspace = remoteRunspace;
+                    oCIEx.pSCode = pSCode;
+                    lApps.Add(oCIEx);
+                }
+                return lApps;
+            }
+        }
+
         /// <summary>
         /// Source:ROOT\Appv
         /// </summary>
@@ -322,6 +412,168 @@ namespace sccmclictr.automation.functions
             public UInt32? UserRefreshInterval { get; set; }
             public String UserRefreshIntervalUnit { get; set; }
             public Boolean? UserRefreshOnLogon { get; set; }
+            #endregion
+
+        }
+    }
+
+        /// <summary>
+    /// App-V 4.x Classes
+    /// Thanks to Mattias Benninge to provide the details
+    /// </summary>
+    public class appv4 : baseInit
+    {
+        internal Runspace remoteRunspace;
+        internal TraceSource pSCode;
+        internal ccm baseClient;
+
+        //Constructor
+        public appv4(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
+            : base(RemoteRunspace, PSCode)
+        {
+            remoteRunspace = RemoteRunspace;
+            pSCode = PSCode;
+            baseClient = oClient;
+        }
+
+        public List<Application> Appv4Applications
+        {
+            get
+            {
+                List<Application> lApps = new List<Application>();
+                List<PSObject> oObj = GetObjects(@"ROOT\microsoft\appvirt\client", "SELECT * FROM Application");
+                foreach (PSObject PSObj in oObj)
+                {
+                    Application oCIEx = new Application(PSObj, remoteRunspace, pSCode);
+
+                    oCIEx.remoteRunspace = remoteRunspace;
+                    oCIEx.pSCode = pSCode;
+                    lApps.Add(oCIEx);
+                }
+                return lApps;
+            }
+        }
+
+        public List<Package> Appv4Packages
+        {
+            get
+            {
+                List<Package> lPkg = new List<Package>();
+                List<PSObject> oObj = GetObjects(@"ROOT\microsoft\appvirt\client", "SELECT * FROM Package");
+                foreach (PSObject PSObj in oObj)
+                {
+                    Package oCIEx = new Package(PSObj, remoteRunspace, pSCode);
+
+                    oCIEx.remoteRunspace = remoteRunspace;
+                    oCIEx.pSCode = pSCode;
+                    lPkg.Add(oCIEx);
+                }
+                return lPkg;
+            }
+        }
+
+        /// <summary>
+        /// Source:ROOT\microsoft\appvirt\client
+        /// </summary>
+        public class Application
+        {
+            //Constructor
+            public Application(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
+            {
+                remoteRunspace = RemoteRunspace;
+                pSCode = PSCode;
+
+                this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
+                this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
+                this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
+                this.__INSTANCE = true;
+                this.WMIObject = WMIObject;
+                this.CachedOsdPath = WMIObject.Properties["CachedOsdPath"].Value as String;
+                this.GlobalRunningCount = WMIObject.Properties["GlobalRunningCount"].Value as UInt32?;
+                string sLastLaunchOnSystem = WMIObject.Properties["LastLaunchOnSystem"].Value as string;
+                if (string.IsNullOrEmpty(sLastLaunchOnSystem))
+                    this.LastLaunchOnSystem = null;
+                else
+                    this.LastLaunchOnSystem = ManagementDateTimeConverter.ToDateTime(sLastLaunchOnSystem) as DateTime?;
+                this.Loading = WMIObject.Properties["Loading"].Value as Boolean?;
+                this.Name = WMIObject.Properties["Name"].Value as String;
+                this.OriginalOsdPath = WMIObject.Properties["OriginalOsdPath"].Value as String;
+                this.PackageGUID = WMIObject.Properties["PackageGUID"].Value as String;
+                this.Version = WMIObject.Properties["Version"].Value as String;
+            }
+
+            #region Properties
+
+            internal string __CLASS { get; set; }
+            internal string __NAMESPACE { get; set; }
+            internal bool __INSTANCE { get; set; }
+            internal string __RELPATH { get; set; }
+            internal PSObject WMIObject { get; set; }
+            internal Runspace remoteRunspace;
+            internal TraceSource pSCode;
+            public String CachedOsdPath { get; set; }
+            public UInt32? GlobalRunningCount { get; set; }
+            public DateTime? LastLaunchOnSystem { get; set; }
+            public Boolean? Loading { get; set; }
+            public String Name { get; set; }
+            public String OriginalOsdPath { get; set; }
+            public String PackageGUID { get; set; }
+            public String Version { get; set; }
+            #endregion
+
+        }
+
+        /// <summary>
+        /// Source:ROOT\microsoft\appvirt\client
+        /// </summary>
+        public class Package
+        {
+            //Constructor
+            public Package(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
+            {
+                remoteRunspace = RemoteRunspace;
+                pSCode = PSCode;
+
+                this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
+                this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
+                this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
+                this.__INSTANCE = true;
+                this.WMIObject = WMIObject;
+                this.CachedLaunchSize = WMIObject.Properties["CachedLaunchSize"].Value as UInt64?;
+                this.CachedPercentage = WMIObject.Properties["CachedPercentage"].Value as UInt16?;
+                this.CachedSize = WMIObject.Properties["CachedSize"].Value as UInt64?;
+                this.InUse = WMIObject.Properties["InUse"].Value as Boolean?;
+                this.LaunchSize = WMIObject.Properties["LaunchSize"].Value as UInt64?;
+                this.Locked = WMIObject.Properties["Locked"].Value as Boolean?;
+                this.Name = WMIObject.Properties["Name"].Value as String;
+                this.PackageGUID = WMIObject.Properties["PackageGUID"].Value as String;
+                this.SftPath = WMIObject.Properties["SftPath"].Value as String;
+                this.TotalSize = WMIObject.Properties["TotalSize"].Value as UInt64?;
+                this.Version = WMIObject.Properties["Version"].Value as String;
+                this.VersionGUID = WMIObject.Properties["VersionGUID"].Value as String;
+            }
+
+            #region Properties
+
+            internal string __CLASS { get; set; }
+            internal string __NAMESPACE { get; set; }
+            internal bool __INSTANCE { get; set; }
+            internal string __RELPATH { get; set; }
+            internal PSObject WMIObject { get; set; }
+            internal Runspace remoteRunspace;
+            internal TraceSource pSCode;
+            public UInt64? CachedLaunchSize { get; set; }
+            public UInt16? CachedPercentage { get; set; }
+            public UInt64? CachedSize { get; set; }
+            public Boolean? InUse { get; set; }
+            public UInt64? LaunchSize { get; set; }
+            public Boolean? Locked { get; set; }
+            public String Name { get; set; }
+            public String PackageGUID { get; set; }
+            public String SftPath { get; set; }
+            public UInt64? TotalSize { get; set; }
+            public String Version { get; set; }
+            public String VersionGUID { get; set; }
             #endregion
 
         }
