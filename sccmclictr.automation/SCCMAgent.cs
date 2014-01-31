@@ -202,6 +202,13 @@ namespace sccmclictr.automation
             //Default Settings
             connectionInfo.AuthenticationMechanism = AuthenticationMechanism.Default;
             connectionInfo.ProxyAuthentication = AuthenticationMechanism.Negotiate;
+            
+            //Set timeout to 1min
+            connectionInfo.OpenTimeout = 60000;
+            connectionInfo.OperationTimeout = 60000;
+            connectionInfo.OpenTimeout = 60000;
+            connectionInfo.CancelTimeout = 10000;
+            connectionInfo.IdleTimeout = 60000;
 
             if(bConnect)
                 connect();

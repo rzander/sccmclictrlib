@@ -21,6 +21,9 @@ using System.Web;
 
 namespace sccmclictr.automation.functions
 {
+    /// <summary>
+    /// Agent health and repair functions
+    /// </summary>
     public class health : baseInit
     {
         internal Runspace remoteRunspace;
@@ -198,6 +201,61 @@ namespace sccmclictr.automation.functions
             catch
             {
             }
+        }
+
+        /// <summary>
+        /// Run CCMEval.exe
+        /// </summary>
+        public void RunCCMEval()
+        { 
+            baseClient.Process.CreateProcess(baseClient.AgentProperties.LocalSCCMAgentPath + "ccmeval.exe");
+        }
+
+        /// <summary>
+        /// Show results of the CCMEval taks
+        /// </summary>
+        /// <returns>List of CCMEval results</returns>
+        public List<ccmeval> GetCCMEvalStatus()
+        {
+            List<ccmeval> lResult = new List<ccmeval>();
+
+            string sPScript = "[xml]$ccmeval = Get-Content \"" + baseClient.AgentProperties.LocalSCCMAgentPath + "CcmEvalReport.xml\"; $ccmeval.ClientHealthReport.HealthChecks.HealthCheck"; // | % { $_ }; ";
+
+            //Always reload XML...
+            List<PSObject> res = base.GetObjectsFromPS(sPScript, true);
+            foreach (PSObject oObj in res)
+            {
+                try
+                {
+                    ccmeval oEval = new ccmeval();
+                    oEval.ID = oObj.Properties["ID"].Value.ToString();
+                    oEval.Description = oObj.Properties["Description"].Value.ToString();
+                    oEval.ResultCode = oObj.Properties["ResultCode"].Value.ToString();
+                    oEval.ResultType = oObj.Properties["ResultType"].Value.ToString();
+                    oEval.ResultDetail = oObj.Properties["ResultDetail"].Value.ToString();
+                    oEval.StepDetail = oObj.Properties["StepDetail"].Value.ToString();
+                    oEval.text = oObj.Properties["#text"].Value.ToString();
+
+                    lResult.Add(oEval);
+                }
+                catch { }
+            }
+
+            return lResult;
+        }
+
+        /// <summary>
+        /// ccmeval result entry
+        /// </summary>
+        public class ccmeval
+        {
+            public string ID { get; set; }
+            public string Description { get; set; }
+            public string ResultCode { get; set; }
+            public string ResultType{ get; set; }
+            public string ResultDetail { get; set; }
+            public string StepDetail { get; set; }
+            public string text { get; set; }
         }
     }
 }
