@@ -242,79 +242,6 @@ namespace sccmclictr.automation.functions
             public String Publisher { get; set; }
             public UInt32? Type { get; set; }
 
-            /// <summary>
-            /// Transalated EvaluationState into text from MSDN (http://msdn.microsoft.com/en-us/library/jj874280.aspx)
-            /// </summary>
-            public string EvaluationStateText
-            {
-                get
-                {
-                    switch (EvaluationState)
-                    {
-                        case 0:
-                            return "No state information is available.";
-                        case 1:
-                            return "Application is enforced to desired/resolved state.";
-                        case 2:
-                            return "Application is not required on the client.";
-                        case 3:
-                            return "Application is available for enforcement (install or uninstall based on resolved state). Content may/may not have been downloaded.";
-                        case 4:
-                            return "Application last failed to enforce (install/uninstall).";
-                        case 5:
-                            return "Application is currently waiting for content download to complete.";
-                        case 6:
-                            return "Application is currently waiting for content download to complete.";
-                        case 7:
-                            return "Application is currently waiting for its dependencies to download.";
-                        case 8:
-                            return "Application is currently waiting for a service (maintenance) window.";
-                        case 9:
-                            return "Application is currently waiting for a previously pending reboot.";
-                        case 10:
-                            return "Application is currently waiting for serialized enforcement.";
-                        case 11:
-                            return "Application is currently enforcing dependencies.";
-                        case 12:
-                            return "Application is currently enforcing.";
-                        case 13:
-                            return "Application install/uninstall enforced and soft reboot is pending.";
-                        case 14:
-                            return "Application installed/uninstalled and hard reboot is pending.";
-                        case 15:
-                            return "Update is available but pending installation.";
-                        case 16:
-                            return "Application failed to evaluate.";
-                        case 17:
-                            return "Application is currently waiting for an active user session to enforce.";
-                        case 18:
-                            return "Application is currently waiting for all users to logoff.";
-                        case 19:
-                            return "Application is currently waiting for a user logon.";
-                        case 20:
-                            return "Application in progress, waiting for retry.";
-                        case 21:
-                            return "Application is waiting for presentation mode to be switched off.";
-                        case 22:
-                            return "Application is pre-downloading content (downloading outside of install job).";
-                        case 23:
-                            return "Application is pre-downloading dependent content (downloading outside of install job).";
-                        case 24:
-                            return "Application download failed (downloading during install job).";
-                        case 25:
-                            return "Application pre-downloading failed (downloading outside of install job).";
-                        case 26:
-                            return "Download success (downloading during install job).";
-                        case 27:
-                            return "Post-enforce evaluation.";
-                        case 28:
-                            return "Waiting for network connectivity.";
-                        default:
-                            return "Unknown state information.";
-
-                    }
-                }
-            }
             #endregion
 
             #region Methods
@@ -487,6 +414,79 @@ namespace sccmclictr.automation.functions
             public String SupersessionState { get; set; }
             public Boolean? UserUIExperience { get; set; }
 
+            /// <summary>
+            /// Transalated EvaluationState into text from MSDN (http://msdn.microsoft.com/en-us/library/jj874280.aspx)
+            /// </summary>
+            public string EvaluationStateText
+            {
+                get
+                {
+                    switch (EvaluationState)
+                    {
+                        case 0:
+                            return "No state information is available.";
+                        case 1:
+                            return "Application is enforced to desired/resolved state.";
+                        case 2:
+                            return "Application is not required on the client.";
+                        case 3:
+                            return "Application is available for enforcement (install or uninstall based on resolved state). Content may/may not have been downloaded.";
+                        case 4:
+                            return "Application last failed to enforce (install/uninstall).";
+                        case 5:
+                            return "Application is currently waiting for content download to complete.";
+                        case 6:
+                            return "Application is currently waiting for content download to complete.";
+                        case 7:
+                            return "Application is currently waiting for its dependencies to download.";
+                        case 8:
+                            return "Application is currently waiting for a service (maintenance) window.";
+                        case 9:
+                            return "Application is currently waiting for a previously pending reboot.";
+                        case 10:
+                            return "Application is currently waiting for serialized enforcement.";
+                        case 11:
+                            return "Application is currently enforcing dependencies.";
+                        case 12:
+                            return "Application is currently enforcing.";
+                        case 13:
+                            return "Application install/uninstall enforced and soft reboot is pending.";
+                        case 14:
+                            return "Application installed/uninstalled and hard reboot is pending.";
+                        case 15:
+                            return "Update is available but pending installation.";
+                        case 16:
+                            return "Application failed to evaluate.";
+                        case 17:
+                            return "Application is currently waiting for an active user session to enforce.";
+                        case 18:
+                            return "Application is currently waiting for all users to logoff.";
+                        case 19:
+                            return "Application is currently waiting for a user logon.";
+                        case 20:
+                            return "Application in progress, waiting for retry.";
+                        case 21:
+                            return "Application is waiting for presentation mode to be switched off.";
+                        case 22:
+                            return "Application is pre-downloading content (downloading outside of install job).";
+                        case 23:
+                            return "Application is pre-downloading dependent content (downloading outside of install job).";
+                        case 24:
+                            return "Application download failed (downloading during install job).";
+                        case 25:
+                            return "Application pre-downloading failed (downloading outside of install job).";
+                        case 26:
+                            return "Download success (downloading during install job).";
+                        case 27:
+                            return "Post-enforce evaluation.";
+                        case 28:
+                            return "Waiting for network connectivity.";
+                        default:
+                            return "Unknown state information.";
+
+                    }
+                }
+            }
             /*
             public CCM_AppDeploymentType[] AppDTs
             {
@@ -1193,6 +1193,17 @@ namespace sccmclictr.automation.functions
             public Boolean? RunDependent { get; set; }
             public Boolean? TaskSequence { get; set; }
             public String Version { get; set; }
+
+            /// <summary>
+            /// Transalated EvaluationState into text from MSDN (http://msdn.microsoft.com/en-us/library/jj874280.aspx)
+            /// </summary>
+            public string EvaluationStateText
+            {
+                get
+                {
+                    return "Unknown state information.";
+                }
+            }
             #endregion
         }
 
@@ -1388,6 +1399,45 @@ namespace sccmclictr.automation.functions
             public String UpdateID { get; set; }
             public String URL { get; set; }
             public Boolean? UserUIExperience { get; set; }
+
+            /// <summary>
+            /// Transalated EvaluationState into text from MSDN (http://msdn.microsoft.com/en-us/library/jj874280.aspx)
+            /// </summary>
+            public string EvaluationStateText
+            {
+                get
+                {
+                    switch (EvaluationState)
+                    {
+                        case 0: return "ciJobStateNone";
+                        case 1: return "ciJobStateAvailable";
+                        case 2: return "ciJobStateSubmitted";
+                        case 3: return "ciJobStateDetecting";
+                        case 4: return "ciJobStatePreDownload";
+                        case 5: return "ciJobStateDownloading";
+                        case 6: return "ciJobStateWaitInstall";
+                        case 7: return "ciJobStateInstalling";
+                        case 8: return "ciJobStatePendingSoftReboot";
+                        case 9: return "ciJobStatePendingHardReboot";
+                        case 10: return "ciJobStateWaitReboot";
+                        case 11: return "ciJobStateVerifying";
+                        case 12: return "ciJobStateInstallComplete";
+                        case 13: return "ciJobStateError";
+                        case 14: return "ciJobStateWaitServiceWindow";
+                        case 15: return "ciJobStateWaitUserLogon";
+                        case 16: return "ciJobStateWaitUserLogoff";
+                        case 17: return "ciJobStateWaitJobUserLogon";
+                        case 18: return "ciJobStateWaitUserReconnect";
+                        case 19: return "ciJobStatePendingUserLogoff";
+                        case 20: return "ciJobStatePendingUpdate";
+                        case 21: return "ciJobStateWaitingRetry";
+                        case 22: return "ciJobStateWaitPresModeOff";
+                        case 23: return "ciJobStateWaitForOrchestration";
+                        default:
+                            return "Unknown state information.";
+                    }
+                }
+            }
             #endregion
 
         }
