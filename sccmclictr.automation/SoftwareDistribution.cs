@@ -1627,6 +1627,101 @@ namespace sccmclictr.automation.functions
                                 Icon = SWObject.Properties["Icon"].Value as string;
                                 AvailableAfter = ((CCM_Application)_rawObject).StartTime;
                                 Name = SWObject.Properties["Name"].Value as string;
+                                int EvaluationState = int.Parse(SWObject.Properties["EvaluationState"].Value.ToString());
+                                switch (EvaluationState)
+                                {
+                                    case 0:
+                                        Status = "Not Installed";
+                                        break;
+                                    case 1:
+                                        Status = "Installed";
+                                        break;
+                                    case 2:
+                                        Status = "Not required";
+                                        break;
+                                    case 3:
+                                        Status = "Ready";
+                                        break;
+                                    case 4:
+                                        Status = "Failed";
+                                        break;
+                                    case 5:
+                                        Status = "Downloading content";
+                                        break;
+                                    case 6:
+                                        Status = "Downloading content";
+                                        break;
+                                    case 7:
+                                        Status = "Waiting";
+                                        break;
+                                    case 8:
+                                        Status = "Waiting";
+                                        break;
+                                    case 9:
+                                        Status = "Waiting";
+                                        break;
+                                    case 10:
+                                        Status = "Waiting";
+                                        break;
+                                    case 11:
+                                        Status = "Waiting";
+                                        break;
+                                    case 12:
+                                        Status = "Installing";
+                                        break;
+                                    case 13:
+                                        Status = "Reboot pending";
+                                        break;
+                                    case 14:
+                                        Status = "Reboot pending";
+                                        break;
+                                    case 15:
+                                        Status = "Waiting";
+                                        break;
+                                    case 16:
+                                        Status = "Failed";
+                                        break;
+                                    case 17:
+                                        Status = "Waiting";
+                                        break;
+                                    case 18:
+                                        Status = "Waiting";
+                                        break;
+                                    case 19:
+                                        Status = "Waiting";
+                                        break;
+                                    case 20:
+                                        Status = "Waiting";
+                                        break;
+                                    case 21:
+                                        Status = "Waiting";
+                                        break;
+                                    case 22:
+                                        Status = "Downloading content";
+                                        break;
+                                    case 23:
+                                        Status = "Downloading content";
+                                        break;
+                                    case 24:
+                                        Status = "Failed";
+                                        break;
+                                    case 25:
+                                        Status = "Failed";
+                                        break;
+                                    case 26:
+                                        Status = "Waiting"; ;
+                                        break;
+                                    case 27:
+                                        Status = "Waiting";
+                                        break;
+                                    case 28:
+                                        Status = "Waiting";
+                                        break;
+                                    default:
+                                        Status = "Unknown state information.";
+                                        break;
+
+                                }
                                 break;
                             case 2:
                                 Type = "Software Update";
@@ -1634,6 +1729,93 @@ namespace sccmclictr.automation.functions
                                 Icon = "Updates";
                                 AvailableAfter = ((CCM_SoftwareUpdate)_rawObject).StartTime;
                                 Name = SWObject.Properties["Name"].Value as string;
+                                int EvaluationState2 = int.Parse(SWObject.Properties["EvaluationState"].Value.ToString());
+                                switch (EvaluationState2)
+                                {
+                                    case 0:
+                                        Status = "No State";
+                                        try
+                                        {
+                                            if (SWObject.Properties["ComplianceState"].Value.ToString() == "0")
+                                            {
+                                                Status = "Missing";
+                                            }
+                                        }
+                                        catch { }
+                                        break;
+                                    case 1:
+                                        Status = "Missing";
+                                        break;
+                                    case 2:
+                                        Status = "Ready";
+                                        break;
+                                    case 3:
+                                        Status = "Detecting";
+                                        break;
+                                    case 4:
+                                        Status = "Downloading content";
+                                        break;
+                                    case 5:
+                                        Status = "Downloading content";
+                                        break;
+                                    case 6:
+                                        Status = "Waiting";
+                                        break;
+                                    case 7:
+                                        Status = "Installing";
+                                        break;
+                                    case 8:
+                                        Status = "Reboot pending";
+                                        break;
+                                    case 9:
+                                        Status = "Reboot pending";
+                                        break;
+                                    case 10:
+                                        Status = "Reboot pending";
+                                        break;
+                                    case 11:
+                                        Status = "Verifying";
+                                        break;
+                                    case 12:
+                                        Status = "Installed";
+                                        break;
+                                    case 13:
+                                        Status = "Failed";
+                                        break;
+                                    case 14:
+                                        Status = "Waiting";
+                                        break;
+                                    case 15:
+                                        Status = "Waiting";
+                                        break;
+                                    case 16:
+                                        Status = "Waiting";
+                                        break;
+                                    case 17:
+                                        Status = "Waiting";
+                                        break;
+                                    case 18:
+                                        Status = "Waiting";
+                                        break;
+                                    case 19:
+                                        Status = "Waiting";
+                                        break;
+                                    case 20:
+                                        Status = "Pending";
+                                        break;
+                                    case 21:
+                                        Status = "Waiting";
+                                        break;
+                                    case 22:
+                                        Status = "Waiting";
+                                        break;
+                                    case 23:
+                                        Status = "Waiting";
+                                        break;
+                                    default:
+                                        Status = "Unknown state information.";
+                                        break;
+                                }
                                 break;
                             case 3:
                                 Type = "Program";
@@ -1681,115 +1863,6 @@ namespace sccmclictr.automation.functions
                         PercentComplete = UInt32.Parse(SWObject.Properties["PercentComplete"].Value.ToString());
                     }
                     catch { }
-
-                    try
-                    {
-                        if (SWObject.Properties["EvaluationState"].Value != null)
-                        {
-                            int EvaluationState = int.Parse(SWObject.Properties["EvaluationState"].Value.ToString());
-                            switch (EvaluationState)
-                            {
-                                case 0:
-                                    Status = "Not Installed";
-                                    break;
-                                case 1:
-                                    Status = "Installed";
-                                    break;
-                                case 2:
-                                    Status = "Not required";
-                                    break;
-                                case 3:
-                                    Status = "Ready";
-                                    break;
-                                case 4:
-                                    Status = "Failed";
-                                    break;
-                                case 5:
-                                    Status = "Downloading content";
-                                    break;
-                                case 6:
-                                    Status = "Downloading content";
-                                    break;
-                                case 7:
-                                    Status = "Waiting";
-                                    break;
-                                case 8:
-                                    Status = "Waiting";
-                                    break;
-                                case 9:
-                                    Status = "Waiting";
-                                    break;
-                                case 10:
-                                    Status = "Waiting";
-                                    break;
-                                case 11:
-                                    Status = "Waiting";
-                                    break;
-                                case 12:
-                                    Status = "Installing";
-                                    break;
-                                case 13:
-                                    Status = "Reboot pending";
-                                    break;
-                                case 14:
-                                    Status = "Reboot pending";
-                                    break;
-                                case 15:
-                                    Status = "Waiting";
-                                    break;
-                                case 16:
-                                    Status = "Failed";
-                                    break;
-                                case 17:
-                                    if (iType == 0 | iType == 3)
-                                    {
-                                        //Status = "Installed";
-                                    }
-                                    else
-                                        Status = "Waiting";
-                                    break;
-                                case 18:
-                                    Status = "Waiting";
-                                    break;
-                                case 19:
-                                    Status = "Waiting";
-                                    break;
-                                case 20:
-                                    Status = "Waiting";
-                                    break;
-                                case 21:
-                                    Status = "Waiting";
-                                    break;
-                                case 22:
-                                    Status = "Downloading content";
-                                    break;
-                                case 23:
-                                    Status = "Downloading content";
-                                    break;
-                                case 24:
-                                    Status = "Failed";
-                                    break;
-                                case 25:
-                                    Status = "Failed";
-                                    break;
-                                case 26:
-                                    Status = "Waiting"; ;
-                                    break;
-                                case 27:
-                                    Status = "Waiting";
-                                    break;
-                                case 28:
-                                    Status = "Waiting";
-                                    break;
-                                default:
-                                    Status = "Unknown state information.";
-                                    break;
-
-                            }
-                        }
-                    }
-                    catch { }
-
                 }
                 catch { }
             }

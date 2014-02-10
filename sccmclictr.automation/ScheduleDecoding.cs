@@ -525,12 +525,16 @@ namespace sccmclictr.automation.schedule
                 {
                     //determine the new start date-time
                     DateTime oNextStartTime = base.StartTime.Subtract(new TimeSpan(DaySpan, HourSpan, MinuteSpan, 0));
-
+                    DateTime oPrevDate = oNextStartTime;
                     while (oNextStartTime < DateTime.Now)
                     {
+                        oPrevDate = oNextStartTime;
                         oNextStartTime = oNextStartTime + new TimeSpan(DaySpan, HourSpan, MinuteSpan, 0);
                     }
-                    return oNextStartTime;
+                    if (oNextStartTime > DateTime.Now)
+                        return oPrevDate;
+                    else
+                        return oNextStartTime;
 
                 }
             }
