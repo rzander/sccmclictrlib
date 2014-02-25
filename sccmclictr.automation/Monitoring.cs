@@ -25,13 +25,19 @@ using System.Collections.ObjectModel;
 
 namespace sccmclictr.automation.functions
 {
+    /// <summary>
+    /// Class monitoring.
+    /// </summary>
     public class monitoring : baseInit
     {
         internal Runspace remoteRunspace;
         internal TraceSource pSCode;
         internal ccm baseClient;
 
-        public void Dispose()
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public new void Dispose()
         {
             if (remoteRunspace != null)
                 remoteRunspace.Dispose();
@@ -41,6 +47,12 @@ namespace sccmclictr.automation.functions
         }
 
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="monitoring"/> class.
+        /// </summary>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
+        /// <param name="oClient">A CCM Client object.</param>
         public monitoring(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
@@ -50,8 +62,14 @@ namespace sccmclictr.automation.functions
             AsynchronousScript = new runScriptAsync(RemoteRunspace);
         }
 
+        /// <summary>
+        /// The asynchronous script
+        /// </summary>
         public runScriptAsync AsynchronousScript;
 
+        /// <summary>
+        /// Class runScriptAsync.
+        /// </summary>
         public class runScriptAsync : IDisposable
         {
             private AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
@@ -59,6 +77,9 @@ namespace sccmclictr.automation.functions
             internal Pipeline pipeline;
             internal RunspaceConnectionInfo _connectionInfo;
 
+            /// <summary>
+            /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            /// </summary>
             public void Dispose()
             {
                 if (_remoteRunspace != null)
@@ -68,6 +89,10 @@ namespace sccmclictr.automation.functions
                 _connectionInfo = null;
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="runScriptAsync"/> class.
+            /// </summary>
+            /// <param name="remoteRunspace">The remote runspace.</param>
             public runScriptAsync(Runspace remoteRunspace)
             {
                 if (_remoteRunspace == null)
@@ -81,6 +106,9 @@ namespace sccmclictr.automation.functions
                 }
             }
 
+            /// <summary>
+            /// Connects this instance.
+            /// </summary>
             public void Connect()
             {
                 if (_remoteRunspace.RunspaceStateInfo.State != RunspaceState.Opened)
@@ -112,11 +140,12 @@ namespace sccmclictr.automation.functions
                 _autoResetEvent.Set();
             }
 
+
             /// <summary>
-            ///  Output data arrived
+            /// Output data arrived.
             /// </summary>
-            /// <param name="sender">contains the result as List of strings</string></param>
-            /// <param name="e"></param>
+            /// <param name="sender">Contains the result as List of strings.</param>
+            /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
             internal void Output_DataReady(object sender, EventArgs e)
             {
                 PipelineReader<PSObject> output = sender as PipelineReader<PSObject>;
@@ -237,6 +266,9 @@ namespace sccmclictr.automation.functions
 
             }
 
+            /// <summary>
+            /// Runs this instance.
+            /// </summary>
             public void Run()
             {
                 if (pipeline == null)
@@ -245,6 +277,9 @@ namespace sccmclictr.automation.functions
                 pipeline.Input.Close();
             }
 
+            /// <summary>
+            /// Runs and waits.
+            /// </summary>
             public void RunWait()
             {
                 if (pipeline == null)
@@ -306,13 +341,15 @@ namespace sccmclictr.automation.functions
                 catch { }
             }
 
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+
             public event EventHandler StringOutput;
             public event EventHandler RawOutput;
             public event EventHandler TypedOutput;
             public event EventHandler Finished;
             public event EventHandler ErrorOccured;
 
-
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
         }
     }
 

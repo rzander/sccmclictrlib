@@ -31,6 +31,12 @@ namespace sccmclictr.automation.functions
         internal ccm baseClient;
 
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="inventory"/> class.
+        /// </summary>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
+        /// <param name="oClient">A CCM Client object.</param>
         public inventory(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
@@ -40,7 +46,7 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Show all Installed SOftware (like AddRemove Programs)
+        /// Show all Installed Software (like AddRemove Programs)
         /// </summary>
         public List<AI_InstalledSoftwareCache> InstalledSoftware
         {
@@ -139,6 +145,12 @@ namespace sccmclictr.automation.functions
         {
             internal baseInit oNewBase;
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="AI_InstalledSoftwareCache"/> class.
+            /// </summary>
+            /// <param name="WMIObject">A WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public AI_InstalledSoftwareCache(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -177,6 +189,7 @@ namespace sccmclictr.automation.functions
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             internal string __CLASS { get; set; }
             internal string __NAMESPACE { get; set; }
@@ -209,9 +222,15 @@ namespace sccmclictr.automation.functions
             public String UpgradeCode { get; set; }
             public String VersionMajor { get; set; }
             public String VersionMinor { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
             #region Methods
+            /// <summary>
+            /// Uninstalls this instance.
+            /// </summary>
+            /// <returns>System.String.</returns>
             public string Uninstall()
             {
                 if (SoftwareCode.StartsWith("{"))
@@ -222,6 +241,10 @@ namespace sccmclictr.automation.functions
                 return null;
             }
 
+            /// <summary>
+            /// Repairs this instance.
+            /// </summary>
+            /// <returns>System.String.</returns>
             public string Repair()
             {
                 if (SoftwareCode.StartsWith("{"))
@@ -241,6 +264,12 @@ namespace sccmclictr.automation.functions
         public class InventoryActionStatus
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="InventoryActionStatus"/> class.
+            /// </summary>
+            /// <param name="WMIObject">A WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public InventoryActionStatus(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -276,11 +305,15 @@ namespace sccmclictr.automation.functions
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
 
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+
             public String InventoryActionID { get; set; }
             public DateTime? LastCycleStartedDate { get; set; }
             public UInt32? LastMajorReportVersion { get; set; }
             public UInt32? LastMinorReportVersion { get; set; }
             public DateTime? LastReportDate { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }

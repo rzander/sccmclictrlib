@@ -12,6 +12,9 @@ using System.Xml;
 
 namespace sccmclictr.automation.functions
 {
+    /// <summary>
+    /// Class dcm.
+    /// </summary>
     public class dcm : baseInit
     {
         internal Runspace remoteRunspace;
@@ -32,6 +35,10 @@ namespace sccmclictr.automation.functions
             baseClient = oClient;
         }
 
+        /// <summary>
+        /// Gets a list of  DCM baselines.
+        /// </summary>
+        /// <value>A list DCM baselines.</value>
         public List<SMS_DesiredConfiguration> DCMBaselines
         {
             get
@@ -102,6 +109,7 @@ namespace sccmclictr.automation.functions
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             internal string __CLASS { get; set; }
             internal string __NAMESPACE { get; set; }
@@ -121,6 +129,8 @@ namespace sccmclictr.automation.functions
             public Boolean isCompliant { get; set; }
 
             public PSObject _RawObject { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
             #region Methods
@@ -198,11 +208,11 @@ namespace sccmclictr.automation.functions
 
             }
 
+
             /// <summary>
             /// List of Config Items (Class ConfigItem)
             /// </summary>
-            /// <param name="DCMBaseline">Instance of SMS_DesiredConfiguration ManagementObject</param>
-            /// <returns>Confg Items</returns>
+            /// <returns>List{ConfigItem}.</returns>
             public List<ConfigItem> ConfigItems()
             {
                 List<ConfigItem> oResult = new List<ConfigItem>();

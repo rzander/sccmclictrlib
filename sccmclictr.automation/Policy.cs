@@ -33,6 +33,12 @@ namespace sccmclictr.automation.policy
         internal ccm baseClient;
 
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="requestedConfig"/> class.
+        /// </summary>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
+        /// <param name="oClient">A CCM Client object.</param>
         public requestedConfig(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
@@ -62,11 +68,19 @@ namespace sccmclictr.automation.policy
             return null;
         }
 
+        /// <summary>
+        /// Deletes a service window.
+        /// </summary>
+        /// <param name="ServiceWindowID">A service window identifier.</param>
         public void DeleteServiceWindow(string ServiceWindowID)
         {
             string sResult = baseClient.GetStringFromPS("Get-WMIObject -Namespace 'ROOT\\ccm\\Policy\\Machine\\RequestedConfig' -Query 'SELECT * FROM CCM_ServiceWindow WHERE ServiceWindowID = \"" + ServiceWindowID + "\"' | Remove-WmiObject");
         }
 
+        /// <summary>
+        /// Gets a list of component client configuration.
+        /// </summary>
+        /// <value>A list of component client configuration.</value>
         public List<CCM_ComponentClientConfig> ComponentClientConfig
         {
             get
@@ -86,6 +100,10 @@ namespace sccmclictr.automation.policy
             } 
         }
 
+        /// <summary>
+        /// Gets a list of software updates client configuration.
+        /// </summary>
+        /// <value>A list of software updates client configuration.</value>
         public List<CCM_SoftwareUpdatesClientConfig> SoftwareUpdatesClientConfig
         {
             get
@@ -105,6 +123,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of root ca certificates.
+        /// </summary>
+        /// <value>A list of root ca certificates.</value>
         public List<CCM_RootCACertificates> RootCACertificates
         {
             get
@@ -124,6 +146,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of source update client configuration.
+        /// </summary>
+        /// <value>A list of source update client configuration.</value>
         public List<CCM_SourceUpdateClientConfig> SourceUpdateClientConfig
         {
             get
@@ -143,6 +169,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of software center settings.
+        /// </summary>
+        /// <value>A list of software center settings.</value>
         public List<CCM_SoftwareCenterSettings> SoftwareCenterSettings
         {
             get
@@ -162,6 +192,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of software inventory client configuration.
+        /// </summary>
+        /// <value>A list of software inventory client configuration.</value>
         public List<CCM_SoftwareInventoryClientConfig> SoftwareInventoryClientConfig
         {
             get
@@ -181,6 +215,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of targeting settings.
+        /// </summary>
+        /// <value>A list of targeting settings.</value>
         public List<CCM_TargetingSettings> TargetingSettings
         {
             get
@@ -200,6 +238,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of multicast configuration.
+        /// </summary>
+        /// <value>A list of multicast configuration.</value>
         public List<CCM_MulticastConfig> MulticastConfig
         {
             get
@@ -219,6 +261,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of software distribution client configuration.
+        /// </summary>
+        /// <value>A list of software distribution client configuration.</value>
         public List<CCM_SoftwareDistributionClientConfig> SoftwareDistributionClientConfig
         {
             get
@@ -237,6 +283,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of configuration management client configuration.
+        /// </summary>
+        /// <value>A list of configuration management client configuration.</value>
         public List<CCM_ConfigurationManagementClientConfig> ConfigurationManagementClientConfig
         {
             get
@@ -255,6 +305,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of client agent configuration.
+        /// </summary>
+        /// <value>A list of client agent configuration.</value>
         public List<CCM_ClientAgentConfig> ClientAgentConfig
         {
             get
@@ -273,6 +327,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of system health client configuration.
+        /// </summary>
+        /// <value>A list of system health client configuration.</value>
         public List<CCM_SystemHealthClientConfig> SystemHealthClientConfig
         {
             get
@@ -291,6 +349,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of power management client configuration.
+        /// </summary>
+        /// <value>A list of power management client configuration.</value>
         public List<CCM_PowerManagementClientConfig> PowerManagementClientConfig
         {
             get
@@ -309,6 +371,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of software metering client configuration.
+        /// </summary>
+        /// <value>A list of software metering client configuration.</value>
         public List<CCM_SoftwareMeteringClientConfig> SoftwareMeteringClientConfig
         {
             get
@@ -327,6 +393,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of hardware inventory client configuration.
+        /// </summary>
+        /// <value>A list of hardware inventory client configuration.</value>
         public List<CCM_HardwareInventoryClientConfig> HardwareInventoryClientConfig
         {
             get
@@ -345,6 +415,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets A list of remote tools policies.
+        /// </summary>
+        /// <value>A list of remote tools policies.</value>
         public List<CCM_RemoteTools_Policy> RemoteTools_Policy
         {
             get
@@ -363,6 +437,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of network access accounts.
+        /// </summary>
+        /// <value>A list of network access accounts.</value>
         public List<CCM_NetworkAccessAccount> NetworkAccessAccount
         {
             get
@@ -381,6 +459,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of application management client configurations.
+        /// </summary>
+        /// <value>A list of application management client configurations.</value>
         public List<CCM_ApplicationManagementClientConfig> ApplicationManagementClientConfig
         {
             get
@@ -447,6 +529,13 @@ namespace sccmclictr.automation.policy
         public class CCM_Policy
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_Policy(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             {
                 remoteRunspace = RemoteRunspace;
@@ -474,14 +563,19 @@ namespace sccmclictr.automation.policy
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+
             public String PolicyID { get; set; }
             public String PolicyInstanceID { get; set; }
             public UInt32? PolicyPrecedence { get; set; }
             public String PolicyRuleID { get; set; }
             public String PolicySource { get; set; }
             public String PolicyVersion { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
-            
+
         }
 
         /// <summary>
@@ -490,6 +584,13 @@ namespace sccmclictr.automation.policy
         public class CCM_ComponentClientConfig : CCM_Policy
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_ComponentClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -514,8 +615,13 @@ namespace sccmclictr.automation.policy
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode; */
+
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+
             public String ComponentName { get; set; }
             public Boolean? Enabled { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -526,6 +632,13 @@ namespace sccmclictr.automation.policy
         public class CCM_SoftwareUpdatesClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_SoftwareUpdatesClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -554,6 +667,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? AssignmentBatchingTimeout { get; set; }
             public String BrandingSubTitle { get; set; }
@@ -574,6 +688,8 @@ namespace sccmclictr.automation.policy
             public UInt32? UserJobPerDPInactivityTimeout { get; set; }
             public UInt32? UserJobTotalInactivityTimeout { get; set; }
             public UInt32? WSUSLocationTimeout { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -584,6 +700,13 @@ namespace sccmclictr.automation.policy
         public class CCM_RootCACertificates : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_RootCACertificates(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -596,10 +719,13 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public String Reserved1 { get; set; }
             public String RootCACerts { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -610,6 +736,13 @@ namespace sccmclictr.automation.policy
         public class CCM_SourceUpdateClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_SourceUpdateClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -628,6 +761,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? LocationTimeOut { get; set; }
             public UInt32? MaxRetryCount { get; set; }
@@ -638,6 +772,8 @@ namespace sccmclictr.automation.policy
             public String Reserved3 { get; set; }
             public UInt32? RetryTimeOut { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -648,6 +784,13 @@ namespace sccmclictr.automation.policy
         public class CCM_SoftwareCenterSettings : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_SoftwareCenterSettings(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -660,10 +803,13 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public Boolean? AutoInstallRequiredSoftware { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
             public Boolean? SuppressComputerActivityInPresentationMode { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -674,6 +820,13 @@ namespace sccmclictr.automation.policy
         public class CCM_SoftwareInventoryClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_SoftwareInventoryClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -687,11 +840,14 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public String Reserved1 { get; set; }
             public String Reserved2 { get; set; }
             public String Reserved3 { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -702,6 +858,13 @@ namespace sccmclictr.automation.policy
         public class CCM_TargetingSettings : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_TargetingSettings(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -720,6 +883,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? AllowUserAffinity { get; set; }
             public UInt32? AllowUserAffinityAfterMinutes { get; set; }
@@ -730,6 +894,8 @@ namespace sccmclictr.automation.policy
             public String Reserved2 { get; set; }
             public String Reserved3 { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -740,6 +906,13 @@ namespace sccmclictr.automation.policy
         public class CCM_MulticastConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_MulticastConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -752,10 +925,13 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? RetryCount { get; set; }
             public UInt32? RetryDelay { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -766,6 +942,13 @@ namespace sccmclictr.automation.policy
         public class CCM_SoftwareDistributionClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_SoftwareDistributionClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -809,6 +992,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public Boolean? ADV_RebootLogoffNotification { get; set; }
             public UInt32? ADV_RebootLogoffNotificationCountdownDuration { get; set; }
@@ -844,6 +1028,8 @@ namespace sccmclictr.automation.policy
             public UInt32? UIContentLocationTimeoutInterval { get; set; }
             public UInt32? UserPreemptionCountdown { get; set; }
             public UInt32? UserPreemptionTimeout { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -854,6 +1040,13 @@ namespace sccmclictr.automation.policy
         public class CCM_ConfigurationManagementClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_ConfigurationManagementClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -870,6 +1063,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? PerProviderTimeOut { get; set; }
             public UInt32? PerScanTimeout { get; set; }
@@ -878,6 +1072,8 @@ namespace sccmclictr.automation.policy
             public String Reserved2 { get; set; }
             public String Reserved3 { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -888,6 +1084,13 @@ namespace sccmclictr.automation.policy
         public class CCM_ClientAgentConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_ClientAgentConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -914,6 +1117,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public String BrandingTitle { get; set; }
             public UInt32? DayReminderInterval { get; set; }
@@ -932,6 +1136,8 @@ namespace sccmclictr.automation.policy
             public UInt32? SuspendBitLocker { get; set; }
             public String SWDBrandingSubTitle { get; set; }
             public UInt32? SystemRestartTurnaroundTime { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -942,6 +1148,13 @@ namespace sccmclictr.automation.policy
         public class CCM_SystemHealthClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_SystemHealthClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -965,6 +1178,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? CumulativeDownloadTimeout { get; set; }
             public UInt32? CumulativeInactivityTimeout { get; set; }
@@ -980,6 +1194,8 @@ namespace sccmclictr.automation.policy
             public String SiteCode { get; set; }
             public String SiteID { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -990,6 +1206,13 @@ namespace sccmclictr.automation.policy
         public class CCM_PowerManagementClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_PowerManagementClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -1004,12 +1227,15 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public Boolean? AllowUserToOptOutFromPowerPlan { get; set; }
             public Boolean? EnableUserIdleMonitoring { get; set; }
             public UInt32? NumberOfDaysToKeep { get; set; }
             public UInt32? NumberOfMonthsToKeep { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -1020,6 +1246,13 @@ namespace sccmclictr.automation.policy
         public class CCM_SoftwareMeteringClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_SoftwareMeteringClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -1035,6 +1268,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? MaximumUsageInstancesPerReport { get; set; }
             public UInt32? ReportTimeout { get; set; }
@@ -1042,6 +1276,8 @@ namespace sccmclictr.automation.policy
             public String Reserved2 { get; set; }
             public String Reserved3 { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -1052,6 +1288,13 @@ namespace sccmclictr.automation.policy
         public class CCM_HardwareInventoryClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_HardwareInventoryClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -1064,11 +1307,14 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public String Reserved1 { get; set; }
             public String Reserved2 { get; set; }
             public String Reserved3 { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -1079,6 +1325,13 @@ namespace sccmclictr.automation.policy
         public class CCM_RemoteTools_Policy : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_RemoteTools_Policy(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -1099,6 +1352,13 @@ namespace sccmclictr.automation.policy
         public class CCM_NetworkAccessAccount : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_NetworkAccessAccount(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -1114,6 +1374,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public String NetworkAccessPassword { get; set; }
             public String NetworkAccessUsername { get; set; }
@@ -1121,6 +1382,8 @@ namespace sccmclictr.automation.policy
             public String Reserved2 { get; set; }
             public String Reserved3 { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -1131,6 +1394,13 @@ namespace sccmclictr.automation.policy
         public class CCM_ApplicationManagementClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_ApplicationManagementClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -1145,12 +1415,15 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? ContentDownloadTimeOut { get; set; }
             public String Reserved1 { get; set; }
             public String Reserved2 { get; set; }
             public String Reserved3 { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -1161,6 +1434,13 @@ namespace sccmclictr.automation.policy
         public class CCM_OutOfBandManagementClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_OutOfBandManagementClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -1171,8 +1451,11 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -1183,6 +1466,13 @@ namespace sccmclictr.automation.policy
         public class CCM_ServiceWindow : CCM_Policy
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_ServiceWindow(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -1200,10 +1490,13 @@ namespace sccmclictr.automation.policy
             }
             
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public String Schedules { get; set; }
             public String ServiceWindowID { get; set; }
             public UInt32? ServiceWindowType { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
 
             /// <summary>
             /// Decode ScheduleID to Object of type: SMS_ST_NonRecurring, SMS_ST_RecurInterval, SMS_ST_RecurWeekly, SMS_ST_RecurMonthlyByWeekday or SMS_ST_RecurMonthlyByDate
@@ -1239,6 +1532,9 @@ namespace sccmclictr.automation.policy
         }
     }
 
+    /// <summary>
+    /// Class actualConfig.
+    /// </summary>
     public class actualConfig : baseInit
     {
         internal Runspace remoteRunspace;
@@ -1246,6 +1542,12 @@ namespace sccmclictr.automation.policy
         internal ccm baseClient;
 
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="actualConfig"/> class.
+        /// </summary>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
+        /// <param name="oClient">A CCM Client object.</param>
         public actualConfig(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
@@ -1254,6 +1556,12 @@ namespace sccmclictr.automation.policy
             baseClient = oClient;
         }
 
+        /// <summary>
+        /// Creates the service window.
+        /// </summary>
+        /// <param name="Schedules">The schedules.</param>
+        /// <param name="ServiceWindowType">Type of the service window.</param>
+        /// <returns>System.String.</returns>
         public string CreateServiceWindow(string Schedules, UInt32 ServiceWindowType)
         {
             List<PSObject> oResults = baseClient.GetObjectsFromPS(string.Format("$a = Set-WmiInstance -Class CCM_ServiceWindow -Namespace 'ROOT\\ccm\\Policy\\Machine\\ActualConfig' -PutType 'CreateOnly';$a.ServiceWindowType = {0};$a.Schedules = '{1}';$a.Put() | Out-Null;$a.ServiceWindowID", ServiceWindowType.ToString(), Schedules));
@@ -1268,6 +1576,10 @@ namespace sccmclictr.automation.policy
         }
 
 
+        /// <summary>
+        /// Gets a list of component client configurations.
+        /// </summary>
+        /// <value>A list of component client configurations.</value>
         public List<CCM_ComponentClientConfig> ComponentClientConfig
         {
             get
@@ -1287,6 +1599,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of software updates client configurations.
+        /// </summary>
+        /// <value>A list of software updates client configuration.</value>
         public List<CCM_SoftwareUpdatesClientConfig> SoftwareUpdatesClientConfig
         {
             get
@@ -1306,6 +1622,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of root ca certificates.
+        /// </summary>
+        /// <value>A list of root ca certificates.</value>
         public List<CCM_RootCACertificates> RootCACertificates
         {
             get
@@ -1325,6 +1645,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of source update client configuration.
+        /// </summary>
+        /// <value>A list of source update client configuration.</value>
         public List<CCM_SourceUpdateClientConfig> SourceUpdateClientConfig
         {
             get
@@ -1344,6 +1668,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of software center settings.
+        /// </summary>
+        /// <value>A list of software center settings.</value>
         public List<CCM_SoftwareCenterSettings> SoftwareCenterSettings
         {
             get
@@ -1363,6 +1691,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets A list of software inventory client configurations.
+        /// </summary>
+        /// <value>A list of software inventory client configurations.</value>
         public List<CCM_SoftwareInventoryClientConfig> SoftwareInventoryClientConfig
         {
             get
@@ -1382,6 +1714,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of targeting settings.
+        /// </summary>
+        /// <value>A list of targeting settings.</value>
         public List<CCM_TargetingSettings> TargetingSettings
         {
             get
@@ -1401,6 +1737,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of multicast configurations.
+        /// </summary>
+        /// <value>A list of multicast configurations.</value>
         public List<CCM_MulticastConfig> MulticastConfig
         {
             get
@@ -1420,6 +1760,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of software distribution client configuration.
+        /// </summary>
+        /// <value>A list of software distribution client configuration.</value>
         public List<CCM_SoftwareDistributionClientConfig> SoftwareDistributionClientConfig
         {
             get
@@ -1438,6 +1782,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of configuration management client configurations.
+        /// </summary>
+        /// <value>A list of configuration management client configurations.</value>
         public List<CCM_ConfigurationManagementClientConfig> ConfigurationManagementClientConfig
         {
             get
@@ -1456,6 +1804,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of client agent configurations.
+        /// </summary>
+        /// <value>A list of client agent configurations.</value>
         public List<CCM_ClientAgentConfig> ClientAgentConfig
         {
             get
@@ -1474,6 +1826,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of system health client configurations.
+        /// </summary>
+        /// <value>A list of system health client configurations.</value>
         public List<CCM_SystemHealthClientConfig> SystemHealthClientConfig
         {
             get
@@ -1492,6 +1848,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of power management client configurations.
+        /// </summary>
+        /// <value>A list of power management client configurations.</value>
         public List<CCM_PowerManagementClientConfig> PowerManagementClientConfig
         {
             get
@@ -1510,6 +1870,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of software metering client configurations.
+        /// </summary>
+        /// <value>A list of software metering client configurations.</value>
         public List<CCM_SoftwareMeteringClientConfig> SoftwareMeteringClientConfig
         {
             get
@@ -1528,6 +1892,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of hardware inventory client configurations.
+        /// </summary>
+        /// <value>A list of hardware inventory client configurations.</value>
         public List<CCM_HardwareInventoryClientConfig> HardwareInventoryClientConfig
         {
             get
@@ -1546,6 +1914,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of remote tools policies.
+        /// </summary>
+        /// <value>A list of remote tools policies.</value>
         public List<CCM_RemoteTools_Policy> RemoteTools_Policy
         {
             get
@@ -1564,6 +1936,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of network access accounts.
+        /// </summary>
+        /// <value>A list of network access accounts.</value>
         public List<CCM_NetworkAccessAccount> NetworkAccessAccount
         {
             get
@@ -1582,6 +1958,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of application management client configurations.
+        /// </summary>
+        /// <value>A list of application management client configurations.</value>
         public List<CCM_ApplicationManagementClientConfig> ApplicationManagementClientConfig
         {
             get
@@ -1600,6 +1980,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of out of band management client configurations.
+        /// </summary>
+        /// <value>A list of out of band management client configurations.</value>
         public List<CCM_OutOfBandManagementClientConfig> OutOfBandManagementClientConfig
         {
             get
@@ -1618,6 +2002,10 @@ namespace sccmclictr.automation.policy
             }
         }
 
+        /// <summary>
+        /// Gets a list of service windows.
+        /// </summary>
+        /// <value>A list of service windows.</value>
         public List<CCM_ServiceWindow> ServiceWindow
         {
             get
@@ -1642,6 +2030,13 @@ namespace sccmclictr.automation.policy
         public class CCM_Policy
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_Policy(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             {
                 remoteRunspace = RemoteRunspace;
@@ -1673,6 +2068,13 @@ namespace sccmclictr.automation.policy
         public class CCM_ComponentClientConfig : CCM_Policy
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_ComponentClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -1689,6 +2091,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             /*internal string __CLASS { get; set; }
             internal string __NAMESPACE { get; set; }
@@ -1699,6 +2102,8 @@ namespace sccmclictr.automation.policy
             internal TraceSource pSCode; */
             public String ComponentName { get; set; }
             public Boolean? Enabled { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -1709,6 +2114,13 @@ namespace sccmclictr.automation.policy
         public class CCM_SoftwareUpdatesClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_SoftwareUpdatesClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -1737,6 +2149,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? AssignmentBatchingTimeout { get; set; }
             public String BrandingSubTitle { get; set; }
@@ -1757,6 +2170,8 @@ namespace sccmclictr.automation.policy
             public UInt32? UserJobPerDPInactivityTimeout { get; set; }
             public UInt32? UserJobTotalInactivityTimeout { get; set; }
             public UInt32? WSUSLocationTimeout { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -1767,6 +2182,13 @@ namespace sccmclictr.automation.policy
         public class CCM_RootCACertificates : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_RootCACertificates(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -1779,10 +2201,13 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public String Reserved1 { get; set; }
             public String RootCACerts { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -1793,6 +2218,13 @@ namespace sccmclictr.automation.policy
         public class CCM_SourceUpdateClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_SourceUpdateClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -1811,6 +2243,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? LocationTimeOut { get; set; }
             public UInt32? MaxRetryCount { get; set; }
@@ -1821,6 +2254,8 @@ namespace sccmclictr.automation.policy
             public String Reserved3 { get; set; }
             public UInt32? RetryTimeOut { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -1831,6 +2266,13 @@ namespace sccmclictr.automation.policy
         public class CCM_SoftwareCenterSettings : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_SoftwareCenterSettings(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -1843,10 +2285,13 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public Boolean? AutoInstallRequiredSoftware { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
             public Boolean? SuppressComputerActivityInPresentationMode { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -1857,6 +2302,13 @@ namespace sccmclictr.automation.policy
         public class CCM_SoftwareInventoryClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_SoftwareInventoryClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -1870,11 +2322,14 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public String Reserved1 { get; set; }
             public String Reserved2 { get; set; }
             public String Reserved3 { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -1885,6 +2340,13 @@ namespace sccmclictr.automation.policy
         public class CCM_TargetingSettings : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_TargetingSettings(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -1903,6 +2365,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? AllowUserAffinity { get; set; }
             public UInt32? AllowUserAffinityAfterMinutes { get; set; }
@@ -1913,6 +2376,8 @@ namespace sccmclictr.automation.policy
             public String Reserved2 { get; set; }
             public String Reserved3 { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -1923,6 +2388,13 @@ namespace sccmclictr.automation.policy
         public class CCM_MulticastConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_MulticastConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -1935,10 +2407,13 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? RetryCount { get; set; }
             public UInt32? RetryDelay { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -1949,6 +2424,13 @@ namespace sccmclictr.automation.policy
         public class CCM_SoftwareDistributionClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_SoftwareDistributionClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -1992,6 +2474,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public Boolean? ADV_RebootLogoffNotification { get; set; }
             public UInt32? ADV_RebootLogoffNotificationCountdownDuration { get; set; }
@@ -2027,6 +2510,8 @@ namespace sccmclictr.automation.policy
             public UInt32? UIContentLocationTimeoutInterval { get; set; }
             public UInt32? UserPreemptionCountdown { get; set; }
             public UInt32? UserPreemptionTimeout { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -2037,6 +2522,13 @@ namespace sccmclictr.automation.policy
         public class CCM_ConfigurationManagementClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_ConfigurationManagementClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -2053,6 +2545,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? PerProviderTimeOut { get; set; }
             public UInt32? PerScanTimeout { get; set; }
@@ -2061,6 +2554,8 @@ namespace sccmclictr.automation.policy
             public String Reserved2 { get; set; }
             public String Reserved3 { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -2071,6 +2566,13 @@ namespace sccmclictr.automation.policy
         public class CCM_ClientAgentConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_ClientAgentConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -2097,6 +2599,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public String BrandingTitle { get; set; }
             public UInt32? DayReminderInterval { get; set; }
@@ -2115,6 +2618,8 @@ namespace sccmclictr.automation.policy
             public UInt32? SuspendBitLocker { get; set; }
             public String SWDBrandingSubTitle { get; set; }
             public UInt32? SystemRestartTurnaroundTime { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -2125,6 +2630,13 @@ namespace sccmclictr.automation.policy
         public class CCM_SystemHealthClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_SystemHealthClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -2148,6 +2660,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? CumulativeDownloadTimeout { get; set; }
             public UInt32? CumulativeInactivityTimeout { get; set; }
@@ -2163,6 +2676,8 @@ namespace sccmclictr.automation.policy
             public String SiteCode { get; set; }
             public String SiteID { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -2173,6 +2688,13 @@ namespace sccmclictr.automation.policy
         public class CCM_PowerManagementClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_PowerManagementClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -2187,12 +2709,15 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public Boolean? AllowUserToOptOutFromPowerPlan { get; set; }
             public Boolean? EnableUserIdleMonitoring { get; set; }
             public UInt32? NumberOfDaysToKeep { get; set; }
             public UInt32? NumberOfMonthsToKeep { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -2203,6 +2728,13 @@ namespace sccmclictr.automation.policy
         public class CCM_SoftwareMeteringClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_SoftwareMeteringClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -2218,6 +2750,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? MaximumUsageInstancesPerReport { get; set; }
             public UInt32? ReportTimeout { get; set; }
@@ -2225,6 +2758,8 @@ namespace sccmclictr.automation.policy
             public String Reserved2 { get; set; }
             public String Reserved3 { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -2235,6 +2770,13 @@ namespace sccmclictr.automation.policy
         public class CCM_HardwareInventoryClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_HardwareInventoryClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -2247,11 +2789,14 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public String Reserved1 { get; set; }
             public String Reserved2 { get; set; }
             public String Reserved3 { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -2262,6 +2807,13 @@ namespace sccmclictr.automation.policy
         public class CCM_RemoteTools_Policy : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_RemoteTools_Policy(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -2282,6 +2834,13 @@ namespace sccmclictr.automation.policy
         public class CCM_NetworkAccessAccount : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_NetworkAccessAccount(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -2297,6 +2856,7 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public String NetworkAccessPassword { get; set; }
             public String NetworkAccessUsername { get; set; }
@@ -2304,6 +2864,8 @@ namespace sccmclictr.automation.policy
             public String Reserved2 { get; set; }
             public String Reserved3 { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -2314,6 +2876,13 @@ namespace sccmclictr.automation.policy
         public class CCM_ApplicationManagementClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_ApplicationManagementClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -2328,12 +2897,15 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? ContentDownloadTimeOut { get; set; }
             public String Reserved1 { get; set; }
             public String Reserved2 { get; set; }
             public String Reserved3 { get; set; }
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -2344,6 +2916,13 @@ namespace sccmclictr.automation.policy
         public class CCM_OutOfBandManagementClientConfig : CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_OutOfBandManagementClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
                 : base(WMIObject, RemoteRunspace, PSCode, oClient)
             {
@@ -2354,8 +2933,11 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? SiteSettingsKey { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -2387,10 +2969,13 @@ namespace sccmclictr.automation.policy
 
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public String Schedules { get; set; }
             public String ServiceWindowID { get; set; }
             public UInt32? ServiceWindowType { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
 
             /// <summary>
             /// Decode ScheduleID to Object of type: SMS_ST_NonRecurring, SMS_ST_RecurInterval, SMS_ST_RecurWeekly, SMS_ST_RecurMonthlyByWeekday or SMS_ST_RecurMonthlyByDate
@@ -2426,6 +3011,9 @@ namespace sccmclictr.automation.policy
         }
     }
 
+    /// <summary>
+    /// Class localpolicy.
+    /// </summary>
     public class localpolicy
     {
         /// <summary>

@@ -31,6 +31,12 @@ namespace sccmclictr.automation.functions
         internal ccm baseClient;
 
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="health"/> class.
+        /// </summary>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
+        /// <param name="oClient">a CCM Client object.</param>
         public health(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
@@ -39,7 +45,10 @@ namespace sccmclictr.automation.functions
             baseClient = oClient;
         }
 
-        public void Dispose()
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public new void Dispose()
         {
             baseClient.Dispose();
             remoteRunspace.Dispose();
@@ -249,6 +258,8 @@ namespace sccmclictr.automation.functions
         /// </summary>
         public class ccmeval
         {
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+
             public string ID { get; set; }
             public string Description { get; set; }
             public string ResultCode { get; set; }
@@ -256,6 +267,8 @@ namespace sccmclictr.automation.functions
             public string ResultDetail { get; set; }
             public string StepDetail { get; set; }
             public string text { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
         }
     }
 }
