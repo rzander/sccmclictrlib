@@ -31,6 +31,12 @@ namespace sccmclictr.automation.functions
         internal ccm baseClient;
 
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="components"/> class.
+        /// </summary>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
+        /// <param name="oClient">A CCM Client object.</param>
         public components(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
@@ -61,6 +67,10 @@ namespace sccmclictr.automation.functions
             } 
         }
 
+        /// <summary>
+        /// Gets a list of component client configuration.
+        /// </summary>
+        /// <value>A list of component client configuration.</value>
         public List<CCM_ComponentClientConfig> ComponentClientConfig
         {
             get
@@ -86,6 +96,13 @@ namespace sccmclictr.automation.functions
         public class CCM_InstalledComponent
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_InstalledComponent"/> class.
+            /// </summary>
+            /// <param name="WMIObject">A WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
+            /// <param name="oClient">A CCM Client object.</param>
             public CCM_InstalledComponent(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             {
                 remoteRunspace = RemoteRunspace;
@@ -119,6 +136,7 @@ namespace sccmclictr.automation.functions
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             internal string __CLASS { get; set; }
             internal string __NAMESPACE { get; set; }
@@ -132,6 +150,7 @@ namespace sccmclictr.automation.functions
             public UInt32? DisplayNameResourceID { get; set; }
             public String Name { get; set; }
             public String Version { get; set; }
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
 
             /// <summary>
             /// Get the Enabled Attribute from root\ccm\Policy\Machine\ActualConfig:CCM_InstalledComponent
@@ -147,6 +166,12 @@ namespace sccmclictr.automation.functions
         public class CCM_ComponentClientConfig
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_ComponentClientConfig"/> class.
+            /// </summary>
+            /// <param name="WMIObject">A WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_ComponentClientConfig(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -162,6 +187,7 @@ namespace sccmclictr.automation.functions
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             internal string __CLASS { get; set; }
             internal string __NAMESPACE { get; set; }
@@ -172,6 +198,8 @@ namespace sccmclictr.automation.functions
             internal TraceSource pSCode;
             public String ComponentName { get; set; }
             public Boolean? Enabled { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }

@@ -12,6 +12,9 @@ using System.Management;
 
 namespace sccmclictr.automation
 {
+    /// <summary>
+    /// Class common.
+    /// </summary>
     static public class common
     {
         /// <summary>
@@ -66,6 +69,11 @@ namespace sccmclictr.automation
 
         }
 
+        /// <summary>
+        /// Gets the sha1 hash of the supplied value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
         public static string GetSha1(string value)
         {
             var data = Encoding.ASCII.GetBytes(value);
@@ -121,6 +129,11 @@ namespace sccmclictr.automation
             }
         }
 
+        /// <summary>
+        /// Converts a WMI DateTime string to a C# DateTime object
+        /// </summary>
+        /// <param name="ManagementDateTime">The WMI DateTime string.</param>
+        /// <returns>System.Nullable{DateTime}.</returns>
         public static DateTime? WMIDateToDateTime(string ManagementDateTime)
         {
             try

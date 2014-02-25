@@ -31,6 +31,12 @@ namespace sccmclictr.automation.functions
         internal ccm baseClient;
 
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="appv5"/> class.
+        /// </summary>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
+        /// <param name="oClient">A CCM client object.</param>
         public appv5(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
@@ -39,6 +45,10 @@ namespace sccmclictr.automation.functions
             baseClient = oClient;
         }
 
+        /// <summary>
+        /// Gets a list of AppV5 client applications.
+        /// </summary>
+        /// <value>A list of AppV5 client applications.</value>
         public List<AppvClientApplication> Appv5ClientApplications
         {
             get
@@ -57,6 +67,10 @@ namespace sccmclictr.automation.functions
             }
         }
 
+        /// <summary>
+        /// Gets a list of AppV5 client assets.
+        /// </summary>
+        /// <value>A list of AppV5 client assets.</value>
         public List<AppvClientAsset> Appv5AppvClientAssets
         {
             get
@@ -75,6 +89,10 @@ namespace sccmclictr.automation.functions
             }
         }
 
+        /// <summary>
+        /// Gets a list of AppV5 client connection groups.
+        /// </summary>
+        /// <value>A list of AppV5 client connection groups.</value>
         public List<AppvClientConnectionGroup> Appv5AppvClientConnectionGroups
         {
             get
@@ -93,6 +111,10 @@ namespace sccmclictr.automation.functions
             }
         }
 
+        /// <summary>
+        /// Gets a list of AppV5 client packages.
+        /// </summary>
+        /// <value>A list of AppV5 client packages.</value>
         public List<AppvClientPackage> Appv5AppvClientPackages
         {
             get
@@ -111,6 +133,10 @@ namespace sccmclictr.automation.functions
             }
         }
 
+        /// <summary>
+        /// Gets a list of AppV5 publishing servers.
+        /// </summary>
+        /// <value>A list of AppV5 publishing servers.</value>
         public List<AppvPublishingServer> Appv5AppvPublishingServers
         {
             get
@@ -135,6 +161,12 @@ namespace sccmclictr.automation.functions
         public class AppvClientApplication
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="AppvClientApplication"/> class.
+            /// </summary>
+            /// <param name="WMIObject">A WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public AppvClientApplication(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -156,6 +188,7 @@ namespace sccmclictr.automation.functions
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             internal string __CLASS { get; set; }
             internal string __NAMESPACE { get; set; }
@@ -172,6 +205,8 @@ namespace sccmclictr.automation.functions
             public String PackageVersionId { get; set; }
             public String TargetPath { get; set; }
             public String Version { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -182,6 +217,12 @@ namespace sccmclictr.automation.functions
         public class AppvClientAsset
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="AppvClientAsset"/> class.
+            /// </summary>
+            /// <param name="WMIObject">A WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public AppvClientAsset(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -213,6 +254,7 @@ namespace sccmclictr.automation.functions
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             internal string __CLASS { get; set; }
             internal string __NAMESPACE { get; set; }
@@ -239,6 +281,8 @@ namespace sccmclictr.automation.functions
             public String UpgradeCode { get; set; }
             public String VersionMajor { get; set; }
             public String VersionMinor { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -249,6 +293,12 @@ namespace sccmclictr.automation.functions
         public class AppvClientConnectionGroup
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="AppvClientConnectionGroup"/> class.
+            /// </summary>
+            /// <param name="WMIObject">A WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public AppvClientConnectionGroup(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -274,6 +324,7 @@ namespace sccmclictr.automation.functions
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             internal string __CLASS { get; set; }
             internal string __NAMESPACE { get; set; }
@@ -294,6 +345,8 @@ namespace sccmclictr.automation.functions
             public UInt32? Priority { get; set; }
             public Boolean? UserPending { get; set; }
             public String VersionId { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -304,6 +357,12 @@ namespace sccmclictr.automation.functions
         public class AppvClientPackage
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="AppvClientPackage"/> class.
+            /// </summary>
+            /// <param name="WMIObject">A WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public AppvClientPackage(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -334,6 +393,7 @@ namespace sccmclictr.automation.functions
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             internal string __CLASS { get; set; }
             internal string __NAMESPACE { get; set; }
@@ -359,6 +419,8 @@ namespace sccmclictr.automation.functions
             public Boolean? UserPending { get; set; }
             public String Version { get; set; }
             public String VersionId { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -369,6 +431,12 @@ namespace sccmclictr.automation.functions
         public class AppvPublishingServer
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="AppvPublishingServer"/> class.
+            /// </summary>
+            /// <param name="WMIObject">A WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public AppvPublishingServer(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -393,6 +461,7 @@ namespace sccmclictr.automation.functions
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             internal string __CLASS { get; set; }
             internal string __NAMESPACE { get; set; }
@@ -412,6 +481,8 @@ namespace sccmclictr.automation.functions
             public UInt32? UserRefreshInterval { get; set; }
             public String UserRefreshIntervalUnit { get; set; }
             public Boolean? UserRefreshOnLogon { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -428,6 +499,12 @@ namespace sccmclictr.automation.functions
         internal ccm baseClient;
 
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="appv4"/> class.
+        /// </summary>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
+        /// <param name="oClient">A CCM client object</param>
         public appv4(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
@@ -436,6 +513,10 @@ namespace sccmclictr.automation.functions
             baseClient = oClient;
         }
 
+        /// <summary>
+        /// Gets the appv4 applications.
+        /// </summary>
+        /// <value>The appv4 applications.</value>
         public List<Application> Appv4Applications
         {
             get
@@ -454,6 +535,10 @@ namespace sccmclictr.automation.functions
             }
         }
 
+        /// <summary>
+        /// Gets the appv4 packages.
+        /// </summary>
+        /// <value>The appv4 packages.</value>
         public List<Package> Appv4Packages
         {
             get
@@ -478,6 +563,12 @@ namespace sccmclictr.automation.functions
         public class Application
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Application"/> class.
+            /// </summary>
+            /// <param name="WMIObject">A WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public Application(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -503,6 +594,7 @@ namespace sccmclictr.automation.functions
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             internal string __CLASS { get; set; }
             internal string __NAMESPACE { get; set; }
@@ -519,6 +611,8 @@ namespace sccmclictr.automation.functions
             public String OriginalOsdPath { get; set; }
             public String PackageGUID { get; set; }
             public String Version { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -529,6 +623,12 @@ namespace sccmclictr.automation.functions
         public class Package
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Package"/> class.
+            /// </summary>
+            /// <param name="WMIObject">A WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public Package(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -554,6 +654,7 @@ namespace sccmclictr.automation.functions
             }
 
             #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             internal string __CLASS { get; set; }
             internal string __NAMESPACE { get; set; }
@@ -574,6 +675,8 @@ namespace sccmclictr.automation.functions
             public UInt64? TotalSize { get; set; }
             public String Version { get; set; }
             public String VersionGUID { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }

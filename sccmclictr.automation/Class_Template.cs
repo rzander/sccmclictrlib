@@ -31,6 +31,12 @@ namespace sccmclictr.automation.functions
         internal ccm baseClient;
 
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Class_Template"/> class.
+        /// </summary>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
+        /// <param name="oClient">A ccm client object.</param>
         public Class_Template(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
@@ -40,6 +46,10 @@ namespace sccmclictr.automation.functions
         }
 
 
+        /// <summary>
+        /// Gets the public list.
+        /// </summary>
+        /// <value>The public list.</value>
         public List<_PublicClass> PublicList
         {
             get
@@ -60,8 +70,17 @@ namespace sccmclictr.automation.functions
         }
     }
 
+    /// <summary>
+    /// Class _PublicClass.
+    /// </summary>
     public class _PublicClass
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="_PublicClass"/> class.
+        /// </summary>
+        /// <param name="WMIObject">A WMI object.</param>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
         public _PublicClass(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
         {
             remoteRunspace = RemoteRunspace;
