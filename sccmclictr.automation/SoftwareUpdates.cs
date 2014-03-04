@@ -31,6 +31,12 @@ namespace sccmclictr.automation.functions
         internal ccm baseClient;
 
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="softwareupdates"/> class.
+        /// </summary>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
+        /// <param name="oClient">A CCM Client object.</param>
         public softwareupdates(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
@@ -154,6 +160,12 @@ namespace sccmclictr.automation.functions
         public class CCM_UpdateStatus
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_UpdateStatus"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_UpdateStatus(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -197,18 +209,82 @@ namespace sccmclictr.automation.functions
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
 
+            /// <summary>
+            /// Gets or sets the article.
+            /// </summary>
+            /// <value>The article.</value>
             public String Article { get; set; }
+
+            /// <summary>
+            /// Gets or sets the bulletin.
+            /// </summary>
+            /// <value>The bulletin.</value>
             public String Bulletin { get; set; }
+
+            /// <summary>
+            /// Gets or sets the language.
+            /// </summary>
+            /// <value>The language.</value>
             public String Language { get; set; }
+
+            /// <summary>
+            /// Gets or sets the product identifier.
+            /// </summary>
+            /// <value>The product identifier.</value>
             public String ProductID { get; set; }
+
+            /// <summary>
+            /// Gets or sets the revision number.
+            /// </summary>
+            /// <value>The revision number.</value>
             public UInt32? RevisionNumber { get; set; }
+
+            /// <summary>
+            /// Gets or sets the scan time.
+            /// </summary>
+            /// <value>The scan time.</value>
             public DateTime? ScanTime { get; set; }
+
+            /// <summary>
+            /// Gets or sets the sources.
+            /// </summary>
+            /// <value>The sources.</value>
             public CCM_SourceStatus[] Sources { get; set; }
+
+            /// <summary>
+            /// Gets or sets the type of the source.
+            /// </summary>
+            /// <value>The type of the source.</value>
             public UInt32? SourceType { get; set; }
+
+            /// <summary>
+            /// Gets or sets the source unique identifier.
+            /// </summary>
+            /// <value>The source unique identifier.</value>
             public String SourceUniqueId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the source version.
+            /// </summary>
+            /// <value>The source version.</value>
             public UInt32? SourceVersion { get; set; }
+
+            /// <summary>
+            /// Gets or sets the status.
+            /// </summary>
+            /// <value>The status.</value>
             public String Status { get; set; }
+
+            /// <summary>
+            /// Gets or sets the title.
+            /// </summary>
+            /// <value>The title.</value>
             public String Title { get; set; }
+
+            /// <summary>
+            /// Gets or sets the unique identifier.
+            /// </summary>
+            /// <value>The unique identifier.</value>
             public String UniqueId { get; set; }
 
             #endregion
@@ -221,6 +297,12 @@ namespace sccmclictr.automation.functions
         public class CCM_SourceStatus
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_SourceStatus"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_SourceStatus(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -248,11 +330,41 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            /// <summary>
+            /// Gets or sets the revision number.
+            /// </summary>
+            /// <value>The revision number.</value>
             public UInt32? RevisionNumber { get; set; }
+
+            /// <summary>
+            /// Gets or sets the scan time.
+            /// </summary>
+            /// <value>The scan time.</value>
             public DateTime? ScanTime { get; set; }
+
+            /// <summary>
+            /// Gets or sets the type of the source.
+            /// </summary>
+            /// <value>The type of the source.</value>
             public UInt32? SourceType { get; set; }
+
+            /// <summary>
+            /// Gets or sets the source unique identifier.
+            /// </summary>
+            /// <value>The source unique identifier.</value>
             public String SourceUniqueId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the source version.
+            /// </summary>
+            /// <value>The source version.</value>
             public UInt32? SourceVersion { get; set; }
+
+            /// <summary>
+            /// Gets or sets the status.
+            /// </summary>
+            /// <value>The status.</value>
             public String Status { get; set; }
             #endregion
 
@@ -264,6 +376,12 @@ namespace sccmclictr.automation.functions
         public class CCM_AssignmentCompliance
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_AssignmentCompliance"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_AssignmentCompliance(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -289,9 +407,29 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            /// <summary>
+            /// Gets or sets the assignment identifier.
+            /// </summary>
+            /// <value>The assignment identifier.</value>
             public String AssignmentId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the is compliant.
+            /// </summary>
+            /// <value>The is compliant.</value>
             public Boolean? IsCompliant { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reserved.
+            /// </summary>
+            /// <value>The reserved.</value>
             public String Reserved { get; set; }
+
+            /// <summary>
+            /// Gets or sets the signature.
+            /// </summary>
+            /// <value>The signature.</value>
             public String Signature { get; set; }
             #endregion
 
@@ -303,6 +441,12 @@ namespace sccmclictr.automation.functions
         public class CCM_AssignmentJobEx1
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_AssignmentJobEx1"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_AssignmentJobEx1(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -331,12 +475,47 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            /// <summary>
+            /// Gets or sets the assignment identifier.
+            /// </summary>
+            /// <value>The assignment identifier.</value>
             public String AssignmentId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the state of the assignment.
+            /// </summary>
+            /// <value>The state of the assignment.</value>
             public UInt32? AssignmentState { get; set; }
+
+            /// <summary>
+            /// Gets or sets the state of the assignment sub.
+            /// </summary>
+            /// <value>The state of the assignment sub.</value>
             public UInt32? AssignmentSubState { get; set; }
+
+            /// <summary>
+            /// Gets or sets the assignment trigger.
+            /// </summary>
+            /// <value>The assignment trigger.</value>
             public UInt32? AssignmentTrigger { get; set; }
+
+            /// <summary>
+            /// Gets or sets the job identifier.
+            /// </summary>
+            /// <value>The job identifier.</value>
             public String JobId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the re evaluate trigger.
+            /// </summary>
+            /// <value>The re evaluate trigger.</value>
             public UInt32? ReEvaluateTrigger { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reserved.
+            /// </summary>
+            /// <value>The reserved.</value>
             public String Reserved { get; set; }
             #endregion
 
@@ -348,6 +527,12 @@ namespace sccmclictr.automation.functions
         public class CCM_ComponentState
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_ComponentState"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_ComponentState(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -378,10 +563,35 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            /// <summary>
+            /// Gets or sets the name of the component.
+            /// </summary>
+            /// <value>The name of the component.</value>
             public String ComponentName { get; set; }
+
+            /// <summary>
+            /// Gets or sets the maximum duration of the pause.
+            /// </summary>
+            /// <value>The maximum duration of the pause.</value>
             public UInt32? MaxPauseDuration { get; set; }
+
+            /// <summary>
+            /// Gets or sets the pause cookie.
+            /// </summary>
+            /// <value>The pause cookie.</value>
             public UInt32? PauseCookie { get; set; }
+
+            /// <summary>
+            /// Gets or sets the pause start time.
+            /// </summary>
+            /// <value>The pause start time.</value>
             public DateTime? PauseStartTime { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reserved.
+            /// </summary>
+            /// <value>The reserved.</value>
             public String Reserved { get; set; }
             #endregion
 
@@ -393,6 +603,12 @@ namespace sccmclictr.automation.functions
         public class CCM_DeploymentTaskEx1
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_DeploymentTaskEx1"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_DeploymentTaskEx1(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -420,11 +636,41 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            /// <summary>
+            /// Gets or sets the assignment identifier.
+            /// </summary>
+            /// <value>The assignment identifier.</value>
             public String AssignmentId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the detect job identifier.
+            /// </summary>
+            /// <value>The detect job identifier.</value>
             public String DetectJobId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the is enforced install.
+            /// </summary>
+            /// <value>The is enforced install.</value>
             public Boolean? IsEnforcedInstall { get; set; }
+
+            /// <summary>
+            /// Gets or sets the job identifier.
+            /// </summary>
+            /// <value>The job identifier.</value>
             public String JobId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the n key.
+            /// </summary>
+            /// <value>The n key.</value>
             public UInt32? nKey { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reserved.
+            /// </summary>
+            /// <value>The reserved.</value>
             public String Reserved { get; set; }
             #endregion
 
@@ -436,6 +682,12 @@ namespace sccmclictr.automation.functions
         public class CCM_SUMLocalSettings
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_SUMLocalSettings"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_SUMLocalSettings(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -460,8 +712,23 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            /// <summary>
+            /// Gets or sets the n key.
+            /// </summary>
+            /// <value>The n key.</value>
             public UInt32? nKey { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reserved.
+            /// </summary>
+            /// <value>The reserved.</value>
             public String Reserved { get; set; }
+
+            /// <summary>
+            /// Gets or sets the user experience.
+            /// </summary>
+            /// <value>The user experience.</value>
             public UInt32? UserExperience { get; set; }
             #endregion
 
@@ -473,6 +740,12 @@ namespace sccmclictr.automation.functions
         public class CCM_TargetedUpdateEx1
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_TargetedUpdateEx1"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_TargetedUpdateEx1(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -530,28 +803,142 @@ namespace sccmclictr.automation.functions
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
 
+            /// <summary>
+            /// Gets or sets the deadline.
+            /// </summary>
+            /// <value>The deadline.</value>
             public DateTime? Deadline { get; set; }
+
+            /// <summary>
+            /// Gets or sets the disable mom alerts.
+            /// </summary>
+            /// <value>The disable mom alerts.</value>
             public Boolean? DisableMomAlerts { get; set; }
+
+            /// <summary>
+            /// Gets or sets the size of the download.
+            /// </summary>
+            /// <value>The size of the download.</value>
             public UInt32? DownloadSize { get; set; }
+
+            /// <summary>
+            /// Gets or sets the dp locality.
+            /// </summary>
+            /// <value>The dp locality.</value>
             public UInt32? DPLocality { get; set; }
+
+            /// <summary>
+            /// Gets or sets the is deleted.
+            /// </summary>
+            /// <value>The is deleted.</value>
             public Boolean? IsDeleted { get; set; }
+
+            /// <summary>
+            /// Gets or sets the keep hidden.
+            /// </summary>
+            /// <value>The keep hidden.</value>
             public Boolean? KeepHidden { get; set; }
+
+            /// <summary>
+            /// Gets or sets the limit state message verbosity.
+            /// </summary>
+            /// <value>The limit state message verbosity.</value>
             public Boolean? LimitStateMessageVerbosity { get; set; }
+
+            /// <summary>
+            /// Gets or sets the override service windows.
+            /// </summary>
+            /// <value>The override service windows.</value>
             public Boolean? OverrideServiceWindows { get; set; }
+
+            /// <summary>
+            /// Gets or sets the percent complete.
+            /// </summary>
+            /// <value>The percent complete.</value>
             public UInt32? PercentComplete { get; set; }
+
+            /// <summary>
+            /// Gets or sets the raise mom alerts on failure.
+            /// </summary>
+            /// <value>The raise mom alerts on failure.</value>
             public Boolean? RaiseMomAlertsOnFailure { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reboot deadline.
+            /// </summary>
+            /// <value>The reboot deadline.</value>
             public DateTime? RebootDeadline { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reboot outside of service windows.
+            /// </summary>
+            /// <value>The reboot outside of service windows.</value>
             public Boolean? RebootOutsideOfServiceWindows { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reference assignments.
+            /// </summary>
+            /// <value>The reference assignments.</value>
             public String RefAssignments { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reserved.
+            /// </summary>
+            /// <value>The reserved.</value>
             public String Reserved { get; set; }
+
+            /// <summary>
+            /// Gets or sets the scheduled update options.
+            /// </summary>
+            /// <value>The scheduled update options.</value>
             public UInt32? ScheduledUpdateOptions { get; set; }
+
+            /// <summary>
+            /// Gets or sets the start time.
+            /// </summary>
+            /// <value>The start time.</value>
             public DateTime? StartTime { get; set; }
+
+            /// <summary>
+            /// Gets or sets the update action.
+            /// </summary>
+            /// <value>The update action.</value>
             public UInt32? UpdateAction { get; set; }
+
+            /// <summary>
+            /// Gets or sets the update applicability.
+            /// </summary>
+            /// <value>The update applicability.</value>
             public UInt32? UpdateApplicability { get; set; }
+
+            /// <summary>
+            /// Gets or sets the update identifier.
+            /// </summary>
+            /// <value>The update identifier.</value>
             public String UpdateId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the state of the update.
+            /// </summary>
+            /// <value>The state of the update.</value>
             public UInt32? UpdateState { get; set; }
+
+            /// <summary>
+            /// Gets or sets the update status.
+            /// </summary>
+            /// <value>The update status.</value>
             public UInt32? UpdateStatus { get; set; }
+
+            /// <summary>
+            /// Gets or sets the update version.
+            /// </summary>
+            /// <value>The update version.</value>
             public String UpdateVersion { get; set; }
+
+            /// <summary>
+            /// Gets or sets the user UI experience.
+            /// </summary>
+            /// <value>The user UI experience.</value>
             public Boolean? UserUIExperience { get; set; }
             #endregion
 
@@ -563,6 +950,12 @@ namespace sccmclictr.automation.functions
         public class CCM_AtomicUpdateEx1
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_AtomicUpdateEx1"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_AtomicUpdateEx1(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -594,15 +987,65 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            /// <summary>
+            /// Gets or sets the cached content in use.
+            /// </summary>
+            /// <value>The cached content in use.</value>
             public UInt32? CachedContentInUse { get; set; }
+
+            /// <summary>
+            /// Gets or sets the content priority.
+            /// </summary>
+            /// <value>The content priority.</value>
             public UInt32? ContentPriority { get; set; }
+
+            /// <summary>
+            /// Gets or sets the content request identifier.
+            /// </summary>
+            /// <value>The content request identifier.</value>
             public String ContentRequestId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the execution request identifier.
+            /// </summary>
+            /// <value>The execution request identifier.</value>
             public String ExecutionRequestId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the failure detail.
+            /// </summary>
+            /// <value>The failure detail.</value>
             public String FailureDetail { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reserved.
+            /// </summary>
+            /// <value>The reserved.</value>
             public String Reserved { get; set; }
+
+            /// <summary>
+            /// Gets or sets the update identifier.
+            /// </summary>
+            /// <value>The update identifier.</value>
             public String UpdateID { get; set; }
+
+            /// <summary>
+            /// Gets or sets the update result.
+            /// </summary>
+            /// <value>The update result.</value>
             public UInt32? UpdateResult { get; set; }
+
+            /// <summary>
+            /// Gets or sets the state of the update.
+            /// </summary>
+            /// <value>The state of the update.</value>
             public UInt32? UpdateState { get; set; }
+
+            /// <summary>
+            /// Gets or sets the update version.
+            /// </summary>
+            /// <value>The update version.</value>
             public String UpdateVersion { get; set; }
             #endregion
 
@@ -614,6 +1057,12 @@ namespace sccmclictr.automation.functions
         public class CCM_BundledUpdateEx1
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_BundledUpdateEx1"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The ps code.</param>
             public CCM_BundledUpdateEx1(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -647,17 +1096,77 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            /// <summary>
+            /// Gets or sets the cached content in use.
+            /// </summary>
+            /// <value>The cached content in use.</value>
             public UInt32? CachedContentInUse { get; set; }
+
+            /// <summary>
+            /// Gets or sets the content priority.
+            /// </summary>
+            /// <value>The content priority.</value>
             public UInt32? ContentPriority { get; set; }
+
+            /// <summary>
+            /// Gets or sets the content request identifier.
+            /// </summary>
+            /// <value>The content request identifier.</value>
             public String ContentRequestId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the execution request identifier.
+            /// </summary>
+            /// <value>The execution request identifier.</value>
             public String ExecutionRequestId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the failure detail.
+            /// </summary>
+            /// <value>The failure detail.</value>
             public String FailureDetail { get; set; }
+
+            /// <summary>
+            /// Gets or sets the is self download complete.
+            /// </summary>
+            /// <value>The is self download complete.</value>
             public Boolean? IsSelfDownloadComplete { get; set; }
+
+            /// <summary>
+            /// Gets or sets the is self installing.
+            /// </summary>
+            /// <value>The is self installing.</value>
             public Boolean? IsSelfInstalling { get; set; }
+
+            /// <summary>
+            /// Gets or sets the related updates.
+            /// </summary>
+            /// <value>The related updates.</value>
             public String RelatedUpdates { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reserved.
+            /// </summary>
+            /// <value>The reserved.</value>
             public String Reserved { get; set; }
+
+            /// <summary>
+            /// Gets or sets the update identifier.
+            /// </summary>
+            /// <value>The update identifier.</value>
             public String UpdateID { get; set; }
+
+            /// <summary>
+            /// Gets or sets the update result.
+            /// </summary>
+            /// <value>The update result.</value>
             public UInt32? UpdateResult { get; set; }
+
+            /// <summary>
+            /// Gets or sets the state of the update.
+            /// </summary>
+            /// <value>The state of the update.</value>
             public UInt32? UpdateState { get; set; }
             #endregion
 
@@ -669,6 +1178,12 @@ namespace sccmclictr.automation.functions
         public class CCM_UpdatesDeploymentJobEx1
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_UpdatesDeploymentJobEx1"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_UpdatesDeploymentJobEx1(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -701,16 +1216,71 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            /// <summary>
+            /// Gets or sets the handle for MTC.
+            /// </summary>
+            /// <value>The handle for MTC.</value>
             public String HandleForMTC { get; set; }
+
+            /// <summary>
+            /// Gets or sets the is completed.
+            /// </summary>
+            /// <value>The is completed.</value>
             public Boolean? IsCompleted { get; set; }
+
+            /// <summary>
+            /// Gets or sets the is owner of MTC task.
+            /// </summary>
+            /// <value>The is owner of MTC task.</value>
             public Boolean? IsOwnerOfMTCTask { get; set; }
+
+            /// <summary>
+            /// Gets or sets the is request sumbitted to MTC.
+            /// </summary>
+            /// <value>The is request sumbitted to MTC.</value>
             public Boolean? IsRequestSumbittedToMTC { get; set; }
+
+            /// <summary>
+            /// Gets or sets the job identifier.
+            /// </summary>
+            /// <value>The job identifier.</value>
             public String JobID { get; set; }
+
+            /// <summary>
+            /// Gets or sets the state of the job.
+            /// </summary>
+            /// <value>The state of the job.</value>
             public UInt32? JobState { get; set; }
+
+            /// <summary>
+            /// Gets or sets the type of the job.
+            /// </summary>
+            /// <value>The type of the job.</value>
             public UInt32? JobType { get; set; }
+
+            /// <summary>
+            /// Gets or sets the job updates.
+            /// </summary>
+            /// <value>The job updates.</value>
             public String JobUpdates { get; set; }
+
+            /// <summary>
+            /// Gets or sets the notify download complete.
+            /// </summary>
+            /// <value>The notify download complete.</value>
             public String NotifyDownloadComplete { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reserved.
+            /// </summary>
+            /// <value>The reserved.</value>
             public String Reserved { get; set; }
+
+            /// <summary>
+            /// Gets or sets the task priority for MTC.
+            /// </summary>
+            /// <value>The task priority for MTC.</value>
             public UInt32? TaskPriorityForMTC { get; set; }
             #endregion
 
@@ -722,6 +1292,12 @@ namespace sccmclictr.automation.functions
         public class CCM_UpdateSource
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_UpdateSource"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_UpdateSource(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -748,10 +1324,35 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            /// <summary>
+            /// Gets or sets the content location.
+            /// </summary>
+            /// <value>The content location.</value>
             public String ContentLocation { get; set; }
+
+            /// <summary>
+            /// Gets or sets the type of the content.
+            /// </summary>
+            /// <value>The type of the content.</value>
             public UInt32? ContentType { get; set; }
+
+            /// <summary>
+            /// Gets or sets the content version.
+            /// </summary>
+            /// <value>The content version.</value>
             public UInt32? ContentVersion { get; set; }
+
+            /// <summary>
+            /// Gets or sets the service identifier.
+            /// </summary>
+            /// <value>The service identifier.</value>
             public String ServiceId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the unique identifier.
+            /// </summary>
+            /// <value>The unique identifier.</value>
             public String UniqueId { get; set; }
             #endregion
 
@@ -765,6 +1366,12 @@ namespace sccmclictr.automation.functions
             internal baseInit oNewBase;
 
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_SoftwareUpdate"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_SoftwareUpdate(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
                 : base(WMIObject)
             {
@@ -802,18 +1409,71 @@ namespace sccmclictr.automation.functions
         internal PSObject WMIObject { get; set; }
         internal Runspace remoteRunspace;
         internal TraceSource pSCode; */
+
+            /// <summary>
+            /// Gets or sets the article identifier.
+            /// </summary>
+            /// <value>The article identifier.</value>
             public String ArticleID { get; set; }
+
+            /// <summary>
+            /// Gets or sets the bulletin identifier.
+            /// </summary>
+            /// <value>The bulletin identifier.</value>
             public String BulletinID { get; set; }
+
+            /// <summary>
+            /// Gets or sets the state of the compliance.
+            /// </summary>
+            /// <value>The state of the compliance.</value>
             public UInt32? ComplianceState { get; set; }
+
+            /// <summary>
+            /// Gets or sets the exclusive update.
+            /// </summary>
+            /// <value>The exclusive update.</value>
             public Boolean? ExclusiveUpdate { get; set; }
+
+            /// <summary>
+            /// Gets or sets the override service windows.
+            /// </summary>
+            /// <value>The override service windows.</value>
             public Boolean? OverrideServiceWindows { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reboot outside service windows.
+            /// </summary>
+            /// <value>The reboot outside service windows.</value>
             public Boolean? RebootOutsideServiceWindows { get; set; }
+
+            /// <summary>
+            /// Gets or sets the restart deadline.
+            /// </summary>
+            /// <value>The restart deadline.</value>
             public DateTime? RestartDeadline { get; set; }
+
+            /// <summary>
+            /// Gets or sets the update identifier.
+            /// </summary>
+            /// <value>The update identifier.</value>
             public String UpdateID { get; set; }
+
+            /// <summary>
+            /// Gets or sets the URL.
+            /// </summary>
+            /// <value>The URL.</value>
             public String URL { get; set; }
+
+            /// <summary>
+            /// Gets or sets the user UI experience.
+            /// </summary>
+            /// <value>The user UI experience.</value>
             public Boolean? UserUIExperience { get; set; }
             #endregion
 
+            /// <summary>
+            /// Installs this instance.
+            /// </summary>
             public void Install()
             {
                 string sCode = string.Format("$a = get-wmiobject -query \"SELECT * FROM CCM_SoftwareUpdate WHERE UpdateID='{0}'\" -namespace \"ROOT\\ccm\\ClientSDK\";([wmiclass]'ROOT\\ccm\\ClientSDK:CCM_SoftwareUpdatesManager').InstallUpdates($a)", this.UpdateID);
@@ -910,7 +1570,10 @@ namespace sccmclictr.automation.functions
 
         }
 
-        //Install List of Updates
+        /// <summary>
+        /// Installs the updates.
+        /// </summary>
+        /// <param name="Updates">The updates.</param>
         public void InstallUpdates(List<CCM_SoftwareUpdate> Updates)
         {
             List<string> sUpdateIDs = new List<string>();

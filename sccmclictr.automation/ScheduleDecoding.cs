@@ -5,6 +5,9 @@ using System.Text;
 
 namespace sccmclictr.automation.schedule
 {
+    /// <summary>
+    /// Class ScheduleDecoding.
+    /// </summary>
     public static class ScheduleDecoding
     {
         //Schedule ID decoding was possible because of the reverse engineering work from Jeff Huston 
@@ -560,7 +563,7 @@ namespace sccmclictr.automation.schedule
             /// <summary>
             /// Get the next start time
             /// </summary>
-            public DateTime NextStartTime
+            public new DateTime NextStartTime
             {
                 get
                 {

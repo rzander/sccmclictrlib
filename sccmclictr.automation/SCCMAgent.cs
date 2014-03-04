@@ -30,6 +30,9 @@ namespace sccmclictr.automation
         private Runspace remoteRunspace { get; set;}
         private bool ipcconnected { get; set; }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             try
@@ -58,7 +61,11 @@ namespace sccmclictr.automation
 
         //private agentProperties oAgentProperties;
         //private softwareDistribution oSoftwareDistribution;
-        
+
+        /// <summary>
+        /// Gets the connection information.
+        /// </summary>
+        /// <value>The connection information.</value>
         public WSManConnectionInfo ConnectionInfo { get { return connectionInfo; } }
 
         /// <summary>
@@ -139,6 +146,15 @@ namespace sccmclictr.automation
             initialize(hostname, username, password, wsManPort, Connect, false);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SCCMAgent"/> class.
+        /// </summary>
+        /// <param name="hostname">The hostname.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="wsManPort">The ws man port.</param>
+        /// <param name="Connect">if set to <c>true</c> [connect].</param>
+        /// <param name="encryption">if set to <c>true</c> [encryption].</param>
         public SCCMAgent(string hostname, string username, string password, int wsManPort, bool Connect, bool encryption)
         {
             initialize(hostname, username, password, wsManPort, Connect, encryption);
@@ -163,7 +179,8 @@ namespace sccmclictr.automation
         /// <param name="username">username for the connectio</param>
         /// <param name="password">password for the connection</param>
         /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
-        /// <param name="doNotConnect">Only prepare the connection, connection must be initialized with 'reconnect'</param>
+        /// <param name="bConnect">Only prepare the connection, connection must be initialized with 'reconnect'</param>
+        /// <param name="Encryption">Enable encryption'</param>
         protected void initialize(string hostname, string username, string password, int wsManPort, bool bConnect, bool Encryption)
         {
             Hostname = hostname;
@@ -217,10 +234,11 @@ namespace sccmclictr.automation
             //Client = new ccm(remoteRunspace, PSCode);
         }
 
+
         /// <summary>
-        /// Re-Connect to a predefined connection
+        /// Connects this instance.
         /// </summary>
-        /// <param name="ConnectionInfo">WSManConnectionInfo</param>
+        /// <exception cref="System.Exception">Unable to connect</exception>
         public void connect()
         {
             Runspace RemoteRunspace = null;
@@ -343,6 +361,9 @@ namespace sccmclictr.automation
 
         #endregion
 
+        /// <summary>
+        /// The client
+        /// </summary>
         public ccm Client;
         
     }

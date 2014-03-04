@@ -31,6 +31,12 @@ namespace sccmclictr.automation.functions
         internal ccm baseClient;
 
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="swcache"/> class.
+        /// </summary>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
+        /// <param name="oClient">A CCM Client object.</param>
         public swcache(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
@@ -39,6 +45,10 @@ namespace sccmclictr.automation.functions
             baseClient = oClient;
         }
 
+        /// <summary>
+        /// Gets the content of the cached.
+        /// </summary>
+        /// <value>The content of the cached.</value>
         public List<CacheInfoEx> CachedContent
         {
             get
@@ -68,7 +78,10 @@ namespace sccmclictr.automation.functions
             }
         }
 
-        //Get all Directories in the SCCM Agent Cache Folder
+        /// <summary>
+        /// Gets all Directories in the SCCM Agent Cache Folder
+        /// </summary>
+        /// <returns>List{System.String}.</returns>
         public List<string> GetAllCacheDirs()
         {
             List<string> lResult = new List<string>();
@@ -99,7 +112,10 @@ namespace sccmclictr.automation.functions
 
         #region Properties
 
-        //SCCM Agent Cache Path to store Software Packages and Updates
+        /// <summary>
+        /// Gets or sets the path where SCCM Client stores software packages and updates.
+        /// </summary>
+        /// <value>The cache path.</value>
         public string CachePath
         {
             get
@@ -112,7 +128,10 @@ namespace sccmclictr.automation.functions
             }
         }
 
-        //SCCM Agent Cache Size for Software packages and Updates
+        /// <summary>
+        /// Gets or sets the size of the cache.
+        /// </summary>
+        /// <value>The size of the cache.</value>
         public UInt32? CacheSize
         {
             get
@@ -129,7 +148,10 @@ namespace sccmclictr.automation.functions
             }
         }
 
-        //SCCM Agent Cache in use property
+        /// <summary>
+        /// Gets the inUse property.
+        /// </summary>
+        /// <value>The in use.</value>
         public Boolean? InUse
         {
             get
@@ -144,7 +166,9 @@ namespace sccmclictr.automation.functions
 
         #endregion
 
-        //Cleanup Orphaned Cache Items (Clean from WMI and Disk)
+        /// <summary>
+        /// Cleanups the orphaned cache items  (Clean from WMI and Disk).
+        /// </summary>
         public void CleanupOrphanedCacheItems()
         {
             //Cleanup Orphaned Database Entries
@@ -167,10 +191,19 @@ namespace sccmclictr.automation.functions
             }
         }
 
+        /// <summary>
+        /// Class CacheInfoEx.
+        /// </summary>
         public class CacheInfoEx
         {
             internal baseInit oNewBase;
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CacheInfoEx"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CacheInfoEx(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -209,20 +242,68 @@ namespace sccmclictr.automation.functions
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
 
+            /// <summary>
+            /// Gets or sets the cache identifier.
+            /// </summary>
+            /// <value>The cache identifier.</value>
             public String CacheId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the content identifier.
+            /// </summary>
+            /// <value>The content identifier.</value>
             public String ContentId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the size of the content.
+            /// </summary>
+            /// <value>The size of the content.</value>
             public UInt32? ContentSize { get; set; }
+
+            /// <summary>
+            /// Gets or sets the type of the content.
+            /// </summary>
+            /// <value>The type of the content.</value>
             public String ContentType { get; set; }
+
+            /// <summary>
+            /// Gets or sets the content ver.
+            /// </summary>
+            /// <value>The content ver.</value>
             public String ContentVer { get; set; }
+
+            /// <summary>
+            /// Gets or sets the last referenced.
+            /// </summary>
+            /// <value>The last referenced.</value>
             public DateTime? LastReferenced { get; set; }
+
+            /// <summary>
+            /// Gets or sets the location.
+            /// </summary>
+            /// <value>The location.</value>
             public String Location { get; set; }
+
+            /// <summary>
+            /// Gets or sets the persist in cache.
+            /// </summary>
+            /// <value>The persist in cache.</value>
             public UInt32? PersistInCache { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reference count.
+            /// </summary>
+            /// <value>The reference count.</value>
             public UInt32? ReferenceCount { get; set; }
             #endregion
 
             #region Methods
 
-            //Cehck if Folder exists
+
+            /// <summary>
+            /// Check if the Folders exists.
+            /// </summary>
+            /// <returns>Boolean.</returns>
             public Boolean FolderExists()
             {
                 string sResult = oNewBase.GetStringFromPS("Test-Path \"" + Location + "\"");
@@ -234,7 +315,9 @@ namespace sccmclictr.automation.functions
                 }
             }
 
-            //Delete Cached Item from Disk
+            /// <summary>
+            /// Deletes the cached items from the disk.
+            /// </summary>
             public void DeleteFolder()
             {
                 //Prevent deletion of all Files
@@ -244,13 +327,17 @@ namespace sccmclictr.automation.functions
                 }
             }
 
-            //Delete Cached Item from Database (WMI)
+            /// <summary>
+            /// Deletes the cached items from  the database (WMI).
+            /// </summary>
             public void DeleteFromDatabase()
             {
                 oNewBase.GetStringFromPS("[wmi]'" + __NAMESPACE + ":" + __RELPATH + "' | remove-wmiobject");
             }
 
-            //Delete Cached Item from Database (WMI) and from Disk
+            /// <summary>
+            /// Delete Cached Item from the Database (WMI) and from the Disk
+            /// </summary>
             public void Delete()
             {
                 DeleteFolder();

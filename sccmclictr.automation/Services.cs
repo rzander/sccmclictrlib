@@ -31,6 +31,12 @@ namespace sccmclictr.automation.functions
         internal ccm baseClient;
 
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="services"/> class.
+        /// </summary>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
+        /// <param name="oClient">A CCM client object.</param>
         public services(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
@@ -72,6 +78,9 @@ namespace sccmclictr.automation.functions
             }
         }
 
+        /// <summary>
+        /// Reloads this instance.
+        /// </summary>
         public void Reload()
         {
             List<Win32_Service> lCache = new List<Win32_Service>();
@@ -121,6 +130,12 @@ namespace sccmclictr.automation.functions
     public class Win32_Service : Win32_BaseService
     {
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Win32_Service"/> class.
+        /// </summary>
+        /// <param name="WMIObject">The WMI object.</param>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
         public Win32_Service(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             : base(WMIObject, RemoteRunspace, PSCode)
         {
@@ -143,6 +158,8 @@ namespace sccmclictr.automation.functions
 
         #region Properties
 
+        #pragma warning disable 1591 // Disable warnings about missing XML comments
+
         //internal string __CLASS { get; set; }
         //internal string __NAMESPACE { get; set; }
         //internal bool __INSTANCE { get; set; }
@@ -153,6 +170,9 @@ namespace sccmclictr.automation.functions
         public UInt32? CheckPoint { get; set; }
         public UInt32? ProcessId { get; set; }
         public UInt32? WaitHint { get; set; }
+
+        #pragma warning restore 1591 // Enable warnings about missing XML comments
+
         #endregion
 
         #region Methods
@@ -178,6 +198,11 @@ namespace sccmclictr.automation.functions
             
             return 0;
         }
+
+        /// <summary>
+        /// Stops the service.
+        /// </summary>
+        /// <returns>UInt32.</returns>
         public UInt32 StopService()
         {
             //Remove cached results
@@ -195,6 +220,11 @@ namespace sccmclictr.automation.functions
 
             return 0;
         }
+
+        /// <summary>
+        /// Restarts the service.
+        /// </summary>
+        /// <returns>UInt32.</returns>
         public UInt32 RestartService()
         {
             //Remove cached results
@@ -212,6 +242,11 @@ namespace sccmclictr.automation.functions
 
             return 0;
         }
+
+        /// <summary>
+        /// Pauses the service.
+        /// </summary>
+        /// <returns>UInt32.</returns>
         public UInt32 PauseService()
         {
             //Remove cached results
@@ -229,6 +264,11 @@ namespace sccmclictr.automation.functions
 
             return 0;
         }
+
+        /// <summary>
+        /// Resumes the service.
+        /// </summary>
+        /// <returns>UInt32.</returns>
         public UInt32 ResumeService()
         {
             //Remove cached results
@@ -290,6 +330,12 @@ namespace sccmclictr.automation.functions
     public class Win32_BaseService : CIM_Service
     {
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Win32_BaseService"/> class.
+        /// </summary>
+        /// <param name="WMIObject">The WMI object.</param>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
         public Win32_BaseService(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             : base(WMIObject, RemoteRunspace, PSCode)
         {
@@ -317,6 +363,8 @@ namespace sccmclictr.automation.functions
 
         #region Properties
 
+        #pragma warning disable 1591 // Disable warnings about missing XML comments
+
         //internal string __CLASS { get; set; }
         //internal string __NAMESPACE { get; set; }
         //internal bool __INSTANCE { get; set; }
@@ -336,6 +384,9 @@ namespace sccmclictr.automation.functions
         public String StartName { get; set; }
         public String State { get; set; }
         public UInt32? TagId { get; set; }
+
+        #pragma warning restore 1591 // Enable warnings about missing XML comments
+
         #endregion
 
         #region Methods
@@ -389,6 +440,12 @@ namespace sccmclictr.automation.functions
     public class CIM_Service : CIM_LogicalElement
     {
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CIM_Service"/> class.
+        /// </summary>
+        /// <param name="WMIObject">The WMI object.</param>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The ps code.</param>
         public CIM_Service(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             : base(WMIObject, RemoteRunspace, PSCode)
         {
@@ -409,6 +466,8 @@ namespace sccmclictr.automation.functions
 
         #region Properties
 
+        #pragma warning disable 1591 // Disable warnings about missing XML comments
+
         //internal string __CLASS { get; set; }
         //internal string __NAMESPACE { get; set; }
         //internal bool __INSTANCE { get; set; }
@@ -421,6 +480,9 @@ namespace sccmclictr.automation.functions
         public String StartMode { get; set; }
         public String SystemCreationClassName { get; set; }
         public String SystemName { get; set; }
+
+        #pragma warning restore 1591 // Enable warnings about missing XML comments
+
         #endregion
 
         #region Methods
@@ -443,6 +505,12 @@ namespace sccmclictr.automation.functions
     public class CIM_LogicalElement : CIM_ManagedSystemElement
     {
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CIM_LogicalElement"/> class.
+        /// </summary>
+        /// <param name="WMIObject">The WMI object.</param>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
         public CIM_LogicalElement(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             : base(WMIObject, RemoteRunspace, PSCode)
         {
@@ -457,7 +525,6 @@ namespace sccmclictr.automation.functions
         }
 
         #region Properties
-
         //internal string __CLASS { get; set; }
         //internal string __NAMESPACE { get; set; }
         //internal bool __INSTANCE { get; set; }
@@ -475,6 +542,12 @@ namespace sccmclictr.automation.functions
     public class CIM_ManagedSystemElement
     {
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CIM_ManagedSystemElement"/> class.
+        /// </summary>
+        /// <param name="WMIObject">The WMI object.</param>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
         public CIM_ManagedSystemElement(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
         {
             remoteRunspace = RemoteRunspace;
@@ -498,6 +571,8 @@ namespace sccmclictr.automation.functions
 
         #region Properties
 
+        #pragma warning disable 1591 // Disable warnings about missing XML comments
+
         internal string __CLASS { get; set; }
         internal string __NAMESPACE { get; set; }
         internal bool __INSTANCE { get; set; }
@@ -510,6 +585,9 @@ namespace sccmclictr.automation.functions
         public DateTime? InstallDate { get; set; }
         public String Name { get; set; }
         public String Status { get; set; }
+
+        #pragma warning restore 1591 // Enable warnings about missing XML comments
+
         #endregion
 
     }

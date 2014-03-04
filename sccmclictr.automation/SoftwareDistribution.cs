@@ -36,6 +36,12 @@ namespace sccmclictr.automation.functions
         internal ccm baseClient;
 
         //Constructor
+        /// <summary>
+        /// Initializes a new instance of the <see cref="softwaredistribution"/> class.
+        /// </summary>
+        /// <param name="RemoteRunspace">The remote runspace.</param>
+        /// <param name="PSCode">The PowerShell code.</param>
+        /// <param name="oClient">A CCM Client object.</param>
         public softwaredistribution(Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
             : base(RemoteRunspace, PSCode)
         {
@@ -229,6 +235,8 @@ namespace sccmclictr.automation.functions
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
 
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+
             public UInt32? ContentSize { get; set; }
             public DateTime? Deadline { get; set; }
             public String Description { get; set; }
@@ -242,12 +250,18 @@ namespace sccmclictr.automation.functions
             public String Publisher { get; set; }
             public UInt32? Type { get; set; }
 
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
+
             #endregion
 
             #region Methods
 
             #endregion
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_SoftwareBase"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
             public CCM_SoftwareBase(PSObject WMIObject)
             {
                 this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
@@ -280,13 +294,29 @@ namespace sccmclictr.automation.functions
             }
         }
 
+        /// <summary>
+        /// Class CCM_AppDeploymentType.
+        /// </summary>
         public class CCM_AppDeploymentType : CCM_SoftwareBase
         {
             #region Properties
 
+            /// <summary>
+            /// Gets or sets the allowed actions.
+            /// </summary>
+            /// <value>The allowed actions.</value>
             public String[] AllowedActions { get; set; }
+
+            /// <summary>
+            /// Gets or sets the state of the applicability.
+            /// </summary>
+            /// <value>The state of the applicability.</value>
             public String ApplicabilityState { get; set; }
 
+            /// <summary>
+            /// Gets or sets the dependencies.
+            /// </summary>
+            /// <value>The dependencies.</value>
             public CCM_AppDeploymentType[] Dependencies { get; set; }
             /*{
                 get
@@ -310,14 +340,59 @@ namespace sccmclictr.automation.functions
                 }
             } */
 
+            /// <summary>
+            /// Gets or sets the deployment report.
+            /// </summary>
+            /// <value>The deployment report.</value>
             public String DeploymentReport { get; set; }
+
+
+            /// <summary>
+            /// Gets or sets the identifier.
+            /// </summary>
+            /// <value>The identifier.</value>
             public String Id { get; set; }
+
+            /// <summary>
+            /// Gets or sets the state of the install.
+            /// </summary>
+            /// <value>The state of the install.</value>
             public String InstallState { get; set; }
+
+            /// <summary>
+            /// Gets or sets the last eval time.
+            /// </summary>
+            /// <value>The last eval time.</value>
             public DateTime? LastEvalTime { get; set; }
+
+            /// <summary>
+            /// Gets or sets the post install action.
+            /// </summary>
+            /// <value>The post install action.</value>
             public String PostInstallAction { get; set; }
+
+            /// <summary>
+            /// Gets or sets the resolved state.
+            /// </summary>
+            /// <value>The resolved state.</value>
             public String ResolvedState { get; set; }
+
+            /// <summary>
+            /// Gets or sets the number of retries remaining.
+            /// </summary>
+            /// <value>The number of retries remaining.</value>
             public UInt32? RetriesRemaining { get; set; }
+
+            /// <summary>
+            /// Gets or sets the revision.
+            /// </summary>
+            /// <value>The revision.</value>
             public String Revision { get; set; }
+
+            /// <summary>
+            /// Gets or sets the supersession state.
+            /// </summary>
+            /// <value>The supersession state.</value>
             public String SupersessionState { get; set; }
             #endregion
 
@@ -330,6 +405,10 @@ namespace sccmclictr.automation.functions
         }*/
             #endregion
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_SoftwareBase" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
             public CCM_AppDeploymentType(PSObject WMIObject)
                 : base(WMIObject)
             {
@@ -390,6 +469,8 @@ namespace sccmclictr.automation.functions
 
             #region Properties
 
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+
             public String[] AllowedActions { get; set; }
             public CCM_AppDeploymentType[] AppDTs { get; set; }
             public String ApplicabilityState { get; set; }
@@ -413,6 +494,8 @@ namespace sccmclictr.automation.functions
             public DateTime? StartTime { get; set; }
             public String SupersessionState { get; set; }
             public Boolean? UserUIExperience { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
 
             /// <summary>
             /// Transalated EvaluationState into text from MSDN (http://msdn.microsoft.com/en-us/library/jj874280.aspx)
@@ -666,10 +749,13 @@ namespace sccmclictr.automation.functions
 
             #endregion
 
+
             /// <summary>
-            /// Constructor
+            /// Initializes a new instance of the <see cref="CCM_Application"/> class.
             /// </summary>
-            /// <param name="WMIObject"></param>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_Application(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
                 : base(WMIObject)
             {
@@ -771,6 +857,10 @@ namespace sccmclictr.automation.functions
         public class CCM_Policy
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Policy"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
             public CCM_Policy(PSObject WMIObject)
             {
                 this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
@@ -801,6 +891,12 @@ namespace sccmclictr.automation.functions
             internal baseInit oNewBase;
 
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_SoftwareDistribution"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_SoftwareDistribution(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
                 : base(WMIObject)
             {
@@ -901,6 +997,8 @@ namespace sccmclictr.automation.functions
 
             #region Properties
 
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+
             public DateTime? ADV_ActiveTime { get; set; }
             public Boolean? ADV_ActiveTimeIsGMT { get; set; }
             public Boolean? ADV_ADF_Published { get; set; }
@@ -969,6 +1067,8 @@ namespace sccmclictr.automation.functions
             public String PRG_WorkingDirectory { get; set; }
 
             public PSObject _RawObject { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
 
             #endregion
 
@@ -1049,6 +1149,12 @@ namespace sccmclictr.automation.functions
         public class CCM_TaskSequence : CCM_SoftwareDistribution
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_SoftwareDistribution" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_TaskSequence(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
                 : base(WMIObject, RemoteRunspace, PSCode)
             {
@@ -1077,6 +1183,8 @@ namespace sccmclictr.automation.functions
 
             #region Properties
 
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+
             public String Reserved { get; set; }
             public String TS_BootImageID { get; set; }
             public DateTime? TS_Deadline { get; set; }
@@ -1086,6 +1194,9 @@ namespace sccmclictr.automation.functions
             public String TS_Sequence { get; set; }
             public UInt32? TS_Type { get; set; }
             public UInt32? TS_UserNotificationFlags { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
+
             #endregion
 
         }
@@ -1157,6 +1268,8 @@ namespace sccmclictr.automation.functions
 
             #region Properties
 
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+
             internal string __CLASS { get; set; }
             internal string __NAMESPACE { get; set; }
             internal bool __INSTANCE { get; set; }
@@ -1194,6 +1307,8 @@ namespace sccmclictr.automation.functions
             public Boolean? TaskSequence { get; set; }
             public String Version { get; set; }
 
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
+
             /// <summary>
             /// Transalated EvaluationState into text from MSDN (http://msdn.microsoft.com/en-us/library/jj874280.aspx)
             /// </summary>
@@ -1213,6 +1328,12 @@ namespace sccmclictr.automation.functions
         public class CCM_Scheduler_ScheduledMessage : CCM_Policy
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Scheduler_ScheduledMessage"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_Scheduler_ScheduledMessage(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
                 : base(WMIObject)
             {
@@ -1252,6 +1373,8 @@ namespace sccmclictr.automation.functions
 
             #region Properties
 
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+
             public String ActiveMessage { get; set; }
             public DateTime? ActiveTime { get; set; }
             public Boolean? ActiveTimeIsGMT { get; set; }
@@ -1268,6 +1391,9 @@ namespace sccmclictr.automation.functions
             public String[] Triggers { get; set; }
 
             public PSObject _RawObject { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
+
             #endregion
 
         }
@@ -1278,6 +1404,12 @@ namespace sccmclictr.automation.functions
         public class CCM_Scheduler_History
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_Scheduler_History"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_Scheduler_History(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -1324,6 +1456,9 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+
             public DateTime? ActivationMessageSent { get; set; }
             public Boolean? ActivationMessageSentIsGMT { get; set; }
             public DateTime? ExpirationMessageSent { get; set; }
@@ -1333,6 +1468,9 @@ namespace sccmclictr.automation.functions
             public String ScheduleID { get; set; }
             public String TriggerState { get; set; }
             public String UserSID { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
+
             #endregion
 
         }
@@ -1343,6 +1481,12 @@ namespace sccmclictr.automation.functions
         public class CCM_SoftwareUpdate : CCM_SoftwareBase
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_SoftwareUpdate"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_SoftwareUpdate(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
                 : base(WMIObject)
             {
@@ -1386,6 +1530,9 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+
             public String ArticleID { get; set; }
             public String BulletinID { get; set; }
             public UInt32? ComplianceState { get; set; }
@@ -1399,6 +1546,8 @@ namespace sccmclictr.automation.functions
             public String UpdateID { get; set; }
             public String URL { get; set; }
             public Boolean? UserUIExperience { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
 
             /// <summary>
             /// Transalated EvaluationState into text from MSDN (http://msdn.microsoft.com/en-us/library/jj874280.aspx)
@@ -1447,21 +1596,37 @@ namespace sccmclictr.automation.functions
         /// </summary>
         public static class AppPriority
         {
+            /// <summary>
+            /// Gets the low AppPriority.
+            /// </summary>
+            /// <value>The low AppPriority.</value>
             public static string Low
             {
                 get { return "Low"; }
             }
 
+            /// <summary>
+            /// Gets the normal AppPriority.
+            /// </summary>
+            /// <value>The normal AppPriority.</value>
             public static string Normal
             {
                 get { return "Normal"; }
             }
 
+            /// <summary>
+            /// Gets the high AppPriority.
+            /// </summary>
+            /// <value>The high AppPriority.</value>
             public static string High
             {
                 get { return "High"; }
             }
 
+            /// <summary>
+            /// Gets the foreground AppPriority.
+            /// </summary>
+            /// <value>The foreground AppPriority.</value>
             public static string Foreground
             {
                 get { return "Foreground"; }
@@ -1473,16 +1638,28 @@ namespace sccmclictr.automation.functions
         /// </summary>
         public static class AppEnforcePreference
         {
+            /// <summary>
+            /// Gets the immediate AppEnforcePreference.
+            /// </summary>
+            /// <value>The immediate AppEnforcePreference.</value>
             public static UInt32 Immediate
             {
                 get { return 0; }
             }
 
+            /// <summary>
+            /// Gets the non business hours AppEnforcePreference.
+            /// </summary>
+            /// <value>The non business hours AppEnforcePreference.</value>
             public static UInt32 NonBusinessHours
             {
                 get { return 1; }
             }
 
+            /// <summary>
+            /// Gets the admin schedule AppEnforcePreference.
+            /// </summary>
+            /// <value>The admin schedule AppEnforcePreference.</value>
             public static UInt32 AdminSchedule
             {
                 get { return 2; }
@@ -1501,6 +1678,8 @@ namespace sccmclictr.automation.functions
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
 
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+
             public String _ProgramID { get; set; }
             public String _State { get; set; }
             public DateTime? _RunStartTime { get; set; }
@@ -1509,6 +1688,14 @@ namespace sccmclictr.automation.functions
             public string UserID { get; set; }
             public string PackageID { get; set; }
 
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="REG_ExecutionHistory"/> class.
+            /// </summary>
+            /// <param name="RegObject">The reg object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public REG_ExecutionHistory(PSObject RegObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -1564,15 +1751,57 @@ namespace sccmclictr.automation.functions
 
         }
 
+        /// <summary>
+        /// Class SoftwareStatus.
+        /// </summary>
         public class SoftwareStatus
         {
+            /// <summary>
+            /// Gets or sets the SoftwareStatus icon.
+            /// </summary>
+            /// <value>The SoftwareStatus icon.</value>
             public string Icon { get; set; }
+
+            /// <summary>
+            /// Gets or sets the SoftwareStatus name.
+            /// </summary>
+            /// <value>The SoftwareStatus name.</value>
             public string Name { get; set; }
+
+            /// <summary>
+            /// Gets or sets the SoftwareStatus type.
+            /// </summary>
+            /// <value>The SoftwareStatus type.</value>
             public string Type { get; set; }
+
+            /// <summary>
+            /// Gets or sets the SoftwareStatus publisher.
+            /// </summary>
+            /// <value>The SoftwareStatus publisher.</value>
             public string Publisher { get; set; }
+
+            /// <summary>
+            /// Gets or sets the SoftwareStatus availability.
+            /// </summary>
+            /// <value>The SoftwareStatus availability.</value>
             public DateTime? AvailableAfter { get; set; }
+
+            /// <summary>
+            /// Gets or sets the SoftwareStatus status.
+            /// </summary>
+            /// <value>The SoftwareStatus status.</value>
             public string Status { get; set; }
+
+            /// <summary>
+            /// Gets or sets the SoftwareStatus percent complete.
+            /// </summary>
+            /// <value>The SoftwareStatus percent complete.</value>
             public UInt32 PercentComplete { get; set; }
+
+            /// <summary>
+            /// Gets or sets the SoftwareStatus error code.
+            /// </summary>
+            /// <value>The SoftwareStatus error code.</value>
             public UInt32 ErrorCode { get; set; }
 
             private CCM_SoftwareBase _rawObject { get; set; }
@@ -1581,6 +1810,12 @@ namespace sccmclictr.automation.functions
             internal TraceSource pSCode;
             internal baseInit oNewBase;
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="SoftwareStatus"/> class.
+            /// </summary>
+            /// <param name="SWObject">The sw object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public SoftwareStatus(PSObject SWObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 try
@@ -1874,6 +2109,12 @@ namespace sccmclictr.automation.functions
         public class Synclet
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Synclet"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public Synclet(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -1896,6 +2137,11 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            /// <summary>
+            /// Gets or sets the name of the class.
+            /// </summary>
+            /// <value>The name of the class.</value>
             public String ClassName { get; set; }
             #endregion
 
@@ -1907,6 +2153,12 @@ namespace sccmclictr.automation.functions
         public class CCM_HandlerSynclet : Synclet
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Synclet" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_HandlerSynclet(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
                 : base(WMIObject, RemoteRunspace, PSCode)
             {
@@ -1935,12 +2187,18 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+
             public String ActionType { get; set; }
             public String AppDeliveryTypeId { get; set; }
             public String ExecutionContext { get; set; }
             public String RequiresLogOn { get; set; }
             public String Reserved { get; set; }
             public UInt32? Revision { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
+
             #endregion
 
         }
@@ -1952,6 +2210,12 @@ namespace sccmclictr.automation.functions
         public class CCM_LocalInstallationSynclet : CCM_HandlerSynclet
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Synclet" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_LocalInstallationSynclet(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
                 : base(WMIObject, RemoteRunspace, PSCode)
             {
@@ -1989,6 +2253,9 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+
             public String AllowedTarget { get; set; }
             public UInt32? ExecuteTime { get; set; }
             public UInt32?[] FastRetryExitCodes { get; set; }
@@ -2004,6 +2271,9 @@ namespace sccmclictr.automation.functions
             public UInt32?[] SuccessExitCodes { get; set; }
             public String UserInteractionMode { get; set; }
             public String WorkingDirectory { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
+
             #endregion
 
         }
@@ -2015,6 +2285,12 @@ namespace sccmclictr.automation.functions
         public class CCM_AppEnforceStatus
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_AppEnforceStatus"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_AppEnforceStatus(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -2041,11 +2317,17 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+
             public String AppDeliveryTypeId { get; set; }
             public String ExecutionStatus { get; set; }
             public UInt32? ExitCode { get; set; }
             public CCM_AppReconnectData_Base ReconnectData { get; set; }
             public UInt32? Revision { get; set; }
+
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
+
             #endregion
 
         }
@@ -2057,6 +2339,12 @@ namespace sccmclictr.automation.functions
         public class CCM_AppReconnectData_Base
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_AppReconnectData_Base"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_AppReconnectData_Base(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -2081,8 +2369,23 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            /// <summary>
+            /// Gets or sets the application delivery type identifier.
+            /// </summary>
+            /// <value>The application delivery type identifier.</value>
             public String AppDeliveryTypeId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the revision.
+            /// </summary>
+            /// <value>The revision.</value>
             public UInt32? Revision { get; set; }
+
+            /// <summary>
+            /// Gets or sets the user sid.
+            /// </summary>
+            /// <value>The user sid.</value>
             public String UserSid { get; set; }
             #endregion
 
@@ -2095,6 +2398,12 @@ namespace sccmclictr.automation.functions
         public class CCM_AppDeliveryType
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_AppDeliveryType"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_AppDeliveryType(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -2120,9 +2429,29 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            /// <summary>
+            /// Gets or sets the application delivery type identifier.
+            /// </summary>
+            /// <value>The application delivery type identifier.</value>
             public String AppDeliveryTypeId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the application identifier.
+            /// </summary>
+            /// <value>The application identifier.</value>
             public String AppId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the type of the host.
+            /// </summary>
+            /// <value>The type of the host.</value>
             public String HostType { get; set; }
+
+            /// <summary>
+            /// Gets or sets the revision.
+            /// </summary>
+            /// <value>The revision.</value>
             public UInt32? Revision { get; set; }
             #endregion
 
@@ -2155,6 +2484,12 @@ namespace sccmclictr.automation.functions
         public class CCM_AppDeliveryTypeSynclet : Synclet
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Synclet" /> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_AppDeliveryTypeSynclet(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode) : base(WMIObject, RemoteRunspace, PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -2184,13 +2519,53 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            /// <summary>
+            /// Gets or sets the application delivery type identifier.
+            /// </summary>
+            /// <value>The application delivery type identifier.</value>
             public String AppDeliveryTypeId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the name of the application delivery type.
+            /// </summary>
+            /// <value>The name of the application delivery type.</value>
             public String AppDeliveryTypeName { get; set; }
+
+            /// <summary>
+            /// Gets or sets the application identifier.
+            /// </summary>
+            /// <value>The application identifier.</value>
             public String AppId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the disc action.
+            /// </summary>
+            /// <value>The disc action.</value>
             public CCM_AppAction DiscAction { get; set; }
+
+            /// <summary>
+            /// Gets or sets the type of the host.
+            /// </summary>
+            /// <value>The type of the host.</value>
             public String HostType { get; set; }
+
+            /// <summary>
+            /// Gets or sets the install action.
+            /// </summary>
+            /// <value>The install action.</value>
             public CCM_AppAction InstallAction { get; set; }
+
+            /// <summary>
+            /// Gets or sets the revision.
+            /// </summary>
+            /// <value>The revision.</value>
             public UInt32? Revision { get; set; }
+
+            /// <summary>
+            /// Gets or sets the uninstall action.
+            /// </summary>
+            /// <value>The uninstall action.</value>
             public CCM_AppAction UninstallAction { get; set; }
             #endregion
 
@@ -2202,6 +2577,12 @@ namespace sccmclictr.automation.functions
         public class CCM_AppAction
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="CCM_AppAction"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public CCM_AppAction(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -2226,8 +2607,23 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            /// <summary>
+            /// Gets or sets the type of the action.
+            /// </summary>
+            /// <value>The type of the action.</value>
             public String ActionType { get; set; }
+
+            /// <summary>
+            /// Gets or sets the content.
+            /// </summary>
+            /// <value>The content.</value>
             public ContentInfo Content { get; set; }
+
+            /// <summary>
+            /// Gets or sets the name of the handler.
+            /// </summary>
+            /// <value>The name of the handler.</value>
             public String HandlerName { get; set; }
             #endregion
 
@@ -2239,6 +2635,12 @@ namespace sccmclictr.automation.functions
         public class ContentInfo
         {
             //Constructor
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ContentInfo"/> class.
+            /// </summary>
+            /// <param name="WMIObject">The WMI object.</param>
+            /// <param name="RemoteRunspace">The remote runspace.</param>
+            /// <param name="PSCode">The PowerShell code.</param>
             public ContentInfo(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
@@ -2262,7 +2664,17 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            /// <summary>
+            /// Gets or sets the content identifier.
+            /// </summary>
+            /// <value>The content identifier.</value>
             public String ContentId { get; set; }
+
+            /// <summary>
+            /// Gets or sets the content version.
+            /// </summary>
+            /// <value>The content version.</value>
             public String ContentVersion { get; set; }
             #endregion
 
