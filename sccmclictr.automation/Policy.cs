@@ -24,8 +24,8 @@ using System.Xml;
 namespace sccmclictr.automation.policy
 {
     /// <summary>
-    /// SCCM Requested Policy
-    /// </summary>s
+    /// SCCM Requested Policy.
+    /// </summary>
     public class requestedConfig : baseInit
     {
         internal Runspace remoteRunspace;
@@ -564,16 +564,45 @@ namespace sccmclictr.automation.policy
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
 
-            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
+
+            /// <summary>
+            /// Gets or sets the policy identifier.
+            /// </summary>
+            /// <value>Unique ID of the policy.</value>
             public String PolicyID { get; set; }
+
+            /// <summary>
+            /// Gets or sets the policy instance identifier.
+            /// </summary>
+            /// <value>The policy instance identifier.</value>
             public String PolicyInstanceID { get; set; }
+
+            /// <summary>
+            /// Gets or sets the policy precedence.
+            /// </summary>
+            /// <value>The policy precedence.</value>
             public UInt32? PolicyPrecedence { get; set; }
+
+            /// <summary>
+            /// Gets or sets the policy rule identifier.
+            /// </summary>
+            /// <value>Unique ID of the rule used to create the policy.</value>
             public String PolicyRuleID { get; set; }
+
+            /// <summary>
+            /// Gets or sets the policy source.
+            /// </summary>
+            /// <value>The policy source.</value>
             public String PolicySource { get; set; }
+
+            /// <summary>
+            /// Gets or sets the policy version.
+            /// </summary>
+            /// <value>The policy version.</value>
             public String PolicyVersion { get; set; }
 
-            #pragma warning restore 1591 // Enable warnings about missing XML comments
+
             #endregion
 
         }
@@ -616,12 +645,20 @@ namespace sccmclictr.automation.policy
             internal Runspace remoteRunspace;
             internal TraceSource pSCode; */
 
-            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
+            /// <summary>
+            /// Gets or sets the name of the component.
+            /// </summary>
+            /// <value>The name of the client component.</value>
             public String ComponentName { get; set; }
+
+            /// <summary>
+            /// Gets or sets the enabled.
+            /// </summary>
+            /// <value>Shows weather the client component is enabled or not</value>
             public Boolean? Enabled { get; set; }
 
-            #pragma warning restore 1591 // Enable warnings about missing XML comments
+
             #endregion
 
         }
@@ -992,44 +1029,211 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
-            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
+            /// <summary>
+            /// Gets or sets the advert reboot/logoff notification flag.
+            /// </summary>
+            /// <value>If TRUE a notification countdown timer will be shown telling user they will be logged off or the computer will be rebooted.</value>
             public Boolean? ADV_RebootLogoffNotification { get; set; }
+
+            /// <summary>
+            /// Gets or sets the duration of the advert reboot/logoff notification countdown.
+            /// </summary>
+            /// <value>The duration in seconds of the reboot/logoff notification countdown.</value>
             public UInt32? ADV_RebootLogoffNotificationCountdownDuration { get; set; }
+
+            /// <summary>
+            /// Gets or sets the advert reboot/logoff notification final window.
+            /// </summary>
+            /// <value>The duration in seconds of the final reboot/logoff notification countdown.</value>
             public UInt32? ADV_RebootLogoffNotificationFinalWindow { get; set; }
+
+            /// <summary>
+            /// Gets or sets the duration of the advert run notification countdown.
+            /// </summary>
+            /// <value>The duration in seconds of the advert run notification countdown.</value>
             public UInt32? ADV_RunNotificationCountdownDuration { get; set; }
+
+            /// <summary>
+            /// Gets or sets the duration that an advert appears in the whats new section.
+            /// </summary>
+            /// <value>The duration in days that a advert appears in the Whats new section.</value>
             public UInt32? ADV_WhatsNewDuration { get; set; }
+
+            /// <summary>
+            /// Gets or sets the cache content timeout.
+            /// </summary>
+            /// <value>The cache content timeout in seconds. After this period content can be deleted.</value>
             public UInt32? CacheContentTimeout { get; set; }
+
+            /// <summary>
+            /// Gets or sets the cache space failure retry count.
+            /// </summary>
+            /// <value>The number of times to retry caching content if it fails due to space restrictions.</value>
             public UInt32? CacheSpaceFailureRetryCount { get; set; }
+
+            /// <summary>
+            /// Gets or sets the cache space failure retry interval.
+            /// </summary>
+            /// <value>The time in seconds to wait before retrying to cache content that previous failed.</value>
             public UInt32? CacheSpaceFailureRetryInterval { get; set; }
+
+            /// <summary>
+            /// Gets or sets the minimum duration the content should be available in the cache.
+            /// </summary>
+            /// <value>The minimum duration in seconds that the content should be available in the cache.</value>
             public UInt32? CacheTombstoneContentMinDuration { get; set; }
+
+            /// <summary>
+            /// Gets or sets the content location timeout interval.
+            /// </summary>
+            /// <value>The maximum time in seconds that the client should search for content locations.</value>
             public UInt32? ContentLocationTimeoutInterval { get; set; }
+
+            /// <summary>
+            /// Gets or sets the content location timeout retry count.
+            /// </summary>
+            /// <value>The maximum number of times that the client should search for content locations.</value>
             public UInt32? ContentLocationTimeoutRetryCount { get; set; }
+
+            /// <summary>
+            /// Gets or sets the default duration of the program.
+            /// </summary>
+            /// <value>The default duration that the program can run for.</value>
             public UInt32? DefaultMaxDuration { get; set; }
+
+            /// <summary>
+            /// Gets or sets the display new program notification.
+            /// </summary>
+            /// <value>If TRUE notify the user that a new program is available.</value>
             public Boolean? DisplayNewProgramNotification { get; set; }
+
+            /// <summary>
+            /// Gets or sets the execution failure retry count.
+            /// </summary>
+            /// <value>The number of times to retry running the program if it previously failed.</value>
             public UInt32? ExecutionFailureRetryCount { get; set; }
+
+            /// <summary>
+            /// Gets or sets the execution failure retry error codes.
+            /// </summary>
+            /// <value>The error codes that will trigger a retry. refer to: http://msdn.microsoft.com/en-us/library/cc143632.aspx for the list of error codes</value>
             public UInt32?[] ExecutionFailureRetryErrorCodes { get; set; }
+
+            /// <summary>
+            /// Gets or sets the execution failure retry interval.
+            /// </summary>
+            /// <value>The execution failure retry interval.</value>
             public UInt32? ExecutionFailureRetryInterval { get; set; }
+
+            /// <summary>
+            /// Gets or sets the lock settings.
+            /// </summary>
+            /// <value>If TRUE site settings cannot be overridden.</value>
             public Boolean? LockSettings { get; set; }
+
+            /// <summary>
+            /// Gets or sets the logoff return codes.
+            /// </summary>
+            /// <value>Array of return codes that if returned by a program signals that a logoff is required.</value>
             public UInt32?[] LogoffReturnCodes { get; set; }
+
+            /// <summary>
+            /// Gets or sets the network access account password.
+            /// </summary>
+            /// <value>The network access account password.</value>
             public String NetworkAccessPassword { get; set; }
+
+            /// <summary>
+            /// Gets or sets the network access account username.
+            /// </summary>
+            /// <value>The network access account username.</value>
             public String NetworkAccessUsername { get; set; }
+
+            /// <summary>
+            /// Gets or sets the network failure retry count.
+            /// </summary>
+            /// <value>The number of times to try connecting to the network.</value>
             public UInt32? NetworkFailureRetryCount { get; set; }
+
+            /// <summary>
+            /// Gets or sets the network failure retry interval.
+            /// </summary>
+            /// <value>The time in seconds between trying to connect to the network.</value>
             public UInt32? NetworkFailureRetryInterval { get; set; }
+
+            /// <summary>
+            /// Gets or sets the new program notification UI interface.
+            /// </summary>
+            /// <value>The new program notification UI interface. Either ARP or RAP. This is the interface that is displayed when the notification ballon is clicked.</value>
             public String NewProgramNotificationUI { get; set; }
+
+            /// <summary>
+            /// Gets or sets the program run notification.
+            /// </summary>
+            /// <value>If TRUE signifys that the client will display a countdown notification.</value>
             public Boolean? PRG_PRF_RunNotification { get; set; }
+
+            /// <summary>
+            /// Gets or sets the reboot return codes.
+            /// </summary>
+            /// <value>An array of return codes that if a program returns signifies that a reboot is required.</value>
             public UInt32?[] RebootReturnCodes { get; set; }
+
+            /// <summary>
+            /// Gets or sets reserved.
+            /// </summary>
+            /// <value>Reserved.</value>
             public String Reserved { get; set; }
+
+            /// <summary>
+            /// Gets or sets reserved1.
+            /// </summary>
+            /// <value>Reserved1.</value>
             public String Reserved1 { get; set; }
+
+            /// <summary>
+            /// Gets or sets reserved2.
+            /// </summary>
+            /// <value>Reserved2.</value>
             public String Reserved2 { get; set; }
+
+            /// <summary>
+            /// Gets or sets reserved3.
+            /// </summary>
+            /// <value>Reserved3.</value>
             public String Reserved3 { get; set; }
+
+            /// <summary>
+            /// Gets or sets the site settings key.
+            /// </summary>
+            /// <value>The site settings key.</value>
             public UInt32? SiteSettingsKey { get; set; }
+
+            /// <summary>
+            /// Gets or sets the success return codes.
+            /// </summary>
+            /// <value>An array of return codes that if a program returns signifies that a the program installed successfully.</value>
             public UInt32?[] SuccessReturnCodes { get; set; }
+
+            /// <summary>
+            /// Gets or sets the UI content location timeout interval.
+            /// </summary>
+            /// <value>The UI content location timeout interval.</value>
             public UInt32? UIContentLocationTimeoutInterval { get; set; }
+
+            /// <summary>
+            /// Gets or sets the user preemption countdown.
+            /// </summary>
+            /// <value>The user preemption countdown.</value>
             public UInt32? UserPreemptionCountdown { get; set; }
+
+            /// <summary>
+            /// Gets or sets the user preemption timeout.
+            /// </summary>
+            /// <value>The user preemption timeout.</value>
             public UInt32? UserPreemptionTimeout { get; set; }
 
-            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }
@@ -1374,16 +1578,43 @@ namespace sccmclictr.automation.policy
             }
 
             #region Properties
-            #pragma warning disable 1591 // Disable warnings about missing XML comments
 
+            /// <summary>
+            /// Gets or sets the network access account password.
+            /// </summary>
+            /// <value>The network access account password.</value>
             public String NetworkAccessPassword { get; set; }
+
+            /// <summary>
+            /// Gets or sets the network access account username.
+            /// </summary>
+            /// <value>The network access account username.</value>
             public String NetworkAccessUsername { get; set; }
+
+            /// <summary>
+            /// Gets or sets reserved1.
+            /// </summary>
+            /// <value>Reserved1.</value>
             public String Reserved1 { get; set; }
+
+            /// <summary>
+            /// Gets or sets reserved2.
+            /// </summary>
+            /// <value>Reserved2.</value>
             public String Reserved2 { get; set; }
+
+            /// <summary>
+            /// Gets or sets reserved3.
+            /// </summary>
+            /// <value>Reserved3.</value>
             public String Reserved3 { get; set; }
+
+            /// <summary>
+            /// Gets or sets the site settings key.
+            /// </summary>
+            /// <value>The site settings key.</value>
             public UInt32? SiteSettingsKey { get; set; }
 
-            #pragma warning restore 1591 // Enable warnings about missing XML comments
             #endregion
 
         }

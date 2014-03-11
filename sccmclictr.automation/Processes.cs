@@ -423,7 +423,7 @@ namespace sccmclictr.automation.functions
         #region Methods
 
         /// <summary>
-        /// Terminates this instance.
+        /// Terminates a process and all of its threads.
         /// </summary>
         /// <returns>UInt32.</returns>
         public UInt32 Terminate()
