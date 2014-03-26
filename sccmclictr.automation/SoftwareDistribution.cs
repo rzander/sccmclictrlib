@@ -1080,19 +1080,26 @@ namespace sccmclictr.automation.functions
             /// <returns></returns>
             public CCM_Scheduler_ScheduledMessage _ScheduledMessage()
             {
-                XmlDocument xDoc = new XmlDocument();
-                xDoc.LoadXml(PRG_Requirements);
-                string sSchedID = xDoc.SelectSingleNode("/SWDReserved/ScheduledMessageID").InnerText.ToString();
-                foreach (PSObject oObj in oNewBase.GetObjects(WMIObject.Properties["__NAMESPACE"].Value.ToString(), "SELECT * FROM CCM_Scheduler_ScheduledMessage WHERE ScheduledMessageID='" + sSchedID + "'"))
+                try
                 {
-                    try
+                    XmlDocument xDoc = new XmlDocument();
+                    xDoc.LoadXml(PRG_Requirements);
+                    string sSchedID = xDoc.SelectSingleNode("/SWDReserved/ScheduledMessageID").InnerText.ToString();
+                    foreach (PSObject oObj in oNewBase.GetObjects(WMIObject.Properties["__NAMESPACE"].Value.ToString(), "SELECT * FROM CCM_Scheduler_ScheduledMessage WHERE ScheduledMessageID='" + sSchedID + "'"))
                     {
-                        CCM_Scheduler_ScheduledMessage oMsg = new CCM_Scheduler_ScheduledMessage(oObj, remoteRunspace, pSCode);
-                        oMsg.remoteRunspace = remoteRunspace;
-                        oMsg.pSCode = pSCode;
-                        return oMsg;
+                        try
+                        {
+                            CCM_Scheduler_ScheduledMessage oMsg = new CCM_Scheduler_ScheduledMessage(oObj, remoteRunspace, pSCode);
+                            oMsg.remoteRunspace = remoteRunspace;
+                            oMsg.pSCode = pSCode;
+                            return oMsg;
+                        }
+                        catch { }
                     }
-                    catch { }
+                }
+                catch(Exception ex)
+                {
+                    Trace.TraceError(ex.Message);
                 }
                 return null;
             }
@@ -1102,41 +1109,59 @@ namespace sccmclictr.automation.functions
             /// </summary>
             public void TriggerSchedule(Boolean enforce)
             {
-                string sSchedule = _ScheduledMessage().ScheduledMessageID;
-
                 try
                 {
+                    string sSchedule = _ScheduledMessage().ScheduledMessageID;
+
                     if (enforce)
                     {
                         string sPrgReq = PRG_Requirements;
+
                         sPrgReq = sPrgReq.Replace("<OverrideServiceWindows>FALSE</OverrideServiceWindows>", "<OverrideServiceWindows>TRUE</OverrideServiceWindows>");
+                        string sPreReq2 = sPrgReq;
                         sPrgReq = sPrgReq.Replace("\r", "");
                         sPrgReq = sPrgReq.Replace("\n", "");
                         sPrgReq = sPrgReq.Replace("\t", "");
-                        oNewBase.SetProperty(this.__NAMESPACE + ":" + this.__RELPATH.Replace("\"", "'"), "ADV_RepeatRunBehavior", "'RerunAlways'");
-                        oNewBase.SetProperty(this.__NAMESPACE + ":" + this.__RELPATH.Replace("\"", "'"), "ADV_MandatoryAssignments", "$True");
+                        //sPrgReq = sPrgReq.Replace("\"", "\"\"");
+                        sPrgReq = sPrgReq.Replace("\'", "\'\'");
+
+                        try
+                        {
+                            oNewBase.SetProperty(this.__NAMESPACE + ":" + this.__RELPATH.Replace("\"", "'"), "ADV_RepeatRunBehavior", "'RerunAlways'");
+                        }
+                        catch { }
+                        try
+                        {
+                            oNewBase.SetProperty(this.__NAMESPACE + ":" + this.__RELPATH.Replace("\"", "'"), "ADV_MandatoryAssignments", "$True");
+                        }
+                        catch { }
                         try
                         {
                             oNewBase.SetProperty(this.__NAMESPACE + ":" + this.__RELPATH.Replace("\"", "'"), "PRG_Requirements", "'" + sPrgReq + "'");
                         }
-                        catch { }
+                        catch (Exception ex)
+                        {
+                            Trace.TraceError(ex.Message);
+                        }
 
                         this.ADV_RepeatRunBehavior = "RerunAlways";
                         this.ADV_MandatoryAssignments = true;
-                        this.PRG_Requirements = sPrgReq;
+                        this.PRG_Requirements = sPreReq2;
 
                         //Evaluate machine policy...
                         //oNewBase.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000022}'", true);
 
-                        //Wait 2s and hope that to policy is updated...
-                        //System.Threading.Thread.Sleep(2000);
+                        //Wait 0.5s and hope that to policy is updated...
+                        System.Threading.Thread.Sleep(500);
 
                     }
+                    //this.oNewBase.CallClassMethod(@"root\ccm\ClientSDK:CCM_ProgramsManager", "ExecuteProgram", "'" + PRG_ProgramID + "', '" + PKG_PackageID + "'");
+                    this.oNewBase.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'" + sSchedule + "'");
                 }
-                catch { }
-
-                //this.oNewBase.CallClassMethod(@"root\ccm\ClientSDK:CCM_ProgramsManager", "ExecuteProgram", "'" + PRG_ProgramID + "', '" + PKG_PackageID + "'");
-                this.oNewBase.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'" + sSchedule + "'");
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.Message);
+                }
             }
 
             #endregion
@@ -2079,6 +2104,7 @@ namespace sccmclictr.automation.functions
                             default:
                                 Type = "Unknown";
                                 Icon = "";
+                                Status = "";
                                 break;
                         }
                     }
