@@ -922,7 +922,9 @@ namespace sccmclictr.automation.functions
         {
             try
             {
-                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000123}'");
+                //WMI Schedule does not exist: base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000123}'");
+                //Using COM Object instead of WMI
+                base.GetObjectsFromPS("((New-Object -comobject \"CPApplet.CPAppletMgr\").GetClientActions() | Where-Object { $_.ActionID -eq '{00000000-0000-0000-0000-000000000123}' }).PerformAction()", true);
             }
             catch
             {
