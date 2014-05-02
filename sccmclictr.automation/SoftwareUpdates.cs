@@ -52,8 +52,22 @@ namespace sccmclictr.automation.functions
         {
             get
             {
+                //retrun cached results
+                return GetUpdateStatus(false);
+            }
+        }
+
+        /// <summary>
+        /// Get all known Software Updates with status
+        /// </summary>
+        /// <param name="reLoad">true = force reload; false = use cached results</param>
+        /// <returns></returns>
+        public List<CCM_UpdateStatus> GetUpdateStatus(bool reLoad)
+        {
                 List<CCM_UpdateStatus> lCache = new List<CCM_UpdateStatus>();
-                List<PSObject> oObj = GetObjects(@"root\ccm\SoftwareUpdates\UpdatesStore", "SELECT * FROM CCM_UpdateStatus");
+
+            //Cache for 2min
+            List<PSObject> oObj = GetObjects(@"root\ccm\SoftwareUpdates\UpdatesStore", "SELECT * FROM CCM_UpdateStatus", reLoad, new TimeSpan(0, 2, 0));
                 foreach (PSObject PSObj in oObj)
                 {
                     CCM_UpdateStatus oUpdStat = new CCM_UpdateStatus(PSObj, remoteRunspace, pSCode);
@@ -64,7 +78,6 @@ namespace sccmclictr.automation.functions
                 }
                 return lCache;
             }
-        }
 
         /// <summary>
         /// Get all mandatory Updates
