@@ -730,6 +730,28 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
+        /// Get all Log Files from the SCCM Agent Log Folder
+        /// </summary>
+        public List<string> LocalSCCMAgentLogFiles
+        {
+            get
+            {
+                List<string> lResult = new List<string>();
+                try
+                {
+                    List<PSObject> oRes = base.GetObjectsFromPS(string.Format("(get-item {0}\\*.log).Name", LocalSCCMAgentLogPath), false, new TimeSpan(0, 5, 0));
+                    foreach (PSObject oFile in oRes)
+                    {
+                        lResult.Add(oFile.ToString());
+                    }
+                }
+                catch { }
+
+                return lResult;
+            }
+        }
+
+        /// <summary>
         /// Get or Set the Server Locator Point (in CM12 it's the Management Point)
         /// </summary>
         public string ServerLocatorPoint

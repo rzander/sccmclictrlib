@@ -130,41 +130,40 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                List<CCM_SoftwareUpdate> lCache = new List<CCM_SoftwareUpdate>();
-                List<PSObject> oObj = GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_SoftwareUpdate", false, new TimeSpan(0,0,10));
-                foreach (PSObject PSObj in oObj)
-                {
-                    //Get AppDTs sub Objects
-                    CCM_SoftwareUpdate oUpdStat = new CCM_SoftwareUpdate(PSObj, remoteRunspace, pSCode);
-
-                    oUpdStat.remoteRunspace = remoteRunspace;
-                    oUpdStat.pSCode = pSCode;
-                    lCache.Add(oUpdStat);
-                }
-                return lCache;
+                return GetSoftwareUpdate(false);
             }
         }
 
         /// <summary>
-        ///  Show required Software Updates and the current state (reload the cache)
+        /// Show required Software Updates and the current state
         /// </summary>
-        public List<CCM_SoftwareUpdate> SoftwareUpdateReload
+        /// <param name="reLoad">Enforce reloading the cache</param>
+        /// <returns></returns>
+        public List<CCM_SoftwareUpdate> GetSoftwareUpdate(bool reLoad)
         {
-            get
-            {
-                List<CCM_SoftwareUpdate> lCache = new List<CCM_SoftwareUpdate>();
-                List<PSObject> oObj = GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_SoftwareUpdate", true);
-                foreach (PSObject PSObj in oObj)
-                {
-                    //Get AppDTs sub Objects
-                    CCM_SoftwareUpdate oUpdStat = new CCM_SoftwareUpdate(PSObj, remoteRunspace, pSCode);
+            return GetSoftwareUpdate(reLoad, new TimeSpan(0, 2, 0));
+        }
 
-                    oUpdStat.remoteRunspace = remoteRunspace;
-                    oUpdStat.pSCode = pSCode;
-                    lCache.Add(oUpdStat);
-                }
-                return lCache;
+        /// <summary>
+        /// Show required Software Updates and the current state
+        /// </summary>
+        /// <param name="reLoad">Enforce reloading the cache</param>
+        /// <param name="tCache">TTL to keep Items in Cache</param>
+        /// <returns></returns>
+        public List<CCM_SoftwareUpdate> GetSoftwareUpdate(bool reLoad, TimeSpan tCache)
+        {
+            List<CCM_SoftwareUpdate> lCache = new List<CCM_SoftwareUpdate>();
+            List<PSObject> oObj = GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_SoftwareUpdate", reLoad, tCache);
+            foreach (PSObject PSObj in oObj)
+            {
+                //Get AppDTs sub Objects
+                CCM_SoftwareUpdate oUpdStat = new CCM_SoftwareUpdate(PSObj, remoteRunspace, pSCode);
+
+                oUpdStat.remoteRunspace = remoteRunspace;
+                oUpdStat.pSCode = pSCode;
+                lCache.Add(oUpdStat);
             }
+            return lCache;
         }
 
         /// <summary>
@@ -1522,7 +1521,7 @@ namespace sccmclictr.automation.functions
             //8 = ciJobStatePendingSoftReboot
             //9 = ciJobStatePendingHardReboot
             //10= ciJobStateWaitReboot
-            List<CCM_SoftwareUpdate> oPendingReboot = SoftwareUpdateReload.Where(t => (t.EvaluationState == 8) | (t.EvaluationState == 9) | (t.EvaluationState == 10)).ToList();
+            List<CCM_SoftwareUpdate> oPendingReboot = GetSoftwareUpdate(true).Where(t => (t.EvaluationState == 8) | (t.EvaluationState == 9) | (t.EvaluationState == 10)).ToList();
 
             if (oPendingReboot.Count > 0)
                 return true;
@@ -1540,7 +1539,7 @@ namespace sccmclictr.automation.functions
             //1 = ciJobStateAvailable
             //14= ciJobStateWaitServiceWindow
             //21= ciJobStateWaitingRetry
-            List<CCM_SoftwareUpdate> oUpdStat = SoftwareUpdateReload.Where(t => (t.EvaluationState == 1) | (t.EvaluationState == 0) | (t.EvaluationState == 14) | (t.EvaluationState == 21)).ToList();
+            List<CCM_SoftwareUpdate> oUpdStat = GetSoftwareUpdate(true).Where(t => (t.EvaluationState == 1) | (t.EvaluationState == 0) | (t.EvaluationState == 14) | (t.EvaluationState == 21)).ToList();
 
             if (oUpdStat.Count > 0)
                 return true;
@@ -1557,7 +1556,7 @@ namespace sccmclictr.automation.functions
         {
             //0 = ciJobStateNone
             //1 = ciJobStateAvailable
-            List<CCM_SoftwareUpdate> oUpdStat = SoftwareUpdateReload.Where(t => (t.EvaluationState == 2) | (t.EvaluationState == 3) | (t.EvaluationState == 4)
+            List<CCM_SoftwareUpdate> oUpdStat = GetSoftwareUpdate(true).Where(t => (t.EvaluationState == 2) | (t.EvaluationState == 3) | (t.EvaluationState == 4)
                 | (t.EvaluationState == 5) | (t.EvaluationState == 6) | (t.EvaluationState == 7) | (t.EvaluationState == 11)).ToList();
 
             if (oUpdStat.Count > 0)
@@ -1574,7 +1573,7 @@ namespace sccmclictr.automation.functions
         public Boolean UpdateInstallationErrors()
         {
             //13= ciJobStateError
-            List<CCM_SoftwareUpdate> oUpdStat = SoftwareUpdateReload.Where(t => (t.EvaluationState == 13)).ToList();
+            List<CCM_SoftwareUpdate> oUpdStat = GetSoftwareUpdate(true).Where(t => (t.EvaluationState == 13)).ToList();
 
             if (oUpdStat.Count > 0)
                 return true;
