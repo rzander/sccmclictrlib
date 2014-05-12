@@ -59,7 +59,8 @@ namespace sccmclictr.automation.functions
             remoteRunspace = RemoteRunspace;
             pSCode = PSCode;
             baseClient = oClient;
-            AsynchronousScript = new runScriptAsync(RemoteRunspace);
+            AsynchronousScript = new runScriptAsync(RemoteRunspace, pSCode);
+
         }
 
         /// <summary>
@@ -76,6 +77,7 @@ namespace sccmclictr.automation.functions
             internal Runspace _remoteRunspace;
             internal Pipeline pipeline;
             internal RunspaceConnectionInfo _connectionInfo;
+            internal TraceSource pSCode;
 
             /// <summary>
             /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -93,7 +95,8 @@ namespace sccmclictr.automation.functions
             /// Initializes a new instance of the <see cref="runScriptAsync"/> class.
             /// </summary>
             /// <param name="remoteRunspace">The remote runspace.</param>
-            public runScriptAsync(Runspace remoteRunspace)
+            /// <param name="PSCode">TraceSource</param>
+            public runScriptAsync(Runspace remoteRunspace, TraceSource PSCode)
             {
                 if (_remoteRunspace == null)
                 {
@@ -104,6 +107,8 @@ namespace sccmclictr.automation.functions
                 {
                     _remoteRunspace = RunspaceFactory.CreateRunspace(remoteRunspace.ConnectionInfo);
                 }
+
+                pSCode = PSCode;
             }
 
             /// <summary>
@@ -145,7 +150,7 @@ namespace sccmclictr.automation.functions
             /// Output data arrived.
             /// </summary>
             /// <param name="sender">Contains the result as List of strings.</param>
-            /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+            /// <param name="EventArgs"/>The instance containing the event data.</param>
             internal void Output_DataReady(object sender, EventArgs e)
             {
                 PipelineReader<PSObject> output = sender as PipelineReader<PSObject>;
@@ -262,6 +267,10 @@ namespace sccmclictr.automation.functions
                         this.Connect();
                     pipeline.Commands.Clear();
                     pipeline.Commands.AddScript(value);
+
+                    //Trace Powershell code
+                    pSCode.TraceInformation(value);
+                    
                 }
 
             }

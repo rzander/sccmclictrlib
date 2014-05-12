@@ -739,7 +739,7 @@ namespace sccmclictr.automation.functions
                 List<string> lResult = new List<string>();
                 try
                 {
-                    List<PSObject> oRes = base.GetObjectsFromPS(string.Format("(get-item {0}\\*.log).Name", LocalSCCMAgentLogPath), false, new TimeSpan(0, 5, 0));
+                    List<PSObject> oRes = base.GetObjectsFromPS(string.Format("(get-item '{0}\\*.log').Name", LocalSCCMAgentLogPath), false, new TimeSpan(0, 5, 0));
                     foreach (PSObject oFile in oRes)
                     {
                         lResult.Add(oFile.ToString());
