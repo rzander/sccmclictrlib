@@ -764,6 +764,8 @@ namespace sccmclictr.automation
             SWCache = null;
             SoftwareDistribution = null;
             DCM = null;
+            Cache = null;
+            Cache.Dispose();
         }
 
         /// <summary>

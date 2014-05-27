@@ -521,18 +521,29 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                List<Application> lApps = new List<Application>();
-                List<PSObject> oObj = GetObjects(@"ROOT\microsoft\appvirt\client", "SELECT * FROM Application");
-                foreach (PSObject PSObj in oObj)
-                {
-                    Application oCIEx = new Application(PSObj, remoteRunspace, pSCode);
-
-                    oCIEx.remoteRunspace = remoteRunspace;
-                    oCIEx.pSCode = pSCode;
-                    lApps.Add(oCIEx);
-                }
-                return lApps;
+                return Appv4ApplicationsList(false, new TimeSpan(0, 0, 30));
             }
+        }
+
+        /// <summary>
+        /// Gets the appv4 applications.
+        /// </summary>
+        /// <param name="Reload">true = do not load from cache</param>
+        /// <param name="TTL">Time to keep in cache</param>
+        /// <returns>List of App-V 4 Applications</returns>
+        public List<Application> Appv4ApplicationsList(bool Reload, TimeSpan TTL)
+        {
+            List<Application> lApps = new List<Application>();
+            List<PSObject> oObj = GetObjects(@"ROOT\microsoft\appvirt\client", "SELECT * FROM Application", Reload, TTL);
+            foreach (PSObject PSObj in oObj)
+            {
+                Application oCIEx = new Application(PSObj, remoteRunspace, pSCode);
+
+                oCIEx.remoteRunspace = remoteRunspace;
+                oCIEx.pSCode = pSCode;
+                lApps.Add(oCIEx);
+            }
+            return lApps;
         }
 
         /// <summary>
@@ -543,18 +554,29 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                List<Package> lPkg = new List<Package>();
-                List<PSObject> oObj = GetObjects(@"ROOT\microsoft\appvirt\client", "SELECT * FROM Package");
-                foreach (PSObject PSObj in oObj)
-                {
-                    Package oCIEx = new Package(PSObj, remoteRunspace, pSCode);
-
-                    oCIEx.remoteRunspace = remoteRunspace;
-                    oCIEx.pSCode = pSCode;
-                    lPkg.Add(oCIEx);
-                }
-                return lPkg;
+                return Appv4PackagesList(false, new TimeSpan(0,0,30));
             }
+        }
+
+        /// <summary>
+        /// Gets the appv4 packages.
+        /// </summary>
+        /// <param name="Reload">True = do not use cached results</param>
+        /// <param name="TTL">Time how log the objects are cached</param>
+        /// <returns></returns>
+        public List<Package> Appv4PackagesList(bool Reload, TimeSpan TTL)
+        {
+            List<Package> lPkg = new List<Package>();
+            List<PSObject> oObj = GetObjects(@"ROOT\microsoft\appvirt\client", "SELECT * FROM Package", Reload, TTL);
+            foreach (PSObject PSObj in oObj)
+            {
+                Package oCIEx = new Package(PSObj, remoteRunspace, pSCode);
+
+                oCIEx.remoteRunspace = remoteRunspace;
+                oCIEx.pSCode = pSCode;
+                lPkg.Add(oCIEx);
+            }
+            return lPkg;
         }
 
         /// <summary>

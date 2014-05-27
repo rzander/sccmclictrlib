@@ -282,6 +282,12 @@ namespace sccmclictr.automation
         /// </summary>
         public void disconnect()
         {
+            try
+            {
+                Client.Cache.Dispose();
+            }
+            catch { }
+
             remoteRunspace.Close();
             GC.Collect();
         }
