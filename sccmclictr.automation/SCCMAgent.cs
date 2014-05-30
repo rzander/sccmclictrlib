@@ -282,14 +282,10 @@ namespace sccmclictr.automation
         /// </summary>
         public void disconnect()
         {
-            try
-            {
-                Client.Cache.Dispose();
-            }
-            catch { }
-
+            Client.Cache.Dispose();
             remoteRunspace.Close();
-            GC.Collect();
+            Client.Dispose();
+            //GC.Collect();
         }
 
         #region IPCConnect

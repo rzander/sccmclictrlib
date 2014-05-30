@@ -27,22 +27,38 @@ namespace sccmclictr.automation
         {
             try
             {
-                if(remoteRunspace != null)
+
+                if (remoteRunspace != null)
+                {
+                    remoteRunspace.Close();
                     remoteRunspace.Dispose();
+                }
                 if (tsPSCode != null)
                 {
                     try
                     {
                         tsPSCode.Close();
-                        Cache.Dispose();
                     }
                     catch { }
 
                     tsPSCode = null;
                 }
 
-                if(Cache != null)
-                    Cache.Dispose();
+                try
+                {
+                    if (Cache != null)
+                    {
+                        //Try to clean cache
+                        foreach (var element in Cache)
+                        {
+                            Cache.Remove(element.Key);
+                        }
+
+                        Cache.Dispose();
+                    }
+                        
+                }
+                catch { }
             }
             catch { }
 
@@ -117,6 +133,7 @@ namespace sccmclictr.automation
             tsPSCode = PSCode;
 
             Cache = new MemoryCache(RemoteRunspace.ConnectionInfo.ComputerName, new System.Collections.Specialized.NameValueCollection(99));
+
         }
 
         /// <summary>
@@ -750,22 +767,23 @@ namespace sccmclictr.automation
         /// </summary>
         public new void Dispose()
         {
-            AgentProperties = null;
-            AgentActions = null;
-            Health = null;
-            Monitoring = null;
-            ActualConfig = null;
-            RequestedConfig = null;
-            Process = null;
-            Services = null;
-            Components = null;
-            Inventory = null;
-            SoftwareUpdates = null;
-            SWCache = null;
-            SoftwareDistribution = null;
-            DCM = null;
-            Cache = null;
-            Cache.Dispose();
+            AgentProperties.Dispose();
+            AgentActions.Dispose();
+            Health.Dispose();
+            Monitoring.Dispose();
+            ActualConfig.Dispose();
+            RequestedConfig.Dispose();
+            Process.Dispose();
+            Services.Dispose();
+            Components.Dispose();
+            Inventory.Dispose();
+            SoftwareUpdates.Dispose();
+            SWCache.Dispose();
+            SoftwareDistribution.Dispose();
+            DCM.Dispose();
+            SWCache.Dispose();
+            AppV4.Dispose();
+            AppV5.Dispose();
         }
 
         /// <summary>

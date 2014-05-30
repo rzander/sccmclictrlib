@@ -37,6 +37,7 @@ namespace sccmclictr.automation.functions
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
+        /*
         public new void Dispose()
         {
             if (remoteRunspace != null)
@@ -44,7 +45,7 @@ namespace sccmclictr.automation.functions
             if (baseClient != null)
                 baseClient.Dispose();
             AsynchronousScript = null;
-        }
+        }*/
 
         //Constructor
         /// <summary>
