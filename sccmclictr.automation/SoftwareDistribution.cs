@@ -60,16 +60,30 @@ namespace sccmclictr.automation.functions
                 return Applications_(false);
             }
         }
+        
         /// <summary>
         /// Get a list of Applications (SELECT * FROM CCM_Application)
         /// </summary>
+        /// <param name="bReload">enforce reload</param>
+        /// <returns>List of CCM_Application</returns>
         public List<CCM_Application> Applications_(Boolean bReload)
+        {
+            return Applications_(bReload, new TimeSpan(0, 3, 0));
+        }
+        
+        /// <summary>
+        /// Get a list of Applications (SELECT * FROM CCM_Application)
+        /// </summary>
+        /// <param name="bReload">enforce reload</param>
+        /// <param name="CacheTime">TTL for Cached items</param>
+        /// <returns></returns>
+        public List<CCM_Application> Applications_(Boolean bReload, TimeSpan CacheTime)
         {
 
             List<CCM_Application> lApps = new List<CCM_Application>();
             List<PSObject> oObj = new List<PSObject>();
 
-            oObj = GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_Application", bReload);
+            oObj = GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_Application", bReload, CacheTime);
 
             foreach (PSObject PSObj in oObj)
             {
