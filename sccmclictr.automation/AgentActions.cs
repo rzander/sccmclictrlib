@@ -1089,5 +1089,38 @@ namespace sccmclictr.automation.functions
 
             return false;
         }
+
+        /// <summary>
+        /// Reset the Pauses Software Distribution flag
+        /// </summary>
+        /// <returns>true = success; false = error</returns>
+        public bool ResetPausedSWDist()
+        {
+            try
+            {
+                string sResult = base.GetStringFromPS("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\State\" -Name \"Paused\" -Type DWORD -force -value 0", true);
+                sResult = base.GetStringFromPS("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\State\" -Name \"PausedCookie\" -Type DWORD -force -value 0", true);
+                
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
+        /// <summary>
+        /// Reset the ProvisioningMode Flag
+        /// </summary>
+        /// <returns>true = success; false = error</returns>
+        public bool ResetProvisioningMode()
+        {
+            try
+            {
+                string sResult = base.GetStringFromPS("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\CCM\\CcmExec\" -Name \"ProvisioningMode\" -Type string -force -value \"false\"", true);
+
+                return true;
+            }
+            catch { }
+            return false;
+        }
     }
 }
