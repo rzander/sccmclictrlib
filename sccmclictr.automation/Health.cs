@@ -221,6 +221,25 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
+        /// DateTime of last CCMEval cycle 
+        /// </summary>
+        public DateTime LastCCMEval
+        {
+            get 
+            {
+                try
+                {
+                    string sPScript = "[xml]$ccmeval = Get-Content \"" + baseClient.AgentProperties.LocalSCCMAgentPath + "CcmEvalReport.xml\"; $ccmeval.ClientHealthReport.Summary.EvaluationTime"; // | % { $_ }; ";
+                    string sResult = base.GetStringFromPS(sPScript);
+                    return DateTime.Parse(sResult); //"yyyy-mm-ddThh:MM:ssZ"
+                }
+                catch { }
+
+                return new DateTime();
+            }
+        }
+
+        /// <summary>
         /// Show results of the CCMEval taks
         /// </summary>
         /// <returns>List of CCMEval results</returns>

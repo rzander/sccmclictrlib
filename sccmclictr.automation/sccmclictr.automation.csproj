@@ -40,7 +40,8 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>OpenSource.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <DelaySign>false</DelaySign>
@@ -106,7 +107,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="ClassDiagram1.cd" />
-    <None Include="OpenSource.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -117,7 +117,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin\SignTool.exe" sign /n "Open Source Developer" /t "http://timestamp.comodoca.com/authenticode" /q "$(TargetPath)"
+    <PostBuildEvent>"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin\SignTool.exe" sign /n "Roger Zander" /t "http://timestamp.comodoca.com/authenticode" /q "$(TargetPath)"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
