@@ -169,8 +169,17 @@ namespace sccmclictr.automation.functions
         /// <summary>
         /// Cleanups the orphaned cache items  (Clean from WMI and Disk).
         /// </summary>
-        public void CleanupOrphanedCacheItems()
+        public string CleanupOrphanedCacheItems()
         {
+            try
+            {
+                return base.GetStringFromPS(Properties.Resources.CacheCleanup);
+            }
+            catch(Exception ex) 
+            {
+                return ex.Message;
+            }
+            /*
             //Cleanup Orphaned Database Entries
             foreach (CacheInfoEx CIX in CachedContent)
             {
@@ -188,7 +197,7 @@ namespace sccmclictr.automation.functions
                 {
                     base.GetStringFromPS("Remove-Item \"" + System.IO.Path.Combine(CachePath, sDir) + "\" -recurse");
                 }
-            }
+            } */
         }
 
         /// <summary>
