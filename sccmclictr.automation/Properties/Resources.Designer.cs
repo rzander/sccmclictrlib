@@ -99,5 +99,33 @@ namespace sccmclictr.automation.Properties {
                 return ResourceManager.GetString("HealthCheck", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $script = 
+        ///{
+        ///function Enable-TSDuplicateToken {
+        ///
+        ///[CmdletBinding()]
+        ///param()
+        ///
+        ///$signature = @&quot;
+        ///    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        ///     public struct TokPriv1Luid
+        ///     {
+        ///         public int Count;
+        ///         public long Luid;
+        ///         public int Attr;
+        ///     }
+        ///
+        ///    public const int SE_PRIVILEGE_ENABLED = 0x00000002;
+        ///    public const int TOKEN_QUERY = 0x00000008;
+        ///    public const int TOKEN_ADJUST_PRIVILEGES = 0x00000020;
+        ///    public const UInt32 STANDARD_RIGHTS_REQUIRED = 0x000F000 [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SecretDecode {
+            get {
+                return ResourceManager.GetString("SecretDecode", resourceCulture);
+            }
+        }
     }
 }

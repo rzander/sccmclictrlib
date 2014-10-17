@@ -2256,6 +2256,27 @@ namespace sccmclictr.automation.policy
         }
 
         /// <summary>
+        /// Collection Variables
+        /// </summary>
+        public List<CCM_CollectionVariable> CollectionVariables
+        {
+            get
+            {
+                List<CCM_CollectionVariable> lCache = new List<CCM_CollectionVariable>();
+                List<PSObject> oObj = GetObjects(@"ROOT\ccm\Policy\Machine\ActualConfig", "SELECT * FROM CCM_CollectionVariable", true);
+                foreach (PSObject PSObj in oObj)
+                {
+                    CCM_CollectionVariable oSW = new CCM_CollectionVariable(PSObj, remoteRunspace, pSCode, baseClient);
+
+                    oSW.remoteRunspace = remoteRunspace;
+                    oSW.pSCode = pSCode;
+                    lCache.Add(oSW);
+                }
+                return lCache;
+            }
+        }
+
+        /// <summary>
         /// Source:ROOT\ccm\Policy\Machine\ActualConfig
         /// </summary>
         public class CCM_Policy
@@ -3238,6 +3259,64 @@ namespace sccmclictr.automation.policy
             }
 
             #endregion
+
+        }
+
+        /// <summary>
+        /// Source:ROOT\ccm\Policy\Machine\ActualConfig
+        /// </summary>
+        public class CCM_CollectionVariable : CCM_Policy
+        {
+            internal ccm baseClient;
+            //Constructor
+            internal CCM_CollectionVariable(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode, ccm oClient)
+                : base(WMIObject, RemoteRunspace, PSCode, oClient)
+            {
+                remoteRunspace = RemoteRunspace;
+                pSCode = PSCode;
+                
+                this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
+                this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
+                this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
+                this.__INSTANCE = true;
+                this.WMIObject = WMIObject;
+                this.Name = WMIObject.Properties["Name"].Value as String;
+                this.Value = WMIObject.Properties["Value"].Value as String;
+                this.baseClient = oClient;
+            }
+
+            #region Properties
+            #pragma warning disable 1591 // Disable warnings about missing XML comments
+            
+            public String Name { get; set; }
+            public String Value { get; set; }
+            
+            #pragma warning restore 1591 // Enable warnings about missing XML comments
+            #endregion
+
+            /// <summary>
+            /// Decode the PolicySecret
+            /// </summary>
+            /// <returns>Decoded secret</returns>
+            public string DecodeValue()
+            {
+                //Stop traceing
+                foreach(TraceListener ts in pSCode.Listeners)
+                {
+                    ts.Filter = new SourceFilter("No match");
+                }
+
+                string sCode = Properties.Resources.SecretDecode + "\r" + "$PolicySecret = ([XML]'" + Value +"').PolicySecret.FirstChild.Value" + "\r" + "Invoke-Command $script";
+                string sResult = baseClient.GetStringFromPS(sCode).Replace("\0", "");
+
+                //enable tracing
+                foreach (TraceListener ts in pSCode.Listeners)
+                {
+                    ts.Filter = null;
+                }
+
+                return sResult ;
+            }
 
         }
     }
