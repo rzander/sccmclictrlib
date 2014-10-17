@@ -173,7 +173,7 @@ namespace sccmclictr.automation.functions
         {
             try
             {
-                return base.GetStringFromPS(Properties.Resources.CacheCleanup);
+                return base.GetStringFromPS(Properties.Resources.CacheCleanup, true);
             }
             catch(Exception ex) 
             {

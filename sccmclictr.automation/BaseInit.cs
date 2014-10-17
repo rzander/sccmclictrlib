@@ -569,6 +569,9 @@ namespace sccmclictr.automation
             //$a=([wmi]"ROOT\ccm:SMS_Client=@");$a.AllowLocalAdminOverride=$false;$a.Put()
 
             string sPSCode = string.Format("$a=([wmi]\"{0}\");$a.{1}={2};$a.Put()", WMIPath, Property, Value);
+
+            tsPSCode.TraceInformation(sPSCode);
+
             if (!bShowPSCodeOnly)
             {
                 string sHash = CreateHash(WMIPath + "." + Property);
