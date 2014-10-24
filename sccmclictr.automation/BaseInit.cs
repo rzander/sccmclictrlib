@@ -418,6 +418,11 @@ namespace sccmclictr.automation
                         {
                             //sResult = obj.BaseObject.ToString();
                             sResult = obj.ToString();
+                            if(obj.BaseObject.GetType() == typeof(ErrorRecord))
+                            {
+                                Trace.TraceError(obj.ToString());
+                                Trace.WriteLineIf(debugLevel.TraceError, obj.ToString());
+                            }
                             Cache.Add(sHash, sResult, DateTime.Now + cacheTime);
                             break;
                         }

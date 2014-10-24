@@ -38,6 +38,7 @@ namespace sccmclictr.automation
         /// <returns></returns>
         internal static Collection<PSObject> RunPSScript(string scriptText, Runspace remoteRunspace)
         {
+
             try
             {
                 using (PowerShell powershell = PowerShell.Create())
@@ -52,7 +53,21 @@ namespace sccmclictr.automation
                         if (po != null)
                             results.Add(po);
                     }
+
+                    if (loRes.Count == 0)
+                    {
+                        Collection<ErrorRecord> errors = powershell.Streams.Error.ReadAll();
+                        foreach (ErrorRecord er in errors)
+                        {
+                            PSObject pErr = new PSObject(er);
+                            results.Add(pErr);
+
+                            
+                        }
+                    }
+
                     return results;
+
                 }
 
             }
