@@ -1122,5 +1122,37 @@ namespace sccmclictr.automation.functions
             catch { }
             return false;
         }
+
+        /// <summary>
+        /// Remove SystemTaskExclude entries from Registry
+        /// </summary>
+        /// <returns>true = success; false = error</returns>
+        public bool SystemTaskExclude()
+        {
+            try
+            {
+                string sResult = base.GetStringFromPS("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\CCM\\CcmExec\" -Name \"SystemTaskExclude\" -Type string -force -value \"\"", true);
+
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
+        /// <summary>
+        /// Remove IsCacheCopyNeededCallBack entry from Registry
+        /// </summary>
+        /// <returns>true = success; false = error</returns>
+        public bool IsCacheCopyNeededCallBack()
+        {
+            try
+            {
+                string sResult = base.GetStringFromPS(@"Remove-ItemProperty 'hklm:\Software\Microsoft\SMS\Mobile Client\Software Distribution\' 'IsCacheCopyNeededCallBack' -ea SilentlyContinue", true);
+
+                return true;
+            }
+            catch { }
+            return false;
+        }
     }
 }
