@@ -289,5 +289,17 @@ namespace sccmclictr.automation.functions
 
             #pragma warning restore 1591 // Enable warnings about missing XML comments
         }
+
+        /// <summary>
+        /// https://msdn.microsoft.com/en-us/library/cc146437.aspx; This causes the client to resend a full compliance report to the Configuration Manager server
+        /// </summary>
+        public void RefreshServerComplianceState()
+        {
+            try
+            {
+                string sResult = base.GetStringFromPS("(New-Object -ComObject Microsoft.CCM.UpdatesStore).RefreshServerComplianceState()", true);
+            }
+            catch { }
+        }
     }
 }
