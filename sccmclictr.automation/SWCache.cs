@@ -10,13 +10,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using sccmclictr.automation;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Diagnostics;
-using System.Web;
 using System.Management;
 
 namespace sccmclictr.automation.functions
@@ -219,27 +215,36 @@ namespace sccmclictr.automation.functions
                 pSCode = PSCode;
                 oNewBase = new baseInit(remoteRunspace, pSCode);
 
-                this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
-                this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
-                this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
-                this.__INSTANCE = true;
+                __CLASS = WMIObject.Properties["__CLASS"].Value as string;
+                __NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
+                __RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
+                __INSTANCE = true;
                 this.WMIObject = WMIObject;
 
-                this.CacheId = WMIObject.Properties["CacheId"].Value as string;
-                this.ContentId = WMIObject.Properties["ContentId"].Value as string;
-                this.ContentSize = WMIObject.Properties["ContentSize"].Value as UInt32?;
-                this.ContentType = WMIObject.Properties["ContentType"].Value as string;
-                this.ContentVer = WMIObject.Properties["ContentVer"].Value as string;
+                //New in Build1510 (2016)
+                try { ContentFlags = WMIObject.Properties["PeerCaching"].Value as UInt32?; } catch { ContentFlags = null; }
+                CacheId = WMIObject.Properties["CacheId"].Value as string;
+                ContentId = WMIObject.Properties["ContentId"].Value as string;
+                try { ContentSize = WMIObject.Properties["ContentSize"].Value as UInt32?; } catch { ContentSize = null; }
+                ContentType = WMIObject.Properties["ContentType"].Value as string;
+                ContentVer = WMIObject.Properties["ContentVer"].Value as string;
+
+                //New in Build1510 (2016)
+                try { ExcludeFileList = WMIObject.Properties["ExcludeFileList"].Value as string; } catch { ExcludeFileList = ""; }
 
                 string sLastEvalTime = WMIObject.Properties["LastReferenced"].Value as string;
                 if (string.IsNullOrEmpty(sLastEvalTime))
-                    this.LastReferenced = null;
+                    LastReferenced = null;
                 else
-                    this.LastReferenced = ManagementDateTimeConverter.ToDateTime(sLastEvalTime) as DateTime?;
+                    LastReferenced = ManagementDateTimeConverter.ToDateTime(sLastEvalTime) as DateTime?;
 
-                this.Location = WMIObject.Properties["Location"].Value as string;
-                this.PersistInCache = WMIObject.Properties["PersistInCache"].Value as UInt32?;
-                this.ReferenceCount = WMIObject.Properties["ReferenceCount"].Value as UInt32?;
+                Location = WMIObject.Properties["Location"].Value as string;
+
+                //New in Build1510 (2016)
+                try { PeerCaching = WMIObject.Properties["PeerCaching"].Value as bool?; } catch { PeerCaching = false; }
+
+                try { PersistInCache = WMIObject.Properties["PersistInCache"].Value as UInt32?; } catch { PersistInCache = null; }
+                try { ReferenceCount = WMIObject.Properties["ReferenceCount"].Value as UInt32?; } catch { ReferenceCount = null; }
             }
 
             #region Properties
@@ -250,6 +255,11 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+
+            /// <summary>
+            /// ? TBD
+            /// </summary>
+            public UInt32? ContentFlags { get; set; }
 
             /// <summary>
             /// Gets or sets the cache identifier.
@@ -273,13 +283,18 @@ namespace sccmclictr.automation.functions
             /// Gets or sets the type of the content.
             /// </summary>
             /// <value>The type of the content.</value>
-            public String ContentType { get; set; }
+            public string ContentType { get; set; }
 
             /// <summary>
             /// Gets or sets the content ver.
             /// </summary>
             /// <value>The content ver.</value>
-            public String ContentVer { get; set; }
+            public string ContentVer { get; set; }
+
+            /// <summary>
+            /// ? TBD
+            /// </summary>
+            public string ExcludeFileList { get; set; }
 
             /// <summary>
             /// Gets or sets the last referenced.
@@ -291,13 +306,19 @@ namespace sccmclictr.automation.functions
             /// Gets or sets the location.
             /// </summary>
             /// <value>The location.</value>
-            public String Location { get; set; }
+            public string Location { get; set; }
 
             /// <summary>
             /// Gets or sets the persist in cache.
             /// </summary>
             /// <value>The persist in cache.</value>
             public UInt32? PersistInCache { get; set; }
+
+            /// <summary>
+            /// PeerCaching enabled
+            /// </summary>
+            public bool? PeerCaching { get; set; }
+
 
             /// <summary>
             /// Gets or sets the reference count.

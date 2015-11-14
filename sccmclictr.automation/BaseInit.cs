@@ -61,7 +61,6 @@ namespace sccmclictr.automation
                 catch { }
             }
             catch { }
-
         }
 
         private Runspace remoteRunspace { get; set; }
@@ -132,8 +131,7 @@ namespace sccmclictr.automation
             remoteRunspace = RemoteRunspace;
             tsPSCode = PSCode;
 
-            Cache = new MemoryCache(RemoteRunspace.ConnectionInfo.ComputerName, new System.Collections.Specialized.NameValueCollection(99));
-
+            Cache = new MemoryCache(RemoteRunspace.ConnectionInfo.ComputerName, new System.Collections.Specialized.NameValueCollection());
         }
 
         /// <summary>
