@@ -478,10 +478,17 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                TimeSpan toldCacheTime = base.cacheTime;
-                base.cacheTime = new TimeSpan(0, 5, 0);
-                string sResult = base.GetProperty(@"ROOT\ccm:SMS_Client=@", "ClientVersion");
-                base.cacheTime = toldCacheTime;
+                string sResult = "";
+                try
+                {
+
+
+                    TimeSpan toldCacheTime = base.cacheTime;
+                    base.cacheTime = new TimeSpan(0, 5, 0);
+                    sResult = base.GetProperty(@"ROOT\ccm:SMS_Client=@", "ClientVersion");
+                    base.cacheTime = toldCacheTime;
+                }
+                catch { }
 
                 return sResult;
             }
@@ -564,17 +571,21 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                //Backup original Cache timout value
-                TimeSpan oldTime = base.cacheTime;
+                string sResult = "";
+                try
+                {
+                    //Backup original Cache timout value
+                    TimeSpan oldTime = base.cacheTime;
 
-                //Set new CacheTimeout for the AssignedSite Code to 1hour
-                base.cacheTime = new TimeSpan(1, 0, 0);
-                string sSiteCode = base.GetStringFromClassMethod(@"ROOT\ccm:SMS_Client", "GetAssignedSite()", "sSiteCode");
+                    //Set new CacheTimeout for the AssignedSite Code to 1hour
+                    base.cacheTime = new TimeSpan(1, 0, 0);
+                    sResult = base.GetStringFromClassMethod(@"ROOT\ccm:SMS_Client", "GetAssignedSite()", "sSiteCode");
 
-                //Reset to original Cache timeout value
-                base.cacheTime = oldTime;
-
-                return sSiteCode;
+                    //Reset to original Cache timeout value
+                    base.cacheTime = oldTime;
+                }
+                catch { }
+                return sResult;
             }
             set
             {
@@ -593,17 +604,21 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                //Backup original Cache timout value
-                TimeSpan oldTime = base.cacheTime;
+                string sMP = "";
+                try
+                {
+                    //Backup original Cache timout value
+                    TimeSpan oldTime = base.cacheTime;
 
-                //Set new CacheTimeout for the ManagementPointe to 1hour
-                base.cacheTime = new TimeSpan(1, 0, 0);
-                
-                string sMP = base.GetProperty(@"ROOT\ccm:SMS_Authority.Name='SMS:" + AssignedSite + "'", "CurrentManagementPoint");
-                
-                //Reset to original Cache timeout value
-                base.cacheTime = oldTime;
+                    //Set new CacheTimeout for the ManagementPointe to 1hour
+                    base.cacheTime = new TimeSpan(1, 0, 0);
 
+                    sMP = base.GetProperty(@"ROOT\ccm:SMS_Authority.Name='SMS:" + AssignedSite + "'", "CurrentManagementPoint");
+
+                    //Reset to original Cache timeout value
+                    base.cacheTime = oldTime;
+                }
+                catch { }
                 return sMP;
 
             }
@@ -616,14 +631,19 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                try
                 {
-                    return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Client\\Internet Facing\")).$(\"Internet MP Hostname\")");
+                    if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                    {
+                        return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Client\\Internet Facing\")).$(\"Internet MP Hostname\")");
+                    }
+                    else
+                    {
+                        return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Client\\Internet Facing\")).$(\"Internet MP Hostname\")");
+                    }
                 }
-                else
-                {
-                    return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Client\\Internet Facing\")).$(\"Internet MP Hostname\")");
-                }
+                catch { }
+                return "";
             }
             set
             {
@@ -703,14 +723,20 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                try
                 {
-                    return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Client\\Configuration\\Client Properties\")).$(\"Local SMS Path\")");
+                    if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                    {
+                        return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\SMS\\Client\\Configuration\\Client Properties\")).$(\"Local SMS Path\")");
+                    }
+                    else
+                    {
+                        return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Client\\Configuration\\Client Properties\")).$(\"Local SMS Path\")");
+                    }
                 }
-                else
-                {
-                    return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Client\\Configuration\\Client Properties\")).$(\"Local SMS Path\")");
-                }
+                catch { }
+
+                return "";
             }
         }
 
@@ -754,14 +780,19 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                try
                 {
-                    return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\")).$(\"SMSSLP\")");
+                    if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                    {
+                        return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\")).$(\"SMSSLP\")");
+                    }
+                    else
+                    {
+                        return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\")).$(\"SMSSLP\")");
+                    }
                 }
-                else
-                {
-                    return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\")).$(\"SMSSLP\")");
-                }
+                catch { }
+                return "";
             }
 
             set
@@ -790,14 +821,19 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                try
                 {
-                    return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\\LocationServices\")).$(\"DnsSuffix\")");
+                    if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                    {
+                        return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\\LocationServices\")).$(\"DnsSuffix\")");
+                    }
+                    else
+                    {
+                        return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\\LocationServices\")).$(\"DnsSuffix\")");
+                    }
                 }
-                else
-                {
-                    return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\\LocationServices\")).$(\"DnsSuffix\")");
-                }
+                catch { }
+                return "";
             }
 
             set
@@ -826,23 +862,28 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                try
                 {
-                    string sPort = base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\")).$(\"HttpPort\")");
-                    if(!string.IsNullOrEmpty(sPort))
-                        return int.Parse(sPort);
+                    if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                    {
+                        string sPort = base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\")).$(\"HttpPort\")");
+                        if (!string.IsNullOrEmpty(sPort))
+                            return int.Parse(sPort);
+                        else
+                            return null;
+                    }
                     else
-                        return null; 
+                    {
+                        //return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\\LocationServices\")).$(\"DnsSuffix\")");
+                        string sPort = base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\")).$(\"HttpPort\")");
+                        if (!string.IsNullOrEmpty(sPort))
+                            return int.Parse(sPort);
+                        else
+                            return null;
+                    }
                 }
-                else
-                {
-                    //return base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\\LocationServices\")).$(\"DnsSuffix\")");
-                    string sPort = base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\")).$(\"HttpPort\")");
-                    if (!string.IsNullOrEmpty(sPort))
-                        return int.Parse(sPort);
-                    else
-                        return null; 
-                }
+                catch { }
+                return null;
             }
 
             set
@@ -873,22 +914,28 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                try
                 {
-                    string sPort = base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\")).$(\"HttpsPort\")");
-                    if (!string.IsNullOrEmpty(sPort))
-                        return int.Parse(sPort);
+                    if (baseClient.Inventory.isx64OS & !baseClient.AgentProperties.isSCCM2012)
+                    {
+                        string sPort = base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Wow6432Node\\Microsoft\\CCM\")).$(\"HttpsPort\")");
+                        if (!string.IsNullOrEmpty(sPort))
+                            return int.Parse(sPort);
+                        else
+                            return null;
+                    }
                     else
-                        return null;
+                    {
+                        string sPort = base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\")).$(\"HttpsPort\")");
+                        if (!string.IsNullOrEmpty(sPort))
+                            return int.Parse(sPort);
+                        else
+                            return null;
+                    }
                 }
-                else
-                {
-                    string sPort = base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\")).$(\"HttpsPort\")");
-                    if (!string.IsNullOrEmpty(sPort))
-                        return int.Parse(sPort);
-                    else
-                        return null;
-                }
+                catch { }
+
+                return null;
             }
 
             set
@@ -919,15 +966,21 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                List<PSObject> lResult = base.GetObjectsFromPS("(Get-ItemProperty(\"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\")).$(\"PendingFileRenameOperations\")");
-                if (lResult.Count > 0)
+                try
                 {
-                    return true;
+                    List<PSObject> lResult = base.GetObjectsFromPS("(Get-ItemProperty(\"HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\")).$(\"PendingFileRenameOperations\")");
+                    if (lResult.Count > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
-                else
-                {
-                    return false;
-                }
+                catch { }
+
+                return false;
             }
         }
 
@@ -938,15 +991,21 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                List<PSObject> lResult = base.GetObjectsFromPS("if(test-path \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Component Based Servicing\\RebootPending\"){ $true }");
-                if (lResult.Count > 0)
+                try
                 {
-                    return true;
+                    List<PSObject> lResult = base.GetObjectsFromPS("if(test-path \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Component Based Servicing\\RebootPending\"){ $true }");
+                    if (lResult.Count > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
-                else
-                {
-                    return false;
-                }
+                catch { }
+
+                return false;
             }
         }
 
@@ -957,8 +1016,14 @@ namespace sccmclictr.automation.functions
         {
             get
             {
-                string sProductCode = base.GetStringFromPS("(Get-WmiObject -Class CCM_InstalledProduct -Namespace \"root\\ccm\").ProductCode");
-                return sProductCode;
+                try
+                {
+                    string sProductCode = base.GetStringFromPS("(Get-WmiObject -Class CCM_InstalledProduct -Namespace \"root\\ccm\").ProductCode");
+                    return sProductCode;
+                }
+                catch { }
+
+                return "";
             }
         }
 
@@ -969,8 +1034,14 @@ namespace sccmclictr.automation.functions
         /// <returns></returns>
         public string DeleteCCMNamespace()
         {
+            try
+            {
                 string sProductCode = base.GetStringFromPS("gwmi -query \"SELECT * FROM __Namespace WHERE Name='CCM'\" -Namespace \"root\" | Remove-WmiObject");
-                return sProductCode;      
+                return sProductCode;
+            }
+            catch { }
+
+            return "";    
         }
 
         /// <summary>
