@@ -481,8 +481,6 @@ namespace sccmclictr.automation.functions
                 string sResult = "";
                 try
                 {
-
-
                     TimeSpan toldCacheTime = base.cacheTime;
                     base.cacheTime = new TimeSpan(0, 5, 0);
                     sResult = base.GetProperty(@"ROOT\ccm:SMS_Client=@", "ClientVersion");

@@ -53,7 +53,7 @@ namespace sccmclictr.automation
                         if (po != null)
                             results.Add(po);
                     }
-
+                    
                     if (loRes.Count == 0)
                     {
                         Collection<ErrorRecord> errors = powershell.Streams.Error.ReadAll();
@@ -61,8 +61,6 @@ namespace sccmclictr.automation
                         {
                             PSObject pErr = new PSObject(er);
                             results.Add(pErr);
-
-                            
                         }
                     }
 
@@ -71,7 +69,8 @@ namespace sccmclictr.automation
                 }
 
             }
-            catch { }
+            catch
+            { }
 
             return null;
         }

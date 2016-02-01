@@ -179,7 +179,17 @@ namespace sccmclictr.automation
                         try
                         {
                             sResult = obj.BaseObject.ToString();
-                            Cache.Add(sHash, sResult, DateTime.Now + cacheTime);
+                            if (obj.BaseObject.GetType() == typeof(ErrorRecord))
+                            {
+                                Trace.TraceError(obj.ToString());
+                                Trace.WriteLineIf(debugLevel.TraceError, obj.ToString());
+                                tsPSCode.TraceInformation("#ERROR:" + obj.ToString());
+                                sResult = "";
+                            }
+                            else
+                            {
+                                Cache.Add(sHash, sResult, DateTime.Now + cacheTime);
+                            }
                             break;
                         }
                         catch (Exception ex)
@@ -240,7 +250,17 @@ namespace sccmclictr.automation
                         try
                         {
                             sResult = obj.BaseObject.ToString();
-                            Cache.Add(sHash, sResult, DateTime.Now + cacheTime);
+                            if (obj.BaseObject.GetType() == typeof(ErrorRecord))
+                            {
+                                Trace.TraceError(obj.ToString());
+                                Trace.WriteLineIf(debugLevel.TraceError, obj.ToString());
+                                tsPSCode.TraceInformation("#ERROR:" + obj.ToString());
+                                sResult = "";
+                            }
+                            else
+                            {
+                                Cache.Add(sHash, sResult, DateTime.Now + cacheTime);
+                            }
                             break;
                         }
                         catch (Exception ex)
@@ -416,12 +436,17 @@ namespace sccmclictr.automation
                         {
                             //sResult = obj.BaseObject.ToString();
                             sResult = obj.ToString();
-                            if(obj.BaseObject.GetType() == typeof(ErrorRecord))
+                            if (obj.BaseObject.GetType() == typeof(ErrorRecord))
                             {
                                 Trace.TraceError(obj.ToString());
                                 Trace.WriteLineIf(debugLevel.TraceError, obj.ToString());
+                                tsPSCode.TraceInformation("#ERROR:" + obj.ToString());
+                                sResult = "";
                             }
-                            Cache.Add(sHash, sResult, DateTime.Now + cacheTime);
+                            else
+                            {
+                                Cache.Add(sHash, sResult, DateTime.Now + cacheTime);
+                            }
                             break;
                         }
                         catch (Exception ex)
@@ -434,6 +459,7 @@ namespace sccmclictr.automation
 
             //Trace the PowerShell Command
             tsPSCode.TraceInformation(PSCode);
+            
 
             return sResult;
         }
@@ -483,7 +509,17 @@ namespace sccmclictr.automation
                         try
                         {
                             sResult = obj.BaseObject.ToString();
-                            Cache.Add(sHash, sResult, DateTime.Now + cacheTime);
+                            if (obj.BaseObject.GetType() == typeof(ErrorRecord))
+                            {
+                                Trace.TraceError(obj.ToString());
+                                Trace.WriteLineIf(debugLevel.TraceError, obj.ToString());
+                                tsPSCode.TraceInformation("#ERROR:" + obj.ToString());
+                                sResult = "";
+                            }
+                            else
+                            {
+                                Cache.Add(sHash, sResult, DateTime.Now + cacheTime);
+                            }
                             break;
                         }
                         catch (Exception ex)

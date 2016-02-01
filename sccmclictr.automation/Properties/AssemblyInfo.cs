@@ -12,7 +12,7 @@ using System.Security.Permissions;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SCCM Tools")]
 [assembly: AssemblyProduct("sccmclictr.automation")]
-[assembly: AssemblyCopyright("Copyright © by Roger Zander 2012")]
+[assembly: AssemblyCopyright("Copyright © 2016 by Roger Zander")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -34,5 +34,5 @@ using System.Security.Permissions;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.0.0.64")]
-[assembly: AssemblyFileVersion("0.0.0.64")]
+[assembly: AssemblyVersion("0.0.0.66")]
+[assembly: AssemblyFileVersion("0.0.0.66")]
