@@ -11,7 +11,12 @@
 using System;
 using System.Management.Automation.Runspaces;
 using System.Diagnostics;
-
+using System.Management.Automation;
+using static sccmclictr.automation.functions.agentproperties;
+using System.Net;
+using System.Xml;
+using System.IO;
+using System.Collections.Generic;
 
 namespace sccmclictr.automation.functions
 {
@@ -19,7 +24,7 @@ namespace sccmclictr.automation.functions
     /// <summary>
     /// Class agentactions.
     /// </summary>
-    public class agentactions: baseInit
+    public class agentactions : baseInit
     {
         internal Runspace remoteRunspace;
         internal TraceSource pSCode;
@@ -289,7 +294,7 @@ namespace sccmclictr.automation.functions
         {
             try
             {
-                foreach(string sSID in baseClient.AgentProperties.GetLoggedOnUserSIDs())
+                foreach (string sSID in baseClient.AgentProperties.GetLoggedOnUserSIDs())
                 {
                     try
                     {
@@ -1094,7 +1099,7 @@ namespace sccmclictr.automation.functions
             {
                 string sResult = base.GetStringFromPS("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\State\" -Name \"Paused\" -Type DWORD -force -value 0", true);
                 sResult = base.GetStringFromPS("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\SMS\\Mobile Client\\Software Distribution\\State\" -Name \"PausedCookie\" -Type DWORD -force -value 0", true);
-                
+
                 return true;
             }
             catch { }
@@ -1146,6 +1151,96 @@ namespace sccmclictr.automation.functions
                 return true;
             }
             catch { }
+            return false;
+        }
+
+        /// <summary>
+        /// Import a local Application Policy
+        /// </summary>
+        /// <param name="Body">Policy Body as XML</param>
+        /// <param name="BodySignature">Body Signature</param>
+        /// <param name="BodySource">'LOCAL' if not specified</param>
+        /// <returns></returns>
+        public bool ApplyPolicyEx(string Body, string BodySignature, string BodySource = "LOCAL")
+        {
+            try
+            {
+                string sResult = baseClient.GetStringFromPS(@"([wmiclass]'ROOT\ccm\ClientSdk:CCM_SoftwareCatalogUtilities').ApplyPolicyEx('" + Body + "','" + BodySignature + "','" + BodySource + "').Id");
+                if (!string.IsNullOrEmpty(sResult))
+                    return true;
+                else
+                    return false;
+            }
+            catch { }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Import an Application into the users policy store
+        /// </summary>
+        /// <param name="ApplicationID"></param>
+        /// <returns></returns>
+        public bool ImportApplicationPolicy(string ApplicationID)
+        {
+            try
+            {
+                DeviceId oID = baseClient.AgentProperties.GetDeviceId;
+                string sPortalURL = baseClient.AgentProperties.PortalURL;
+                string SOAPResult = "";
+
+                //Console.WriteLine(sPortalURL);
+
+                if (!string.IsNullOrEmpty(sPortalURL))
+                {
+                    HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(sPortalURL + "/applicationviewservice.asmx");
+                    webRequest.Headers.Add("SOAPAction","http://schemas.microsoft.com/5.0.0.0/ConfigurationManager/SoftwareCatalog/Website/InstallApplication");
+                    webRequest.ContentType = "text/xml;charset=\"utf-8\"";
+                    webRequest.Accept = "text/xml";
+                    webRequest.Method = "POST";
+                    webRequest.UseDefaultCredentials = true;
+
+                    XmlDocument soapEnvelopeXml = new XmlDocument();
+                    soapEnvelopeXml.LoadXml(@"<?xml version=""1.0"" encoding=""utf-8""?><s:Envelope xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/""><s:Body><InstallApplication xmlns=""http://schemas.microsoft.com/5.0.0.0/ConfigurationManager/SoftwareCatalog/Website"" xmlns:i=""http://www.w3.org/2001/XMLSchema-instance""><applicationID>" +
+                        ApplicationID + "</applicationID><deviceID>" + oID.ClientId + "," + oID.SignedClientId +
+                        "</deviceID><reserved/></InstallApplication></s:Body></s:Envelope>");
+
+                    //Console.WriteLine(soapEnvelopeXml.InnerXml);
+
+                    using (Stream stream = webRequest.GetRequestStream())
+                    {
+                        soapEnvelopeXml.Save(stream);
+                    }
+
+                    using (WebResponse response = webRequest.GetResponse())
+                    {
+                        using (StreamReader rd = new StreamReader(response.GetResponseStream()))
+                        {
+                            SOAPResult = rd.ReadToEnd();
+                        }
+                    }
+                }
+                else
+                    return false;
+
+                if(!string.IsNullOrEmpty(SOAPResult))
+                {
+                    //Console.WriteLine(SOAPResult);
+                    string sPSCode = "[xml]$out = '" + SOAPResult + "';" +
+                        "$BodySignature = $out.Envelope.Body.InstallApplicationResponse.InstallApplicationResult.BodySignature;" +
+                        "$Body64 = $out.Envelope.Body.InstallApplicationResponse.InstallApplicationResult.PolicyAssignmentsDocument;" +
+                        "$Body = [System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($Body64));" +
+                        @"([wmiclass]'ROOT\ccm\ClientSdk:CCM_SoftwareCatalogUtilities').ApplyPolicyEx($Body, $BodySignature, 'LOCAL')";
+                    List<PSObject> oRes = baseClient.GetObjectsFromPS(sPSCode, true);
+
+                    //Console.WriteLine(oRes[0].Properties["Id"].Value.ToString());
+
+                    return true;
+                }
+
+            }
+            catch(Exception ex) { Console.WriteLine(ex.Message);  }
+
             return false;
         }
     }

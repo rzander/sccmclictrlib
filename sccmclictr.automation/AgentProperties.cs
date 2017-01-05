@@ -42,9 +42,6 @@ namespace sccmclictr.automation.functions
             baseClient = oClient;
         }
 
-        
-
-#if CM2012
 
         /// <summary>
         /// Return the ActiveDirectory Site-Name (if exist).
@@ -432,7 +429,6 @@ namespace sccmclictr.automation.functions
             return oResult;
         }
 
-#endif
 
         /// <summary>
         /// Get/Set the option if an Administrator can Override Agent Settings from the ControlPanel Applet
@@ -1072,6 +1068,56 @@ namespace sccmclictr.automation.functions
 
             }
             return oResult;
+        }
+
+        /// <summary>
+        /// Get the DeviceID from ROOT\ccm\ClientSdk:CCM_SoftwareCatalogUtilities
+        /// </summary>
+        /// <returns>DeviceID Object with ClientID and SignedClientId</returns>
+        public DeviceId GetDeviceId
+        {
+            get
+            {
+                try
+                {
+                    PSObject oResult = base.CallClassMethod(@"ROOT\ccm\ClientSdk:CCM_SoftwareCatalogUtilities", "GetDeviceId", "", true);
+                    oResult.BaseObject.ToString();
+                    DeviceId oID = new DeviceId();
+                    oID.ClientId = oResult.Properties["ClientId"].Value.ToString();
+                    oID.SignedClientId = oResult.Properties["SignedClientId"].Value.ToString();
+                    oID.ReturnValue = (uint)oResult.Properties["ReturnValue"].Value;
+                    return oID;
+                }
+                catch { }
+
+                return new DeviceId();
+            }
+        }
+
+        /// <summary>
+        /// get ApplicationCatalog URL
+        /// </summary>
+        public string PortalURL
+        {
+            get
+            {
+                try
+                {
+                    PSObject oResult = CallClassMethod(@"ROOT\ccm\ClientSdk:CCM_SoftwareCatalogUtilities", "GetPortalUrlValue", "");
+                    return oResult.Properties["PortalUrl"].Value.ToString();
+                }
+                catch(Exception ex) { return ex.Message; }
+            }
+        }
+
+        /// <summary>
+        /// DeviceID from ROOT\ccm\ClientSdk:CCM_SoftwareCatalogUtilities
+        /// </summary>
+        public class DeviceId
+        {
+            public string ClientId;
+            public string SignedClientId;
+            public uint ReturnValue;
         }
     }
 }

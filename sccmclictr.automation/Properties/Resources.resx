@@ -288,71 +288,44 @@ $signature = @"
 }
 
 Function UnProtect-PolicySecret {
+&lt;#
+    .SYNOPSIS
+    Decrypts policy secrets (c) 2016 by Mattias Benninge
 
-	[CmdletBinding()] 
-	PARAM (
-		[Parameter(Position=0,Mandatory=$true,HelpMessage="Encrypted sting",ValueFromPipeline=$true)][Alias("Data")][String] $strData 
-	)
-	
-	PROCESS { 
-	    $signature = @'  
-		[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-	    public struct DATA_BLOB {
-	        public int cbData;
-	        public System.IntPtr pbData;
-	    }
-		
-	    [DllImport("Crypt32.dll",SetLastError=true, CharSet=CharSet.Auto)]
-	    [return: MarshalAs(UnmanagedType.Bool)]
-	    public static extern bool CryptUnprotectData(
-	        ref DATA_BLOB pDataIn, 
-	        String szDataDescr, 
-	        ref int pOptionalEntropy, 
-	        IntPtr pvReserved, 
-	        ref int pPromptStruct, 
-	        int dwFlags, 
-	        ref DATA_BLOB pDataOut
-		);
-'@
-		# Add-Type so we can access the unmanaged functions from PowerShell
-	    Add-Type -MemberDefinition $signature -Name Crypt32 -Namespace PKI
-		
-		# Chop string up into bytes, and drop the first 4 bytes
-		[System.Byte[]]$byteData = New-Object System.Byte[] $($strData.length / 2 - 4)
-	    for ($i = 0; $i -lt (($strData.length / 2) - 4); $i++)
-	    {
-	        $byteData[$i] = [System.Convert]::ToByte($strData.substring(($i + 4) * 2, 2),16)
-	    }
-		
-		# Create a Blob to contain the encrypted bytes
-	    $cipherTextBlob = New-Object PKI.Crypt32+DATA_BLOB
-	    $cipherTextBlob.cbData = $byteData.length
-	    $cipherTextBlob.pbData = [System.Runtime.Interopservices.Marshal]::AllocCoTaskMem($cipherTextBlob.cbData)
+    .DESCRIPTION
+    The UnProtect-PolicySecret CmdLet takes a encrypted string and returnsthe decrypted sting.
+    
+    .NOTES
+    This function must be run under the local system account on the computer that encrypted the data.
+  
+    .EXAMPLE
+    UnProtect-PolicySecret -data "F600000001000000D08C9DDF0115D1118C7A00C04FC297EB010000006AF233F693"
 
-	    # Copy data from original source to the BLOB structure
-	    [System.Runtime.Interopservices.Marshal]::Copy($byteData, 0, $cipherTextBlob.pbData, $cipherTextBlob.cbData)
-	    
-		# Create a Blob to contain the unencrypted bytes
-		$plainTextBlob = New-Object PKI.Crypt32+DATA_BLOB
+    .PARAMETER Data
+    [String] Encrypted data
+#&gt;
 
-	    # Decrypt the Blob with the encrypted bytes in it, and store in the plain text Blob
-	    if ([PKI.Crypt32]::CryptUnprotectData([ref]$cipherTextBlob, $null, [ref][IntPtr]::Zero, [IntPtr]::Zero, [ref][IntPtr]::Zero, 1, [ref]$plainTextBlob))
-	    {
-			# If the decryption was sucessful, create a new byte array to contain
-	        $bytePlainText = New-Object byte[] -ArgumentList $plainTextBlob.cbData
+    [CmdletBinding()] 
+    PARAM (
+        [Parameter(Position=0,Mandatory=$true,HelpMessage="Encrypted sting",ValueFromPipeline=$true)][Alias("Data")][String] $strData 
+    )
+                             
+    # Chop string up into bytes, and drop the first 4 bytes
+    [System.Byte[]]$byteData = New-Object System.Byte[] $($strData.length / 2 - 4)
+    for ($i = 0; $i -lt (($strData.length / 2) - 4); $i++)
+    {
+        $byteData[$i] = [System.Convert]::ToByte($strData.substring(($i + 4) * 2, 2),16)
+    }
 
-	        # Copy data from the plain text Blob to the new byte array
-	        [System.Runtime.Interopservices.Marshal]::Copy($plainTextBlob.pbData, $bytePlainText, 0, $bytePlainText.length)
-	        
-	        # Convert the unicode byte array to plain text string and return it
-	        return $([System.Text.UnicodeEncoding]::Unicode.GetString($bytePlainText))
-	    }
-	    Else
-	    {
-	        write-host ("Decrypt failed, error code: " + [System.Runtime.Interopservices.Marshal]::GetLastWin32Error())
-	    }
-	}
+    #Add the security type assembly
+    Add-Type -AssemblyName System.Security 
+            
+    #Decrypt the data
+    $bytePlainText = [System.Security.Cryptography.ProtectedData]::Unprotect($byteData , $null, [System.Security.Cryptography.DataProtectionScope]::CurrentUser)
+
+    return $([System.Text.UnicodeEncoding]::Unicode.GetString($bytePlainText)) 
 }
+
 
 # Impersonate the LocalSystem account on the current thread
 Enable-TSDuplicateToken

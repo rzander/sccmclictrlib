@@ -197,6 +197,26 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
+        /// Return OS version e.g. "10.0.14393"
+        /// </summary>
+        public string OSVersion
+        {
+            get
+            {
+                TimeSpan toldCacheTime = base.cacheTime;
+
+                //Cache for 15minutes
+                base.cacheTime = new TimeSpan(0, 15, 0);
+
+                string sVersion = base.GetStringFromPS("(Get-WmiObject Win32_OperatingSystem).Version");
+                base.cacheTime = toldCacheTime;
+
+                return sVersion;
+
+            }
+        }
+
+        /// <summary>
         /// Return True if OS is x64 Architecture
         /// </summary>
         public Boolean isx64OS

@@ -21,6 +21,9 @@ using System.Web;
 
 using System.Drawing;
 using System.Xml;
+using System.Net;
+using System.IO;
+using System.Reflection;
 
 namespace sccmclictr.automation.functions
 {
@@ -235,6 +238,118 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
+        /// Get Application from the Catalog
+        /// </summary>
+        /// <param name="AppCatalogURL">e.g. http://CatalogServer/CMApplicationCatalog</param>
+        /// <param name="searchFilter"></param>
+        /// <returns></returns>
+        public List<AppDetailView> ApplicationCatalog(string AppCatalogURL, string searchFilter = "")
+        {
+            List<AppDetailView> lResult = new List<AppDetailView>();
+            try
+            {
+                string SOAPResult = "";
+                if(string.IsNullOrEmpty(AppCatalogURL))
+                    AppCatalogURL = baseClient.AgentProperties.PortalURL;
+                string OSArchitecture = baseClient.Inventory.OSArchitecture;
+                string OSversionFull = baseClient.Inventory.OSVersion;
+                string OSVersion = OSversionFull.Substring(0, OSversionFull.LastIndexOf('.'));
+
+                if (!string.IsNullOrEmpty(AppCatalogURL))
+                {
+                    HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(AppCatalogURL + "/applicationviewservice.asmx");
+                    webRequest.Headers.Add("SOAPAction", "http://schemas.microsoft.com/5.0.0.0/ConfigurationManager/SoftwareCatalog/Website/GetFilteredApplications");
+                    webRequest.Headers.Add("Accept-Language", "de-DE");
+                    webRequest.Headers.Add("request-source", "softwarecenter");
+                    webRequest.Headers.Add("api-version", "4.0");
+                    webRequest.ContentType = "text/xml;charset=\"utf-8\"";
+                    webRequest.Accept = "text/xml";
+                    webRequest.Method = "POST";
+                    webRequest.UseDefaultCredentials = true;
+
+                    string sQuery = "<queryString/>";
+                    if (!string.IsNullOrEmpty(searchFilter))
+                        sQuery = "<queryString>" + searchFilter + "</queryString>";
+
+                    string sXMLEnvelope = @"<s:Envelope xmlns:s=""http://schemas.xmlsoap.org/soap/envelope/"">" +
+                        "<s:Body>" +
+                        @"<GetFilteredApplications xmlns=""http://schemas.microsoft.com/5.0.0.0/ConfigurationManager/SoftwareCatalog/Website"" xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"">" +
+                        "<sortBy>Name</sortBy>" +
+                        "<filterByProperty>IsFeatured</filterByProperty >" +
+                        sQuery +
+                        "<maximumRows>100</maximumRows>" +
+                        "<startRowIndex>0</startRowIndex>" +
+                        "<sortAscending>true</sortAscending>" +
+                        "<classicNameFields>PackageProgramName</classicNameFields>" +
+                        "<useSecondarySort>true</useSecondarySort>" +
+                        "<fillInIcon>false</fillInIcon>" +
+                        "<platform>" +
+                        "<OSVersion>" + OSVersion + "</OSVersion>" +
+                        "<OSArchitecture>" + OSArchitecture + "</OSArchitecture>" +
+                        "<OSProductType>1</OSProductType>" +
+                        "<SMSID/>" +
+                        "<SspVersion>SWCenter:4.0.0.0</SspVersion>" +
+                        "<IsClassicAppSupported>true</IsClassicAppSupported>" +
+                        "</platform>" +
+                        "</GetFilteredApplications>" +
+                        "</s:Body>" +
+                        "</s:Envelope> ";
+
+                    XmlDocument soapEnvelopeXml = new XmlDocument();
+                    soapEnvelopeXml.LoadXml(sXMLEnvelope);
+
+                    //Console.WriteLine(soapEnvelopeXml.InnerXml);
+
+                    using (Stream stream = webRequest.GetRequestStream())
+                    {
+                        soapEnvelopeXml.Save(stream);
+                    }
+
+                    using (WebResponse response = webRequest.GetResponse())
+                    {
+                        using (StreamReader rd = new StreamReader(response.GetResponseStream()))
+                        {
+                            SOAPResult = rd.ReadToEnd();
+                        }
+                    }
+                }
+                else
+                    return lResult;
+
+                if (!string.IsNullOrEmpty(SOAPResult))
+                {
+                    XmlDocument xResult = new XmlDocument();
+                    xResult.LoadXml(SOAPResult);
+                    XmlNamespaceManager manager = new XmlNamespaceManager(xResult.NameTable);
+                    manager.AddNamespace("ns", "http://schemas.microsoft.com/5.0.0.0/ConfigurationManager/SoftwareCatalog/Website");
+
+                    foreach (XmlNode xNode in xResult.SelectNodes("//ns:GetFilteredApplicationsResponse/ns:GetFilteredApplicationsResult/ns:AppDetailView", manager))
+                    {
+                        AppDetailView oApp = new AppDetailView();
+
+                        FieldInfo[] properties = oApp.GetType().GetFields();
+
+                        foreach (FieldInfo p in properties)
+                        {
+                            try
+                            {
+                                p.SetValue(oApp, xNode[p.Name].InnerText);
+                            }
+                            catch { }
+                        }
+
+                        lResult.Add(oApp);
+                    }
+
+                }
+            }
+            catch(Exception ex) { Console.WriteLine(ex.Message); }
+
+            return lResult;
+
+        }
+
+        /// <summary>
         /// ROOT\ccm\ClientSDK:CCM_SoftwareBase
         /// </summary>
         public class CCM_SoftwareBase
@@ -264,7 +379,7 @@ namespace sccmclictr.automation.functions
             public String Publisher { get; set; }
             public UInt32? Type { get; set; }
 
-            #pragma warning restore 1591 // Enable warnings about missing XML comments
+#pragma warning restore 1591 // Enable warnings about missing XML comments
 
             #endregion
 
@@ -2717,6 +2832,29 @@ namespace sccmclictr.automation.functions
             /// <value>The content version.</value>
             public String ContentVersion { get; set; }
             #endregion
+
+        }
+
+
+        public class AppDetailView
+        {
+            public string Category;
+            public string Publisher;
+            public string ApplicationId;
+            public string Description;
+            public string Name;
+            public string AppVersion;
+            public string AvailableDate;
+            public string ApplicationDefinitionVersion;
+            public string IsAppModelApplication;
+            public string PackageName;
+            public string ImagePath;
+            public string AutoApproval;
+            public string SupersededApplications;
+            public string Icon;
+            public string DeploymentTypeExperience;
+            public string InstallationState;
+            public string InstallationErrorCode;
 
         }
 
