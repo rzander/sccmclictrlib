@@ -1225,16 +1225,27 @@ namespace sccmclictr.automation.functions
 
                 if(!string.IsNullOrEmpty(SOAPResult))
                 {
+
+
                     //Console.WriteLine(SOAPResult);
-                    string sPSCode = "[xml]$out = '" + SOAPResult + "';" +
+                    /*string sPSCode = "[xml]$out = '" + SOAPResult + "';" +
                         "$BodySignature = $out.Envelope.Body.InstallApplicationResponse.InstallApplicationResult.BodySignature;" +
                         "$Body64 = $out.Envelope.Body.InstallApplicationResponse.InstallApplicationResult.PolicyAssignmentsDocument;" +
                         "$Body = [System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($Body64));" +
-                        @"([wmiclass]'ROOT\ccm\ClientSdk:CCM_SoftwareCatalogUtilities').ApplyPolicyEx($Body, $BodySignature, 'LOCAL')";
-                    List<PSObject> oRes = baseClient.GetObjectsFromPS(sPSCode, true);
+                        @"([wmiclass]'ROOT\ccm\ClientSdk:CCM_SoftwareCatalogUtilities').ApplyPolicyEx($Body, $BodySignature, 'LOCAL')";*/
+                    //List<PSObject> oRes = baseClient.GetObjectsFromPS(sPSCode, true);
 
+                    XmlDocument xDoc = new XmlDocument();
+                    xDoc.LoadXml(SOAPResult);
+                    XmlNode xNode2 = xDoc.SelectSingleNode("//*[local-name()='InstallApplicationResult']");
+                    string s2 = xNode2["PolicyAssignmentsDocument"].InnerText;
+                    //[System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($Body64))
+                    string sPolicy = System.Text.Encoding.Unicode.GetString(System.Convert.FromBase64String(s2));
+                    string sPSCode = getPSWMIScript(sPolicy);
+                    string sRes = baseClient.GetStringFromPS(sPSCode, true);
                     //Console.WriteLine(oRes[0].Properties["Id"].Value.ToString());
-
+                    System.Threading.Thread.Sleep(1000);
+                    baseClient.AgentActions.AppManGlobalEvaluation();
                     return true;
                 }
 
@@ -1242,6 +1253,73 @@ namespace sccmclictr.automation.functions
             catch(Exception ex) { Console.WriteLine(ex.Message);  }
 
             return false;
+        }
+
+        /// <summary>
+        /// Generate PS to import App Policy
+        /// </summary>
+        /// <param name="sXMLBody"></param>
+        /// <returns></returns>
+        public string getPSWMIScript(string sXMLBody)
+        {
+            File.WriteAllText(Environment.ExpandEnvironmentVariables(@"%temp%\body.xml"), sXMLBody);
+
+            XmlDocument xDoc = new XmlDocument();
+            xDoc.LoadXml(sXMLBody);
+
+            List<string> lResult = new List<string>();
+
+            foreach (XmlNode xNode in xDoc.SelectNodes("/ReplyAssignments/EPolicy/PolicyXML"))
+            {
+                try
+                {
+                    string sComp = xNode.InnerXml.ToString();
+                    string sXMLPolicy = sccmclictr.automation.policy.localpolicy.DecompressPolicy(sComp);
+                    sXMLPolicy.ToString();
+
+                    XmlDocument xBody = new XmlDocument();
+                    xBody.LoadXml(sXMLPolicy);
+                    foreach (XmlNode xPolicy in xBody.SelectNodes("/Policy/PolicyRule/PolicyAction/instance"))
+                    {
+                        try
+                        {
+                            string sClassName = xPolicy.Attributes["class"].Value.ToString();
+                            lResult.Add(@"$ruleClass = ([WMICLASS]'ROOT\ccm\Policy\Machine\ActualConfig:" + sClassName + "').CreateInstance();");
+
+                            foreach (XmlNode xProperty in xPolicy.SelectNodes("property"))
+                            {
+                                try
+                                {
+                                    string sType = xProperty.Attributes["type"].Value as string;
+                                    if (!string.IsNullOrEmpty(xProperty.InnerText))
+                                    {
+                                        switch (sType)
+                                        {
+                                            case "8200":
+                                                lResult.Add("$ruleClass[\"" + xProperty.Attributes["name"].Value.ToString() + "\"] = @(\"" + xProperty.InnerText.Trim().Replace("\r\n", "`r`n").Replace("'", "`'").Replace("\"", "`\"") + "\");");
+                                                continue;
+                                            case "19":
+                                                lResult.Add("$ruleClass[\"" + xProperty.Attributes["name"].Value.ToString() + "\"] = " + xProperty.InnerText.Trim().Replace("\r\n", "`r`n").Replace("'", "`'").Replace("\"", "`\"") + ";");
+                                                continue;
+                                            default:
+                                                lResult.Add("$ruleClass[\"" + xProperty.Attributes["name"].Value.ToString() + "\"] = \"" + xProperty.InnerText.Trim().Replace("\r\n", "`r`n").Replace("'", "`'").Replace("\"", "`\"") + "\";");
+                                                continue;
+                                        }
+                                    }
+                                }
+                                catch { }
+                            }
+
+                            lResult.Add("$ruleClass.Put();");
+                        }
+                        catch { }
+                    }
+                }
+                catch { }
+            }
+            string sResult = string.Join("", lResult.ToArray());
+            File.WriteAllText(Environment.ExpandEnvironmentVariables(@"%temp%\sccmclictr.ps1"), sXMLBody);
+            return string.Join("", lResult.ToArray());
         }
     }
 }
