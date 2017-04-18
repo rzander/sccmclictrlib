@@ -1130,7 +1130,7 @@ namespace sccmclictr.automation.functions
         {
             try
             {
-                string sResult = base.GetStringFromPS("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\CCM\\CcmExec\" -Name \"SystemTaskExclude\" -Type string -force -value \"\"", true);
+                string sResult = base.GetStringFromPS("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\CCM\\CcmExec\" -Name \"SystemTaskExcludes\" -Type string -force -value \"\"", true);
 
                 return true;
             }
@@ -1318,8 +1318,8 @@ namespace sccmclictr.automation.functions
                 catch { }
             }
             string sResult = string.Join("", lResult.ToArray());
-            File.WriteAllText(Environment.ExpandEnvironmentVariables(@"%temp%\sccmclictr.ps1"), sXMLBody);
-            return string.Join("", lResult.ToArray());
+            File.WriteAllText(Environment.ExpandEnvironmentVariables(@"%temp%\sccmclictr.ps1"), sResult);
+            return sResult;
         }
     }
 }
