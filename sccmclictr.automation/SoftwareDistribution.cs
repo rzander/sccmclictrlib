@@ -277,7 +277,7 @@ namespace sccmclictr.automation.functions
                         "<sortBy>Name</sortBy>" +
                         "<filterByProperty>IsFeatured</filterByProperty >" +
                         sQuery +
-                        "<maximumRows>100</maximumRows>" +
+                        "<maximumRows>1000</maximumRows>" +
                         "<startRowIndex>0</startRowIndex>" +
                         "<sortAscending>true</sortAscending>" +
                         "<classicNameFields>PackageProgramName</classicNameFields>" +
