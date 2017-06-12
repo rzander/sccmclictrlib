@@ -95,15 +95,16 @@ namespace sccmclictr.automation.functions
         /// <summary>
         /// Get a single Service Instance
         /// </summary>
-        /// <param name="ServiceName"></param>
+        /// <param name="ServiceName">Name of the Service</param>
+        /// <param name="Reload">true = do not get results from cache</param>
         /// <returns></returns>
-        public Win32_Service GetService(string ServiceName)
+        public Win32_Service GetService(string ServiceName, bool Reload = true)
         {
             //Remove cached results
             string sHash1 = base.CreateHash(@"ROOT\cimv2" + string.Format("SELECT * FROM Win32_Service WHERE Name ='{0}'", ServiceName));
             base.Cache.Remove(sHash1);
 
-            List<PSObject> oObj = GetObjects(@"ROOT\cimv2", string.Format("SELECT * FROM Win32_Service WHERE Name ='{0}'", ServiceName));
+            List<PSObject> oObj = GetObjects(@"ROOT\cimv2", string.Format("SELECT * FROM Win32_Service WHERE Name ='{0}'", ServiceName), Reload);
             foreach (PSObject PSObj in oObj)
             {
                 Win32_Service oCIEx = new Win32_Service(PSObj, remoteRunspace, pSCode);
@@ -282,6 +283,64 @@ namespace sccmclictr.automation.functions
 
             return 0;
         }
+
+        /// <summary>
+        /// Set a Service StartupType to Manual
+        /// </summary>
+        /// <returns>false = error</returns>
+        public bool SetStartup_Manual()
+        {
+            bool bResult = false;
+            try
+            {
+                oNewBase.GetStringFromPS(string.Format("Set-Service {0} -StartupType Manual", base.Name), true);
+            }
+            catch
+            {
+                bResult = false;
+            }
+
+            return bResult;
+        }
+
+        /// <summary>
+        /// Set a Service StartupType to Automatic
+        /// </summary>
+        /// <returns>false = error</returns>
+        public bool SetStartup_Auto()
+        {
+            bool bResult = false;
+            try
+            {
+                oNewBase.GetStringFromPS(string.Format("Set-Service {0} -StartupType Automatic", base.Name), true);
+            }
+            catch
+            {
+                bResult = false;
+            }
+
+            return bResult;
+        }
+
+        /// <summary>
+        /// Set a Service StartupType to Disabled
+        /// </summary>
+        /// <returns>false = error</returns>
+        public bool SetStartup_Disabled()
+        {
+            bool bResult = false;
+            try
+            {
+                oNewBase.GetStringFromPS(string.Format("Set-Service {0} -StartupType Disabled", base.Name), true);
+            }
+            catch
+            {
+                bResult = false;
+            }
+
+            return bResult;
+        }
+
         /*
         public UInt32 InterrogateService()
         {
@@ -317,6 +376,8 @@ namespace sccmclictr.automation.functions
             return 0;
         }
          **/
+
+
         #endregion
     }
 
