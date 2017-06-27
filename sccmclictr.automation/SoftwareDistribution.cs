@@ -846,11 +846,73 @@ namespace sccmclictr.automation.functions
             /// <returns></returns>
             public string Uninstall(string AppPriority, bool isRebootIfNeeded)
             {
+                // set EnforcementDeadlines to null
+                List<PSObject>  Assignments = oNewBase.GetObjects(@"ROOT\ccm\policy\Machine\actualconfig", "SELECT * FROM CCM_ApplicationCIAssignment", true);
+
+                foreach(PSObject Assignment in Assignments)
+                {
+                    string AssignedCIs = Assignment.Properties["AssignedCIs"].Value.ToString();
+
+                    if(AssignedCIs.Contains(Id.Replace("Application", "RequiredApplication"))) 
+                    {
+                        try
+                        {
+                            if (Assignment.Properties["EnforcementDeadline"].Name == "EnforcementDeadline")
+                            {
+                                oNewBase.SetProperty(@"ROOT\ccm\policy\Machine\actualconfig" + ":" + Assignment.Properties["__RELPATH"].Value.ToString().Replace("\"", "'"), "EnforcementDeadline", "$null");
+                            }
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                    }
+                }
+
+                System.Threading.Thread.Sleep(10000);
+
                 if (string.IsNullOrEmpty(AppPriority))
                     AppPriority = "Normal";
 
                 string sJobID = "";
                 PSObject oResult = oNewBase.CallClassMethod("ROOT\\ccm\\ClientSdk:CCM_Application", "Uninstall", "'" + Id + "', " + Revision + ", $" + IsMachineTarget.ToString() + ", " + AppEnforcePreference.Immediate + ", " + "'" + AppPriority + "'" + ", $" + isRebootIfNeeded.ToString());
+                List<PSObject> oObj = oNewBase.GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_Application WHERE Id ='" + this.Id + "'", true);
+
+                try
+                {
+                    int i = 0;
+                    while (((uint)oObj[0].Properties["EvaluationState"].Value) == this.EvaluationState && ((uint)oObj[0].Properties["EvaluationState"].Value)  != 3 && i <= 30)
+                    {
+                        System.Threading.Thread.Sleep(3000);
+                        oObj = oNewBase.GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_Application WHERE Id ='" + this.Id + "'", true);
+                        i++;
+                    }
+                }
+                catch (Exception e)
+                {
+                    System.Threading.Thread.Sleep(30000);
+                }
+
+                // set Enforcement Deadlines to old Value
+                foreach (PSObject Assignment in Assignments)
+                {
+                    string AssignedCIs = Assignment.Properties["AssignedCIs"].Value.ToString() as string;
+
+                    if (AssignedCIs.Contains(Id.Replace("Application", "RequiredApplication")))
+                    {
+                        try
+                        {
+                            if (Assignment.Properties["EnforcementDeadline"].Name == "EnforcementDeadline")
+                            {
+                                oNewBase.SetProperty(@"ROOT\ccm\policy\Machine\actualconfig" + ":" + Assignment.Properties["__RELPATH"].Value.ToString().Replace("\"", "'"), "EnforcementDeadline", "'" + Assignment.Properties["EnforcementDeadline"].Value.ToString() + "'");
+                            }
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                    }
+                }
                 return sJobID;
             }
 
