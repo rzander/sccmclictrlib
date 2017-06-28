@@ -1,5 +1,5 @@
 ﻿//SCCM Client Center Automation Library (SCCMCliCtr.automation)
-//Copyright (c) 2011 by Roger Zander
+//Copyright (c) 2017 by Roger Zander
 
 //This program is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version. 
 //This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. 
@@ -2971,7 +2971,29 @@ namespace sccmclictr.automation.functions
                 this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
                 this.__INSTANCE = true;
                 this.WMIObject = WMIObject;
-                this.AssignedCIs = WMIObject.Properties["AssignedCIs"].Value as String[];
+
+                try
+                {
+                    //https://stackoverflow.com/questions/36422558/calling-dynamic-psobject-properties-in-c-sharp-returns-runtimebinderexception
+
+                    object membersValue = WMIObject.Properties["AssignedCIs"].Value;
+                    object[] members;
+                    
+                    // If the group has only one member, then it won't be an object array but rather a PSObject
+                    if (membersValue.GetType() == typeof(PSObject))
+                    {
+                        members = new object[] { membersValue };
+                    }
+                    else
+                    {
+                        // The group has more than one member, in this case we can cast it to an object array
+                        members = ((object[])membersValue);
+                    }
+
+                    this.AssignedCIs = Array.ConvertAll(members, x => x.ToString());
+                }
+                catch { }
+
                 this.AssignmentAction = WMIObject.Properties["AssignmentAction"].Value as UInt32?;
                 this.AssignmentFlags = WMIObject.Properties["AssignmentFlags"].Value as UInt64?;
                 this.AssignmentID = WMIObject.Properties["AssignmentID"].Value as String;
