@@ -371,6 +371,7 @@ namespace sccmclictr.automation.functions
         {
             return ApplicationCIAssignment(bReload, new TimeSpan(0, 0, 30));
         }
+
         /// <summary>
         /// Get ApplicationCIAssignment's from ROOT\ccm\Policy\Machine\ActualConfig
         /// </summary>
@@ -898,74 +899,41 @@ namespace sccmclictr.automation.functions
             /// <returns></returns>
             public string Uninstall(string AppPriority, bool isRebootIfNeeded)
             {
-                // set EnforcementDeadlines to null
-                List<PSObject> Assignments = oNewBase.GetObjects(@"ROOT\ccm\policy\Machine\actualconfig", "SELECT * FROM CCM_ApplicationCIAssignment", true);
+                bool bProcessed = false;
+                List<PSObject> oObj = new List<PSObject>();
 
-                foreach (PSObject Assignment in Assignments)
+                oObj = oNewBase.GetObjects(@"ROOT\ccm\Policy\Machine\ActualConfig", "SELECT * FROM CCM_ApplicationCIAssignment", true);
+                foreach (PSObject PSObj in oObj)
                 {
-                    string AssignedCIs = Assignment.Properties["AssignedCIs"].Value.ToString();
-
-                    if (AssignedCIs.Contains(Id.Replace("Application", "RequiredApplication")))
+                    try
                     {
-                        try
+                        //Get CCM_ApplicationCIAssignment
+                        CCM_ApplicationCIAssignment oApp = new CCM_ApplicationCIAssignment(PSObj, remoteRunspace, pSCode);
+                        oApp.remoteRunspace = remoteRunspace;
+                        oApp.pSCode = pSCode;
+                        if(Array.FindAll(oApp.AssignedCIs, s => s.IndexOf(Id.Split('_')[2]) >= 0).Count() > 0)
                         {
-                            if (Assignment.Properties["EnforcementDeadline"].Name == "EnforcementDeadline")
-                            {
-                                oNewBase.SetProperty(@"ROOT\ccm\policy\Machine\actualconfig" + ":" + Assignment.Properties["__RELPATH"].Value.ToString().Replace("\"", "'"), "EnforcementDeadline", "$null");
-                            }
-                        }
-                        catch (Exception e)
-                        {
+                            oNewBase.SetProperty(oApp.__NAMESPACE + ":" + oApp.__RELPATH.Replace("\"","`\""), "EnforcementDeadline", "$null");
+                            System.Threading.Thread.Sleep(1000); //sleep 1s to process the change
+                            PSObject opResult = oNewBase.CallClassMethod("ROOT\\ccm\\ClientSdk:CCM_Application", "Uninstall", "'" + Id + "', " + Revision + ", $" + IsMachineTarget.ToString() + ", " + AppEnforcePreference.Immediate + ", " + "'" + AppPriority + "'" + ", $" + isRebootIfNeeded.ToString());
+                            System.Threading.Thread.Sleep(1000); //sleep 1s to process the change
+                            if (oApp.WMIObject.Properties["EnforcementDeadline"].Value != null)
+                                oNewBase.SetProperty(oApp.__NAMESPACE + ":" + oApp.__RELPATH.Replace("\"", "`\""), "EnforcementDeadline", "\"" + oApp.WMIObject.Properties["EnforcementDeadline"].Value.ToString() + "\"");
+
+                            bProcessed = true;
 
                         }
+
                     }
+                    catch { }
                 }
 
-                System.Threading.Thread.Sleep(10000);
-
-                if (string.IsNullOrEmpty(AppPriority))
-                    AppPriority = "Normal";
-
-                string sJobID = "";
-                PSObject oResult = oNewBase.CallClassMethod("ROOT\\ccm\\ClientSdk:CCM_Application", "Uninstall", "'" + Id + "', " + Revision + ", $" + IsMachineTarget.ToString() + ", " + AppEnforcePreference.Immediate + ", " + "'" + AppPriority + "'" + ", $" + isRebootIfNeeded.ToString());
-                List<PSObject> oObj = oNewBase.GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_Application WHERE Id ='" + this.Id + "'", true);
-
-                try
+                if(!bProcessed)
                 {
-                    int i = 0;
-                    while (((uint)oObj[0].Properties["EvaluationState"].Value) == this.EvaluationState && ((uint)oObj[0].Properties["EvaluationState"].Value) != 3 && i <= 30)
-                    {
-                        System.Threading.Thread.Sleep(3000);
-                        oObj = oNewBase.GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_Application WHERE Id ='" + this.Id + "'", true);
-                        i++;
-                    }
-                }
-                catch (Exception e)
-                {
-                    System.Threading.Thread.Sleep(30000);
+                    PSObject opResult = oNewBase.CallClassMethod("ROOT\\ccm\\ClientSdk:CCM_Application", "Uninstall", "'" + Id + "', " + Revision + ", $" + IsMachineTarget.ToString() + ", " + AppEnforcePreference.Immediate + ", " + "'" + AppPriority + "'" + ", $" + isRebootIfNeeded.ToString());
                 }
 
-                // set Enforcement Deadlines to old Value
-                foreach (PSObject Assignment in Assignments)
-                {
-                    string AssignedCIs = Assignment.Properties["AssignedCIs"].Value.ToString() as string;
-
-                    if (AssignedCIs.Contains(Id.Replace("Application", "RequiredApplication")))
-                    {
-                        try
-                        {
-                            if (Assignment.Properties["EnforcementDeadline"].Name == "EnforcementDeadline")
-                            {
-                                oNewBase.SetProperty(@"ROOT\ccm\policy\Machine\actualconfig" + ":" + Assignment.Properties["__RELPATH"].Value.ToString().Replace("\"", "'"), "EnforcementDeadline", "'" + Assignment.Properties["EnforcementDeadline"].Value.ToString() + "'");
-                            }
-                        }
-                        catch (Exception e)
-                        {
-
-                        }
-                    }
-                }
-                return sJobID;
+                return "";
             }
 
             /// <summary>
