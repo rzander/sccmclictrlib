@@ -457,7 +457,10 @@ namespace sccmclictr.automation.functions
                 if (string.IsNullOrEmpty(sDeadline))
                     this.Deadline = null;
                 else
+                {
                     this.Deadline = ManagementDateTimeConverter.ToDateTime(sDeadline) as DateTime?;
+                    this.Deadline = ((DateTime)this.Deadline).ToUniversalTime();
+                }
 
                 this.Description = WMIObject.Properties["Description"].Value as string;
                 this.ErrorCode = WMIObject.Properties["ErrorCode"].Value as uint?;
@@ -901,6 +904,7 @@ namespace sccmclictr.automation.functions
             {
                 bool bProcessed = false;
                 List<PSObject> oObj = new List<PSObject>();
+                List<CCM_ApplicationCIAssignment> lAssignments = new List<CCM_ApplicationCIAssignment>();
 
                 oObj = oNewBase.GetObjects(@"ROOT\ccm\Policy\Machine\ActualConfig", "SELECT * FROM CCM_ApplicationCIAssignment", true);
                 foreach (PSObject PSObj in oObj)
@@ -908,30 +912,61 @@ namespace sccmclictr.automation.functions
                     try
                     {
                         //Get CCM_ApplicationCIAssignment
+
                         CCM_ApplicationCIAssignment oApp = new CCM_ApplicationCIAssignment(PSObj, remoteRunspace, pSCode);
                         oApp.remoteRunspace = remoteRunspace;
                         oApp.pSCode = pSCode;
-                        if(Array.FindAll(oApp.AssignedCIs, s => s.IndexOf(Id.Split('_')[2]) >= 0).Count() > 0)
+                        if (Array.FindAll(oApp.AssignedCIs, s => s.IndexOf(Id.Split('_')[2]) >= 0).Count() > 0)
                         {
-                            oNewBase.SetProperty(oApp.__NAMESPACE + ":" + oApp.__RELPATH.Replace("\"","`\""), "EnforcementDeadline", "$null");
-                            System.Threading.Thread.Sleep(1000); //sleep 1s to process the change
-                            PSObject opResult = oNewBase.CallClassMethod("ROOT\\ccm\\ClientSdk:CCM_Application", "Uninstall", "'" + Id + "', " + Revision + ", $" + IsMachineTarget.ToString() + ", " + AppEnforcePreference.Immediate + ", " + "'" + AppPriority + "'" + ", $" + isRebootIfNeeded.ToString());
-                            System.Threading.Thread.Sleep(1000); //sleep 1s to process the change
-                            if (oApp.WMIObject.Properties["EnforcementDeadline"].Value != null)
-                                oNewBase.SetProperty(oApp.__NAMESPACE + ":" + oApp.__RELPATH.Replace("\"", "`\""), "EnforcementDeadline", "\"" + oApp.WMIObject.Properties["EnforcementDeadline"].Value.ToString() + "\"");
-
+                            lAssignments.Add(oApp);
+                            oNewBase.SetProperty(oApp.__NAMESPACE + ":" + oApp.__RELPATH.Replace("\"", "`\""), "EnforcementDeadline", "$null");
                             bProcessed = true;
-
                         }
 
                     }
                     catch { }
                 }
 
-                if(!bProcessed)
+                if (bProcessed)
+                    System.Threading.Thread.Sleep(2000); //sleep 2s to process the changes
+
+                foreach (PSObject PSObj in oObj)
                 {
-                    PSObject opResult = oNewBase.CallClassMethod("ROOT\\ccm\\ClientSdk:CCM_Application", "Uninstall", "'" + Id + "', " + Revision + ", $" + IsMachineTarget.ToString() + ", " + AppEnforcePreference.Immediate + ", " + "'" + AppPriority + "'" + ", $" + isRebootIfNeeded.ToString());
+                    try
+                    {
+                        PSObject opResult = oNewBase.CallClassMethod("ROOT\\ccm\\ClientSdk:CCM_Application", "Uninstall", "'" + Id + "', " + Revision + ", $" + IsMachineTarget.ToString() + ", " + 1 + ", " + "'" + AppPriority + "'" + ", $" + isRebootIfNeeded.ToString());
+                    }
+                    catch { }
                 }
+
+                if (bProcessed)
+                {
+                    System.Threading.Thread.Sleep(2000); //sleep 2s to process the changes
+
+                    foreach (PSObject PSObj in oObj)
+                    {
+                        try
+                        {
+                            //Get CCM_ApplicationCIAssignment
+                            CCM_ApplicationCIAssignment oApp = new CCM_ApplicationCIAssignment(PSObj, remoteRunspace, pSCode);
+                            oApp.remoteRunspace = remoteRunspace;
+                            oApp.pSCode = pSCode;
+                            if (Array.FindAll(oApp.AssignedCIs, s => s.IndexOf(Id.Split('_')[2]) >= 0).Count() > 0)
+                            {
+                                foreach (var oldAssignment in lAssignments.Where(t => t.AssignedCIs == oApp.AssignedCIs))
+                                {
+                                    oNewBase.SetProperty(oApp.__NAMESPACE + ":" + oApp.__RELPATH.Replace("\"", "`\""), "EnforcementDeadline", "\"" + oldAssignment.WMIObject.Properties["EnforcementDeadline"].Value.ToString() + "\"");
+                                }
+                            }
+                        }
+                        catch { }
+                    }
+                }
+
+                /* if (!bProcessed)
+                 {
+                     PSObject opResult = oNewBase.CallClassMethod("ROOT\\ccm\\ClientSdk:CCM_Application", "Uninstall", "'" + Id + "', " + Revision + ", $" + IsMachineTarget.ToString() + ", " + AppEnforcePreference.Immediate + ", " + "'" + AppPriority + "'" + ", $" + isRebootIfNeeded.ToString());
+                 }*/
 
                 return "";
             }
@@ -981,7 +1016,6 @@ namespace sccmclictr.automation.functions
                 this.WMIObject = WMIObject;
 
                 List<string> lActions = new List<string>();
-                //foreach (string sAction in WMIObject.Properties["AllowedActions"].Value as string[])
                 foreach (string sAction in ((WMIObject.Properties["AllowedActions"].Value as PSObject).BaseObject as System.Collections.ArrayList))
                 {
                     lActions.Add(sAction);
