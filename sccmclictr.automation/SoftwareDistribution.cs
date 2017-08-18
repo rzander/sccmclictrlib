@@ -1058,7 +1058,10 @@ namespace sccmclictr.automation.functions
                     this.LastEvalTime = null;
                 else
                 {
-                    try { this.LastEvalTime = ManagementDateTimeConverter.ToDateTime(sLastEvalTime) as DateTime?; }
+                    try {
+                        this.LastEvalTime = ManagementDateTimeConverter.ToDateTime(sLastEvalTime) as DateTime?;
+                        this.LastEvalTime = ((DateTime)this.LastEvalTime).ToUniversalTime();
+                    }
                     catch { }
                 }
 
@@ -1067,7 +1070,10 @@ namespace sccmclictr.automation.functions
                     this.LastInstallTime = null;
                 else
                 {
-                    try { this.LastInstallTime = ManagementDateTimeConverter.ToDateTime(sLastInstallTime) as DateTime?; }
+                    try {
+                        this.LastInstallTime = ManagementDateTimeConverter.ToDateTime(sLastInstallTime) as DateTime?;
+                        this.LastInstallTime = ((DateTime)this.LastInstallTime).ToUniversalTime();
+                    }
                     catch { }
                 }
                 this.NotifyUser = WMIObject.Properties["NotifyUser"].Value as Boolean?;
@@ -1076,7 +1082,10 @@ namespace sccmclictr.automation.functions
                     this.ReleaseDate = null;
                 else
                 {
-                    try { this.ReleaseDate = ManagementDateTimeConverter.ToDateTime(sReleaseDate) as DateTime?; }
+                    try {
+                        this.ReleaseDate = ManagementDateTimeConverter.ToDateTime(sReleaseDate) as DateTime?;
+                        this.ReleaseDate = ((DateTime)this.ReleaseDate).ToUniversalTime();
+                    }
                     catch { };
                 }
                 this.ResolvedState = WMIObject.Properties["ResolvedState"].Value as String;
@@ -1087,7 +1096,10 @@ namespace sccmclictr.automation.functions
                     this.StartTime = null;
                 else
                 {
-                    try { this.StartTime = ManagementDateTimeConverter.ToDateTime(sStartTime) as DateTime?; }
+                    try {
+                        this.StartTime = ManagementDateTimeConverter.ToDateTime(sStartTime) as DateTime?;
+                        this.StartTime = ((DateTime)this.StartTime).ToUniversalTime();
+                    }
                     catch { }
                 }
                 this.SupersessionState = WMIObject.Properties["SupersessionState"].Value as String;

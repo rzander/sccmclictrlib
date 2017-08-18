@@ -1403,7 +1403,10 @@ namespace sccmclictr.automation.functions
                 if (string.IsNullOrEmpty(sRestartDeadline))
                     this.RestartDeadline = null;
                 else
+                {
                     this.RestartDeadline = ManagementDateTimeConverter.ToDateTime(sRestartDeadline) as DateTime?;
+                    this.RestartDeadline = ((DateTime)this.RestartDeadline).ToUniversalTime();
+                }
                 this.UpdateID = WMIObject.Properties["UpdateID"].Value as String;
                 this.URL = WMIObject.Properties["URL"].Value as String;
                 this.UserUIExperience = WMIObject.Properties["UserUIExperience"].Value as Boolean?;
