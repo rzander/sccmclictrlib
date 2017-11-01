@@ -927,21 +927,24 @@ namespace sccmclictr.automation.functions
                     catch { }
                 }
 
+                
                 if (bProcessed)
                     System.Threading.Thread.Sleep(2000); //sleep 2s to process the changes
 
-                foreach (PSObject PSObj in oObj)
+
+                PSObject opResult = oNewBase.CallClassMethod("ROOT\\ccm\\ClientSdk:CCM_Application", "Uninstall", "'" + Id + "', " + Revision + ", $" + IsMachineTarget.ToString() + ", " + AppEnforcePreference.Immediate + ", " + "'" + AppPriority + "'" + ", $" + isRebootIfNeeded.ToString());
+
+                /*foreach (PSObject PSObj in oObj)
                 {
                     try
                     {
-                        PSObject opResult = oNewBase.CallClassMethod("ROOT\\ccm\\ClientSdk:CCM_Application", "Uninstall", "'" + Id + "', " + Revision + ", $" + IsMachineTarget.ToString() + ", " + 1 + ", " + "'" + AppPriority + "'" + ", $" + isRebootIfNeeded.ToString());
-                    }
+                     }
                     catch { }
-                }
+                }*/
 
                 if (bProcessed)
                 {
-                    System.Threading.Thread.Sleep(2000); //sleep 2s to process the changes
+                    System.Threading.Thread.Sleep(1000); //sleep 1s to process the changes
 
                     foreach (PSObject PSObj in oObj)
                     {
