@@ -416,7 +416,7 @@ namespace sccmclictr.automation
         /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
         /// <returns>Command results as a string.</returns>
         /// <example><code>string sPort = base.GetStringFromPS("(Get-ItemProperty(\"HKLM:\\SOFTWARE\\Microsoft\\CCM\")).$(\"HttpPort\")", True);</code></example>
-        public string GetStringFromPS(string PSCode, bool Reload)
+        public string GetStringFromPS(string PSCode, bool Reload = false)
         {
             string sResult = "";
 
@@ -795,6 +795,7 @@ namespace sccmclictr.automation
         public functions.services Services;
         public functions.processes Process;
         public functions.dcm DCM;
+        public functions.locationservices LocationServices;
         public policy.requestedConfig RequestedConfig;
         public policy.actualConfig ActualConfig;
         public functions.monitoring Monitoring;
@@ -826,6 +827,7 @@ namespace sccmclictr.automation
             SWCache.Dispose();
             AppV4.Dispose();
             AppV5.Dispose();
+            LocationServices.Dispose();
         }
 
         /// <summary>
@@ -851,6 +853,7 @@ namespace sccmclictr.automation
             DCM = new functions.dcm(RemoteRunspace, PSCode, this);
             AppV5 = new functions.appv5(RemoteRunspace, PSCode, this);
             AppV4 = new functions.appv4(RemoteRunspace, PSCode, this);
+            LocationServices = new functions.locationservices(RemoteRunspace, PSCode, this);
         }
     }
 }
