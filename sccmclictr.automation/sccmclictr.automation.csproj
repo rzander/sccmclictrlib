@@ -124,8 +124,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\Bin\SignTool.exe" sign /n "Roger Zander" /t "http://timestamp.comodoca.com/authenticode" /q "$(TargetPath)"
-</PostBuildEvent>
+    <PostBuildEvent>"C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\Bin\SignTool.exe" sign /n "Roger Zander" /t "http://timestamp.comodoca.com/authenticode" /q "$(TargetPath)" &gt; %25temp%25\out.txt 2&gt;&amp;1
+exit 0</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
