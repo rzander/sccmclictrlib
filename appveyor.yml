@@ -1,0 +1,12 @@
+version: 1.0.0.{build}
+nuget:
+  account_feed: true
+  project_feed: true
+build:
+  project: sccmclictr.automation\sccmclictr.automation.sln
+  publish_nuget: true
+  include_nuget_references: true
+  verbosity: minimal
+artifacts:
+- path: sccmclictr.automation\bin\Debug\sccmclictr.automation.dll
+  name: sccmclictrlib
