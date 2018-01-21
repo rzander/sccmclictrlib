@@ -12,7 +12,7 @@ using System.Security.Permissions;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SCCM Tools")]
 [assembly: AssemblyProduct("sccmclictr.automation")]
-[assembly: AssemblyCopyright("Copyright © 2017 by Roger Zander")]
+[assembly: AssemblyCopyright("Copyright © 2018 by Roger Zander")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
