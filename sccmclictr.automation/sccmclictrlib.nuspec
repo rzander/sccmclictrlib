@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>sccmclictrlib</id>
-        <version>1.0.0.9</version>
+        <version>$version$</version>
         <title>SCCM Client Center Automation Library</title>
         <authors>Roger Zander</authors>
         <owners>Roger Zander</owners>
@@ -14,6 +14,6 @@
         <tags>ConfigMgr SCCM SCCMCliCtr</tags>
     </metadata>
     <files>
-        <file src="lib\net46\sccmclictr.automation.dll" target="lib\net46\sccmclictr.automation.dll" />
+        <file src="sccmclictr.automation\bin\Debug\sccmclictr.automation.dll" target="lib\net46\sccmclictr.automation.dll" />
     </files>
 </package>
