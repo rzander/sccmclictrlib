@@ -45,11 +45,14 @@ namespace sccmclictr.automation.functions
         /// </summary>
         public class BoundaryGroupCache
         {
+            internal baseInit oNewBase;
+
             //Constructor
             public BoundaryGroupCache(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
             {
                 remoteRunspace = RemoteRunspace;
                 pSCode = PSCode;
+                oNewBase = new baseInit(remoteRunspace, pSCode);
 
                 __CLASS = WMIObject.Properties["__CLASS"].Value as string;
                 __NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
@@ -71,6 +74,28 @@ namespace sccmclictr.automation.functions
             internal TraceSource pSCode;
             public String[] BoundaryGroupIDs { get; set; }
             public String CacheToken { get; set; }
+            #endregion
+
+            #region Methods
+
+            /// <summary>
+            /// Delete BoundaryGroupCache
+            /// </summary>
+            /// <returns>true = success</returns>
+            public bool Delete()
+            {
+                bool bResult = false;
+
+                try
+                {
+                    oNewBase.GetStringFromPS("[wmi]'" + __NAMESPACE + ":" + __RELPATH + "' | remove-wmiobject");
+                    bResult = true;
+                }
+                catch { }
+
+                return bResult;
+            }
+
             #endregion
 
         }
