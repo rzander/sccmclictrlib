@@ -1057,6 +1057,27 @@ namespace sccmclictr.automation.functions
 
         }
 
+        public bool SetClientProvisioningMode(bool bEnable)
+        {
+            try
+            {
+                if (bEnable)
+                {
+                    base.CallClassMethod(@"ROOT\ccm:SMS_Client", "SetClientProvisioningMode", "1", true);
+                }
+                else
+                {
+                    base.CallClassMethod(@"ROOT\ccm:SMS_Client", "SetClientProvisioningMode", "0", true);
+                }
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Repairs the SCCM/CM12 agent.
         /// </summary>
@@ -1115,7 +1136,7 @@ namespace sccmclictr.automation.functions
             try
             {
                 string sResult = base.GetStringFromPS("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\CCM\\CcmExec\" -Name \"ProvisioningMode\" -Type string -force -value \"false\"", true);
-
+                baseClient.AgentActions.SetClientProvisioningMode(false);
                 return true;
             }
             catch { }
