@@ -653,7 +653,20 @@ namespace sccmclictr.automation
         }
 
         /// <summary>
-        /// Gets a list of PSObjects from cache(if Reload==False) or from a given WMI namespace using a given WQL query
+        /// Gets a list of PSObjects from cache or from a given WMI namespace using the PowerShell CmdLet Get-CimInstance
+        /// </summary>
+        /// <param name="WMINamespace">The WMI namespace.</param>
+        /// <param name="WQLQuery">The WQL query.</param>
+        /// <returns>Command results as list of PSObjects.</returns>
+        /// <example><code>List&lt;PSObject&gt; lResult = base.GetObjects(@"ROOT\CCM", "SELECT * FROM SMS_MPProxyInformation Where State = 'Active'");</code></example>
+        public List<PSObject> GetCimObjects(string WMINamespace, string WQLQuery)
+        {
+            //return cached Items
+            return GetCimObjects(WMINamespace, WQLQuery, false);
+        }
+
+        /// <summary>
+        /// Gets a list of PSObjects from cache(if Reload==False) or from a given WMI namespace the PowerShell CmdLet Get-WmiObject
         /// </summary>
         /// <param name="WMINamespace">The WMI namespace.</param>
         /// <param name="WQLQuery">The WQL query.</param>
@@ -666,7 +679,20 @@ namespace sccmclictr.automation
         }
 
         /// <summary>
-        /// Gets a list of PSObjects from cache(if Reload==False) or from a given WMI namespace using a given WQL query
+        /// Gets a list of PSObjects from cache(if Reload==False) or from a given WMI namespace using the PowerShell CmdLet Get-CimInstance
+        /// </summary>
+        /// <param name="WMINamespace">The WMI namespace.</param>
+        /// <param name="WQLQuery">The WQL query.</param>
+        /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
+        /// <returns>Command results as a list of PSObjects.</returns>
+        /// <example><code>List&lt;PSObject&gt; lResult = base.GetObjects(@"ROOT\CCM", "SELECT * FROM SMS_MPProxyInformation Where State = 'Active'", True);</code></example>
+        public List<PSObject> GetCimObjects(string WMINamespace, string WQLQuery, bool Reload)
+        {
+            return GetCimObjects(WMINamespace, WQLQuery, Reload, cacheTime);
+        }
+
+        /// <summary>
+        /// Gets a list of PSObjects from cache(if Reload==False) or from a given WMI namespace using the PowerShell CmdLet Get-WmiObject
         /// </summary>
         /// <param name="WMINamespace">The WMI namespace.</param>
         /// <param name="WQLQuery">The WQL query.</param>
@@ -679,6 +705,51 @@ namespace sccmclictr.automation
             //get-wmiobject -query "SELECT * FROM CacheInfoEx" -namespace "root\ccm\SoftMgmtAgent"
             List<PSObject> lResult = new List<PSObject>();
             string sPSCode = string.Format("get-wmiobject -query \"{0}\" -namespace \"{1}\"", WQLQuery, WMINamespace);
+
+            if (!bShowPSCodeOnly)
+            {
+                string sHash = CreateHash(WMINamespace + WQLQuery);
+                if ((Cache.Get(sHash) != null) & !Reload)
+                {
+                    lResult = Cache.Get(sHash) as List<PSObject>;
+                }
+                else
+                {
+                    foreach (PSObject obj in WSMan.RunPSScript(sPSCode, remoteRunspace))
+                    {
+                        try
+                        {
+                            lResult.Add(obj);
+                        }
+                        catch (Exception ex)
+                        {
+                            Trace.WriteLineIf(debugLevel.TraceError, ex.Message);
+                        }
+                    }
+                    Cache.Add(sHash, lResult, DateTime.Now + cacheTime);
+                }
+            }
+
+            //Trace the PowerShell Command
+            tsPSCode.TraceInformation(sPSCode);
+
+            return lResult;
+        }
+
+        /// <summary>
+        /// Gets a list of PSObjects from cache(if Reload==False) or from a given WMI namespace using the PowerShell CmdLet Get-CimInstance
+        /// </summary>
+        /// <param name="WMINamespace">The WMI namespace.</param>
+        /// <param name="WQLQuery">The WQL query.</param>
+        /// <param name="Reload">Enforce reload. i.e. don't use cached results.</param>
+        /// <param name="tCacheTime">Custom cache time.</param>
+        /// <returns>Command results as a list of PSObjects.</returns>
+        /// <example><code>List&lt;PSObject&gt; lResult = base.GetObjects(@"ROOT\CCM", "SELECT * FROM SMS_MPProxyInformation Where State = 'Active'", True, new TimeSpan(0,0,30));</code></example>
+        public List<PSObject> GetCimObjects(string WMINamespace, string WQLQuery, bool Reload, TimeSpan tCacheTime)
+        {
+            //get-wmiobject -query "SELECT * FROM CacheInfoEx" -namespace "root\ccm\SoftMgmtAgent"
+            List<PSObject> lResult = new List<PSObject>();
+            string sPSCode = string.Format("Get-CimInstance -query \"{0}\" -namespace \"{1}\"", WQLQuery, WMINamespace);
 
             if (!bShowPSCodeOnly)
             {
