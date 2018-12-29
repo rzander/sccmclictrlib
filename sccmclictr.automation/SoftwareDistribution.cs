@@ -100,6 +100,26 @@ namespace sccmclictr.automation.functions
 
         }
 
+        public CCM_ApplicationActions ApplicationActions(Boolean bReload, TimeSpan CacheTime)
+        {
+            List<PSObject> oObj = new List<PSObject>();
+            oObj = GetObjects(@"ROOT\ccm\ClientSDK", "SELECT * FROM CCM_ClientAgentSettings", bReload, CacheTime);
+            foreach (PSObject PSObj in oObj)
+            {
+                try
+                {
+                    CCM_ApplicationActions oResult = new CCM_ApplicationActions(PSObj, remoteRunspace, pSCode);
+
+                    oResult.remoteRunspace = remoteRunspace;
+                    oResult.pSCode = pSCode;
+                    return oResult;
+                }
+                catch { }
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Get a list of Programs
         /// </summary>
@@ -654,6 +674,7 @@ namespace sccmclictr.automation.functions
             public String[] AllowedActions { get; set; }
             public CCM_AppDeploymentType[] AppDTs { get; set; }
             public String ApplicabilityState { get; set; }
+            public string ConfigureState { get; set; }
             public String DeploymentReport { get; set; }
             public UInt32? EnforcePreference { get; set; }
             public String FileTypes { get; set; }
@@ -667,6 +688,8 @@ namespace sccmclictr.automation.functions
             public DateTime? LastEvalTime { get; set; }
             public DateTime? LastInstallTime { get; set; }
             public Boolean? NotifyUser { get; set; }
+            public Boolean? OverrideServiceWindow { get; set; }
+            public Boolean? RebootOutsideServiceWindow { get; set; }
             public DateTime? ReleaseDate { get; set; }
             public String ResolvedState { get; set; }
             public String Revision { get; set; }
@@ -880,6 +903,22 @@ namespace sccmclictr.automation.functions
                 return sJobID;
             }
 
+            public string Repair()
+            {
+                return Repair(AppPriority.Normal, false);
+            }
+
+            public string Repair(string AppPriority, bool isRebootIfNeeded)
+            {
+                if (string.IsNullOrEmpty(AppPriority))
+                    AppPriority = "Normal";
+
+                string sJobID = "";
+                PSObject oResult = oNewBase.CallClassMethod("ROOT\\ccm\\ClientSdk:CCM_Application", "Repair", "'" + Id + "', " + Revision + ", $" + IsMachineTarget.ToString() + ", " + AppEnforcePreference.Immediate + ", " + "'" + AppPriority + "'" + ", $" + isRebootIfNeeded.ToString());
+                //sJobID = oResult.Properties["JobID"].Value.ToString();
+                return sJobID;
+            }
+
             /// <summary>
             /// Uninstall an Application
             /// </summary>
@@ -1041,6 +1080,7 @@ namespace sccmclictr.automation.functions
                 catch { }
 
                 this.ApplicabilityState = WMIObject.Properties["ApplicabilityState"].Value as String;
+                this.ConfigureState = WMIObject.Properties["ConfigureState"].Value as String;
                 this.DeploymentReport = WMIObject.Properties["DeploymentReport"].Value as String;
                 this.EnforcePreference = WMIObject.Properties["EnforcePreference"].Value as UInt32?;
                 this.FileTypes = WMIObject.Properties["FileTypes"].Value as String;
@@ -1075,6 +1115,8 @@ namespace sccmclictr.automation.functions
                     catch { }
                 }
                 this.NotifyUser = WMIObject.Properties["NotifyUser"].Value as Boolean?;
+                this.OverrideServiceWindow = WMIObject.Properties["OverrideServiceWindow"].Value as Boolean?;
+                this.RebootOutsideServiceWindow = WMIObject.Properties["RebootOutsideServiceWindow"].Value as Boolean?;
                 string sReleaseDate = WMIObject.Properties["ReleaseDate"].Value as string;
                 if (string.IsNullOrEmpty(sReleaseDate))
                     this.ReleaseDate = null;
@@ -1104,6 +1146,55 @@ namespace sccmclictr.automation.functions
                 this.UserUIExperience = WMIObject.Properties["UserUIExperience"].Value as Boolean?;
 
             }
+        }
+
+        /// <summary>
+        /// Source:ROOT\ccm\ClientSDK
+        /// </summary>
+        public class CCM_ApplicationActions
+        {
+            //Constructor
+            public CCM_ApplicationActions(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
+            {
+                remoteRunspace = RemoteRunspace;
+                pSCode = PSCode;
+
+                this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
+                this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
+                this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
+                this.__INSTANCE = true;
+                this.WMIObject = WMIObject;
+                string sNextGlobalRevalTime = WMIObject.Properties["NextGlobalRevalTime"].Value as string;
+                if (string.IsNullOrEmpty(sNextGlobalRevalTime))
+                    this.NextGlobalRevalTime = null;
+                else
+                    this.NextGlobalRevalTime = ManagementDateTimeConverter.ToDateTime(sNextGlobalRevalTime) as DateTime?;
+                string sNextRetryTime = WMIObject.Properties["NextRetryTime"].Value as string;
+                if (string.IsNullOrEmpty(sNextRetryTime))
+                    this.NextRetryTime = null;
+                else
+                    this.NextRetryTime = ManagementDateTimeConverter.ToDateTime(sNextRetryTime) as DateTime?;
+                string sNextServiceWindowTime = WMIObject.Properties["NextServiceWindowTime"].Value as string;
+                if (string.IsNullOrEmpty(sNextServiceWindowTime))
+                    this.NextServiceWindowTime = null;
+                else
+                    this.NextServiceWindowTime = ManagementDateTimeConverter.ToDateTime(sNextServiceWindowTime) as DateTime?;
+            }
+
+            #region Properties
+
+            internal string __CLASS { get; set; }
+            internal string __NAMESPACE { get; set; }
+            internal bool __INSTANCE { get; set; }
+            internal string __RELPATH { get; set; }
+            internal PSObject WMIObject { get; set; }
+            internal Runspace remoteRunspace;
+            internal TraceSource pSCode;
+            public DateTime? NextGlobalRevalTime { get; set; }
+            public DateTime? NextRetryTime { get; set; }
+            public DateTime? NextServiceWindowTime { get; set; }
+            #endregion
+
         }
 
         /// <summary>
