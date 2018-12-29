@@ -367,6 +367,34 @@ namespace sccmclictr.automation.functions
             return 1;
         }
 
+        public UInt32 GetMachinePolicy()
+        {
+            try
+            {
+                return UInt32.Parse(GetStringFromClassMethod(@"ROOT\ccm\ClientSDK:CCM_ClientUtilities", "GetMachinePolicy()", "ReturnValue"));
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError("GetMachinePolicy: " + ex.Message);
+            }
+
+            return 1;
+        }
+
+        public UInt32 GetUserPolicy()
+        {
+            try
+            {
+                return UInt32.Parse(GetStringFromClassMethod(@"ROOT\ccm\ClientSDK:CCM_ClientUtilities", "GetUserPolicy()", "ReturnValue"));
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError("GetUserPolicy: " + ex.Message);
+            }
+
+            return 1;
+        }
+
         /// <summary>
         /// Determine pending reboots (from ConfigMgr. !)
         /// </summary>
