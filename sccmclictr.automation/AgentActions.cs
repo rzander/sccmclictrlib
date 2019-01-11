@@ -1262,9 +1262,12 @@ namespace sccmclictr.automation.functions
                     string s2 = xNode2["PolicyAssignmentsDocument"].InnerText;
                     //[System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($Body64))
                     string sPolicy = System.Text.Encoding.Unicode.GetString(System.Convert.FromBase64String(s2));
+                    //File.WriteAllText(Environment.ExpandEnvironmentVariables("%TEMP%\\Policy.txt"), sPolicy);
                     string sPSCode = getPSWMIScript(sPolicy);
+                    //File.WriteAllText(Environment.ExpandEnvironmentVariables("%TEMP%\\PolicyPS.ps1"), sPSCode);
                     string sRes = baseClient.GetStringFromPS(sPSCode, true);
                     //Console.WriteLine(oRes[0].Properties["Id"].Value.ToString());
+
                     System.Threading.Thread.Sleep(1000);
                     baseClient.AgentActions.AppManGlobalEvaluation();
                     return true;
@@ -1281,7 +1284,7 @@ namespace sccmclictr.automation.functions
         /// </summary>
         /// <param name="sXMLBody"></param>
         /// <returns></returns>
-        public string getPSWMIScript(string sXMLBody)
+        public static string getPSWMIScript(string sXMLBody)
         {
             File.WriteAllText(Environment.ExpandEnvironmentVariables(@"%temp%\body.xml"), sXMLBody);
 

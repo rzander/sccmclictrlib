@@ -3385,9 +3385,17 @@ namespace sccmclictr.automation.policy
 
             byte[] arr = new byte[hex.Length >> 1];
 
-            for (int i = 0; i < hex.Length; ++i)
+
+            for (int i = 0; i < hex.Length >> 1; ++i)
             {
-                arr[i] = (byte)((_getHexVal(hex[i << 1]) << 4) + (_getHexVal(hex[(i << 1) + 1])));
+                try
+                {
+                    arr[i] = (byte)((_getHexVal(hex[i << 1]) << 4) + (_getHexVal(hex[(i << 1) + 1])));
+                }
+                catch(Exception ex)
+                {
+                    ex.Message.ToString();
+                }
             }
 
             return arr;
@@ -3396,13 +3404,22 @@ namespace sccmclictr.automation.policy
         //copied from: http://stackoverflow.com/questions/321370/convert-hex-string-to-byte-array
         internal static int _getHexVal(char hex)
         {
-            int val = (int)hex;
-            //For uppercase A-F letters:
-            return val - (val < 58 ? 48 : 55);
-            //For lowercase a-f letters:
-            //return val - (val < 58 ? 48 : 87);
-            //Or the two combined, but a bit slower:
-            //return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
+            try
+            {
+                int val = (int)hex;
+                //For uppercase A-F letters:
+                return val - (val < 58 ? 48 : 55);
+                //For lowercase a-f letters:
+                //return val - (val < 58 ? 48 : 87);
+                //Or the two combined, but a bit slower:
+                //return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
+            }
+            catch(Exception ex)
+            {
+                ex.Message.ToString();
+            }
+
+            return 0;
         }
 
         /// <summary>
