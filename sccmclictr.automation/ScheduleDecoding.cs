@@ -6,6 +6,8 @@
 //GNU General Public License: http://www.gnu.org/licenses/lgpl.html
 
 using System;
+using System.Globalization;
+using System.Linq;
 
 namespace sccmclictr.automation.schedule
 {
@@ -397,6 +399,35 @@ namespace sccmclictr.automation.schedule
             return null;
         }
 
+        public static DateTime GetNthWeekdayOfMonth(DateTime dt, int n, DayOfWeek weekday)
+        {
+            var days = Enumerable.Range(1, DateTime.DaysInMonth(dt.Year, dt.Month)).Select(day => new DateTime(dt.Year, dt.Month, day));
+
+            var weekdays = from day in days
+                           where day.DayOfWeek == weekday
+                           orderby day.Day ascending
+                           select day;
+
+            int index = n - 1;
+
+            if (index >= 0 && index < weekdays.Count())
+                return weekdays.ElementAt(index);
+
+            else
+            {
+                // if the month doesn't has the 5th day than return the 4th day because in SCCM the 5th spells "the last"
+                if(n == 5)
+                {
+                    index = 3;
+                    if (index >= 0 && index < weekdays.Count())
+                        return weekdays.ElementAt(index);
+                }
+
+                throw new InvalidOperationException("The specified day does not exist in this month!");
+            }
+                
+        }
+
         /// <summary>
         /// split the scheduleID string into 16char substrings
         /// </summary>
@@ -513,7 +544,7 @@ namespace sccmclictr.automation.schedule
                     //determine the new start date-time
                     DateTime oNextStartTime = base.StartTime.Subtract(new TimeSpan(DaySpan, HourSpan, MinuteSpan, 0));
                     dEndTime = oNextStartTime + new TimeSpan(this.DayDuration, this.HourDuration, this.MinuteDuration, 0);
-                    while (dEndTime < DateTime.Now)
+                    while (dEndTime < StartTime)
                     {
                         dEndTime = dEndTime + new TimeSpan(DaySpan, HourSpan, MinuteSpan, 0);
                         oNextStartTime = oNextStartTime + new TimeSpan(DaySpan, HourSpan, MinuteSpan, 0);
@@ -571,18 +602,15 @@ namespace sccmclictr.automation.schedule
             {
                 get
                 {
-                    if (base.StartTime > DateTime.Now)
-                        return base.StartTime;
-                    else
+                    //determine the new start date-time
+                    DateTime oNextStartTime = new DateTime(StartTime.Year, StartTime.Month, StartTime.Day, StartTime.Hour, StartTime.Minute, 0);
+
+                    while((int)oNextStartTime.DayOfWeek + 1 != Day)
                     {
-                        //determine the new start date-time
-                        DateTime oNextStartTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, StartTime.Hour, StartTime.Minute, 0);
-                        while (((int)oNextStartTime.DayOfWeek + 1 != Day) | (oNextStartTime < DateTime.Now))
-                        {
-                            oNextStartTime = oNextStartTime + new TimeSpan(1, 0, 0, 0);
-                        }
-                        return oNextStartTime;
+                        oNextStartTime = oNextStartTime + new TimeSpan(1, 0, 0, 0);
                     }
+
+                    return oNextStartTime;
                 }
             }
 
@@ -638,30 +666,30 @@ namespace sccmclictr.automation.schedule
             {
                 get
                 {
-                    if (base.StartTime > DateTime.Now)
-                        return base.StartTime;
+                    //determine the new start date-time
+                    if (MonthDay == 0)
+                    {
+                        DateTime oNextStartTime = new DateTime(StartTime.Year, StartTime.Month, DateTime.DaysInMonth(StartTime.Year, StartTime.Month), StartTime.Hour, StartTime.Minute, 0);
+
+                        //Last Day of Month...
+                        while (oNextStartTime < StartTime)
+                        {
+                            oNextStartTime = oNextStartTime.AddMonths(ForNumberOfMonths);
+                            oNextStartTime = new DateTime(oNextStartTime.Year, oNextStartTime.Month, DateTime.DaysInMonth(oNextStartTime.Year, oNextStartTime.Month), StartTime.Hour, StartTime.Minute, 0);
+                        }
+
+                        return oNextStartTime;
+                    }
                     else
                     {
-                        //determine the new start date-time
-                        if (MonthDay == 0)
+                        DateTime oNextStartTime = new DateTime(StartTime.Year, StartTime.Month, MonthDay, StartTime.Hour, StartTime.Minute, 0);
+
+                        // Skip month if month has less than MonthDay days
+                        while (oNextStartTime < StartTime || DateTime.DaysInMonth(oNextStartTime.Year, oNextStartTime.Month) < MonthDay)
                         {
-                            //Last Day of Month...
-                            DateTime oNextStartTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, StartTime.Hour, StartTime.Minute, 0);
-                            while ((int)oNextStartTime.Day != DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month))
-                            {
-                                oNextStartTime = oNextStartTime + new TimeSpan(1, 0, 0, 0);
-                            }
-                            return oNextStartTime;
+                            oNextStartTime = oNextStartTime.AddMonths(ForNumberOfMonths);
                         }
-                        else
-                        {
-                            DateTime oNextStartTime = new DateTime(DateTime.Now.Year, StartTime.Month, MonthDay, StartTime.Hour, StartTime.Minute, 0);
-                            while (oNextStartTime < DateTime.Now)
-                            {
-                                oNextStartTime = oNextStartTime.AddMonths(ForNumberOfMonths);
-                            }
-                            return oNextStartTime;
-                        }
+                        return oNextStartTime;
                     }
                 }
             }
@@ -696,55 +724,21 @@ namespace sccmclictr.automation.schedule
             {
                 get
                 {
-                    if (base.StartTime > DateTime.Now)
-                        return base.StartTime;
-                    else
+                    //determine the new start date-time
+                    DateTime oNextStartTime = new DateTime(StartTime.Year, StartTime.Month, 1, StartTime.Hour, StartTime.Minute, 0);
+                    oNextStartTime = ScheduleDecoding.GetNthWeekdayOfMonth(StartTime, WeekOrder, ((DayOfWeek)((Day - 1) % 7)));
+
+                    oNextStartTime = new DateTime(oNextStartTime.Year, oNextStartTime.Month, oNextStartTime.Day, StartTime.Hour, StartTime.Minute, 0);
+
+                    while (oNextStartTime < StartTime)
                     {
-                        //determine the new start date-time
-                        DateTime oNextStartTime = new DateTime(StartTime.Year, StartTime.Month, 1, StartTime.Hour, StartTime.Minute, 0);
-                        bool ReRun = false;
-
-                        //Verify that the nextStartTime is in the future
-                        while ((oNextStartTime < DateTime.Now) | ReRun)
-                        {
-                            //Check if next month cycle is still in the past
-                            while (oNextStartTime.AddMonths(ForNumberOfMonths) < DateTime.Now)
-                            {
-                                //Add number of months
-                                oNextStartTime = oNextStartTime.AddMonths(ForNumberOfMonths);
-                            }
-
-                            int iCount = WeekOrder;
-                            while (iCount > 0)
-                            {
-                                if ((int)oNextStartTime.DayOfWeek + 1 == Day)
-                                {
-                                    iCount = iCount - 1;
-                                    if (iCount != 0)
-                                        oNextStartTime = oNextStartTime.AddDays(1);
-                                }
-                                else
-                                {
-                                    oNextStartTime = oNextStartTime.AddDays(1);
-                                }
-                            }
-
-                            //Check if schedule is still in the past ?
-                            if (oNextStartTime < DateTime.Now)
-                            {
-                                oNextStartTime = oNextStartTime.AddMonths(ForNumberOfMonths);
-                                oNextStartTime = new DateTime(oNextStartTime.Year, oNextStartTime.Month, 1, oNextStartTime.Hour, oNextStartTime.Minute, oNextStartTime.Second);
-                                ReRun = true;
-                            }
-                            else
-                            {
-                                //Do not rerun the cycle
-                                ReRun = false;
-                            }
-
-                        }
-                        return oNextStartTime;
+                        oNextStartTime = oNextStartTime.AddMonths(ForNumberOfMonths);
+                        oNextStartTime = ScheduleDecoding.GetNthWeekdayOfMonth(oNextStartTime, WeekOrder, ((DayOfWeek)((Day - 1) % 7)));
+                        oNextStartTime = oNextStartTime.AddHours(StartTime.Hour);
+                        oNextStartTime = oNextStartTime.AddMinutes(StartTime.Minute);
                     }
+
+                    return oNextStartTime;
                 }
             }
         }
