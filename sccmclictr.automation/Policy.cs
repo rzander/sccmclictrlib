@@ -1,5 +1,5 @@
 ﻿//SCCM Client Center Automation Library (SCCMCliCtr.automation)
-//Copyright (c) 2011 by Roger Zander
+//Copyright (c) 2018 by Roger Zander
 
 //This program is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version. 
 //This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. 
@@ -10,14 +10,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using sccmclictr.automation;
-using System.Management;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Diagnostics;
-using System.Web;
 using System.IO;
 using System.Xml;
 
@@ -3389,9 +3385,17 @@ namespace sccmclictr.automation.policy
 
             byte[] arr = new byte[hex.Length >> 1];
 
+
             for (int i = 0; i < hex.Length >> 1; ++i)
             {
-                arr[i] = (byte)((_getHexVal(hex[i << 1]) << 4) + (_getHexVal(hex[(i << 1) + 1])));
+                try
+                {
+                    arr[i] = (byte)((_getHexVal(hex[i << 1]) << 4) + (_getHexVal(hex[(i << 1) + 1])));
+                }
+                catch(Exception ex)
+                {
+                    ex.Message.ToString();
+                }
             }
 
             return arr;
@@ -3400,13 +3404,22 @@ namespace sccmclictr.automation.policy
         //copied from: http://stackoverflow.com/questions/321370/convert-hex-string-to-byte-array
         internal static int _getHexVal(char hex)
         {
-            int val = (int)hex;
-            //For uppercase A-F letters:
-            return val - (val < 58 ? 48 : 55);
-            //For lowercase a-f letters:
-            //return val - (val < 58 ? 48 : 87);
-            //Or the two combined, but a bit slower:
-            //return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
+            try
+            {
+                int val = (int)hex;
+                //For uppercase A-F letters:
+                return val - (val < 58 ? 48 : 55);
+                //For lowercase a-f letters:
+                //return val - (val < 58 ? 48 : 87);
+                //Or the two combined, but a bit slower:
+                //return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
+            }
+            catch(Exception ex)
+            {
+                ex.Message.ToString();
+            }
+
+            return 0;
         }
 
         /// <summary>

@@ -1,5 +1,5 @@
 ﻿//SCCM Client Center Automation Library (SCCMCliCtr.automation)
-//Copyright (c) 2011 by Roger Zander
+//Copyright (c) 2018 by Roger Zander
 
 //This program is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version. 
 //This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. 
@@ -10,14 +10,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using sccmclictr.automation;
 using System.Management;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Diagnostics;
-using System.Web;
 
 namespace sccmclictr.automation.functions
 {
@@ -53,20 +49,10 @@ namespace sccmclictr.automation.functions
             get
             {
                 List<AI_InstalledSoftwareCache> lCache = new List<AI_InstalledSoftwareCache>();
-                List<PSObject> oObj = GetObjects(@"ROOT\ccm\invagt", "SELECT * FROM AI_InstalledSoftwareCache", true);
+                /*List<PSObject> oObj = GetCimObjects(@"ROOT\ccm\invagt", "SELECT * FROM AI_InstalledSoftwareCache", true);
                 foreach (PSObject PSObj in oObj)
                 {
-                    //Get AppDTs sub Objects
-                    AI_InstalledSoftwareCache oCIEx = new AI_InstalledSoftwareCache(PSObj, remoteRunspace, pSCode);
-
-                    oCIEx.remoteRunspace = remoteRunspace;
-                    oCIEx.pSCode = pSCode;
-                    lCache.Add(oCIEx);
-                }
-                if (lCache.Count == 0)
-                {
-                    List<PSObject> oObj2 = GetObjects(@"root\CIMV2\sms", "SELECT * FROM SMS_InstalledSoftware", true);
-                    foreach (PSObject PSObj in oObj2)
+                    try
                     {
                         //Get AppDTs sub Objects
                         AI_InstalledSoftwareCache oCIEx = new AI_InstalledSoftwareCache(PSObj, remoteRunspace, pSCode);
@@ -75,8 +61,26 @@ namespace sccmclictr.automation.functions
                         oCIEx.pSCode = pSCode;
                         lCache.Add(oCIEx);
                     }
+                    catch { }
+                }*/
+                //if (lCache.Count == 0)
+
+                List<PSObject> oObj2 = GetCimObjects(@"root\CIMV2\sms", "SELECT * FROM SMS_InstalledSoftware", true);
+                foreach (PSObject PSObj in oObj2)
+                {
+                    try
+                    {
+                        //Get AppDTs sub Objects
+                        AI_InstalledSoftwareCache oCIEx = new AI_InstalledSoftwareCache(PSObj, remoteRunspace, pSCode);
+
+                        oCIEx.remoteRunspace = remoteRunspace;
+                        oCIEx.pSCode = pSCode;
+                        lCache.Add(oCIEx);
+                    }
+                    catch { }
                 }
-                return lCache; 
+
+                return lCache;
             } 
         }
 
@@ -91,12 +95,16 @@ namespace sccmclictr.automation.functions
                 List<PSObject> oObj = GetObjects(@"ROOT\ccm\invagt", "SELECT * FROM InventoryActionStatus");
                 foreach (PSObject PSObj in oObj)
                 {
-                    //Get AppDTs sub Objects
-                    InventoryActionStatus oCIEx = new InventoryActionStatus(PSObj, remoteRunspace, pSCode);
+                    try
+                    {
+                        //Get AppDTs sub Objects
+                        InventoryActionStatus oCIEx = new InventoryActionStatus(PSObj, remoteRunspace, pSCode);
 
-                    oCIEx.remoteRunspace = remoteRunspace;
-                    oCIEx.pSCode = pSCode;
-                    lCache.Add(oCIEx);
+                        oCIEx.remoteRunspace = remoteRunspace;
+                        oCIEx.pSCode = pSCode;
+                        lCache.Add(oCIEx);
+                    }
+                    catch { }
                 }
                 return lCache;
             }
@@ -161,17 +169,19 @@ namespace sccmclictr.automation.functions
         /// <returns></returns>
         public List<SMS_PowerSettings> PowerSettings(bool Reload)
         {
-
-                List<SMS_PowerSettings> lCache = new List<SMS_PowerSettings>();
-                List<PSObject> oObj = GetObjects(@"ROOT\cimv2\sms", "SELECT * FROM SMS_PowerSettings", Reload);
-                foreach (PSObject PSObj in oObj)
+            List<SMS_PowerSettings> lCache = new List<SMS_PowerSettings>();
+            List<PSObject> oObj = GetObjects(@"ROOT\cimv2\sms", "SELECT * FROM SMS_PowerSettings", Reload);
+            foreach (PSObject PSObj in oObj)
+            {
+                try
                 {
                     SMS_PowerSettings oPWR = new SMS_PowerSettings(PSObj, remoteRunspace, pSCode);
                     lCache.Add(oPWR);
                 }
+                catch { }
+            }
 
-                return lCache;
-            
+            return lCache;
         }
 
         /// <summary>
@@ -249,22 +259,27 @@ namespace sccmclictr.automation.functions
                 pSCode = PSCode;
                 oNewBase = new baseInit(remoteRunspace, pSCode);
 
-                this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
-                this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
-                this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
+                this.__CLASS = (WMIObject.Properties["__CLASS"] == null) ? WMIObject.Properties["CimClass"].Value as string : WMIObject.Properties["__CLASS"].Value as string;
+                this.__CLASS = (WMIObject.Properties["__NAMESPACE"] == null) ? "" as string : WMIObject.Properties["__NAMESPACE"].Value as string;
+                this.__CLASS = (WMIObject.Properties["__RELPATH"] == null) ? "" : WMIObject.Properties["__RELPATH"].Value as string;
+
                 this.__INSTANCE = true;
                 this.WMIObject = WMIObject;
                 this.ARPDisplayName = WMIObject.Properties["ARPDisplayName"].Value as String;
                 this.ChannelCode = WMIObject.Properties["ChannelCode"].Value as String;
+                this.ChannelID = WMIObject.Properties["ChannelID"].Value as String;
                 this.CM_DSLID = WMIObject.Properties["CM_DSLID"].Value as String;
                 this.EvidenceSource = WMIObject.Properties["EvidenceSource"].Value as String;
-                this.InstallDate = WMIObject.Properties["InstallDate"].Value as String;
+                this.InstallDate = (WMIObject.Properties["InstallDate"].Value == null) ? "" : WMIObject.Properties["InstallDate"].Value.ToString();
                 this.InstallDirectoryValidation = WMIObject.Properties["InstallDirectoryValidation"].Value as String;
                 this.InstalledLocation = WMIObject.Properties["InstalledLocation"].Value as String;
                 this.InstallSource = WMIObject.Properties["InstallSource"].Value as String;
                 this.InstallType = WMIObject.Properties["InstallType"].Value as String;
                 this.Language = WMIObject.Properties["Language"].Value as String;
                 this.LocalPackage = WMIObject.Properties["LocalPackage"].Value as String;
+                this.MPC = WMIObject.Properties["MPC"].Value as String;
+                this.OsComponent = WMIObject.Properties["OsComponent"].Value as String;
+                this.PackageCode = WMIObject.Properties["PackageCode"].Value as String;
                 this.ProductID = WMIObject.Properties["ProductID"].Value as String;
                 this.ProductName = WMIObject.Properties["ProductName"].Value as String;
                 this.ProductVersion = WMIObject.Properties["ProductVersion"].Value as String;
@@ -292,6 +307,7 @@ namespace sccmclictr.automation.functions
             internal TraceSource pSCode;
             public String ARPDisplayName { get; set; }
             public String ChannelCode { get; set; }
+            public String ChannelID { get; set; }
             public String CM_DSLID { get; set; }
             public String EvidenceSource { get; set; }
             public String InstallDate { get; set; }
@@ -301,6 +317,9 @@ namespace sccmclictr.automation.functions
             public String InstallType { get; set; }
             public String Language { get; set; }
             public String LocalPackage { get; set; }
+            public String MPC { get; set; }
+            public String OsComponent { get; set; }
+            public String PackageCode { get; set; }
             public String ProductID { get; set; }
             public String ProductName { get; set; }
             public String ProductVersion { get; set; }

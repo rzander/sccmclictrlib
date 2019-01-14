@@ -1,5 +1,5 @@
 ﻿//SCCM Client Center Automation Library (SCCMCliCtr.automation)
-//Copyright (c) 2011 by Roger Zander
+//Copyright (c) 2018 by Roger Zander
 
 //This program is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version. 
 //This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. 
@@ -1057,6 +1057,27 @@ namespace sccmclictr.automation.functions
 
         }
 
+        public bool SetClientProvisioningMode(bool bEnable)
+        {
+            try
+            {
+                if (bEnable)
+                {
+                    base.CallClassMethod(@"ROOT\ccm:SMS_Client", "SetClientProvisioningMode", "1", true);
+                }
+                else
+                {
+                    base.CallClassMethod(@"ROOT\ccm:SMS_Client", "SetClientProvisioningMode", "0", true);
+                }
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Repairs the SCCM/CM12 agent.
         /// </summary>
@@ -1115,7 +1136,7 @@ namespace sccmclictr.automation.functions
             try
             {
                 string sResult = base.GetStringFromPS("New-ItemProperty -path \"HKLM:\\SOFTWARE\\Microsoft\\CCM\\CcmExec\" -Name \"ProvisioningMode\" -Type string -force -value \"false\"", true);
-
+                baseClient.AgentActions.SetClientProvisioningMode(false);
                 return true;
             }
             catch { }
@@ -1241,9 +1262,12 @@ namespace sccmclictr.automation.functions
                     string s2 = xNode2["PolicyAssignmentsDocument"].InnerText;
                     //[System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($Body64))
                     string sPolicy = System.Text.Encoding.Unicode.GetString(System.Convert.FromBase64String(s2));
+                    //File.WriteAllText(Environment.ExpandEnvironmentVariables("%TEMP%\\Policy.txt"), sPolicy);
                     string sPSCode = getPSWMIScript(sPolicy);
+                    //File.WriteAllText(Environment.ExpandEnvironmentVariables("%TEMP%\\PolicyPS.ps1"), sPSCode);
                     string sRes = baseClient.GetStringFromPS(sPSCode, true);
                     //Console.WriteLine(oRes[0].Properties["Id"].Value.ToString());
+
                     System.Threading.Thread.Sleep(1000);
                     baseClient.AgentActions.AppManGlobalEvaluation();
                     return true;
@@ -1260,7 +1284,7 @@ namespace sccmclictr.automation.functions
         /// </summary>
         /// <param name="sXMLBody"></param>
         /// <returns></returns>
-        public string getPSWMIScript(string sXMLBody)
+        public static string getPSWMIScript(string sXMLBody)
         {
             File.WriteAllText(Environment.ExpandEnvironmentVariables(@"%temp%\body.xml"), sXMLBody);
 

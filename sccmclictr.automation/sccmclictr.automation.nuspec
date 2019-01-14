@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>sccmclictrlib</id>
+    <version>$version$</version>
+    <title>SCCM Client Center Automation Library</title>
+    <authors>Roger Zander</authors>
+    <owners>Roger Zander</owners>
+    <licenseUrl>https://github.com/rzander/sccmclictrlib/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/rzander/sccmclictrlib</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>SCCM Client Automation library (previously smsclictr.automation.dll) is a .NET Library (C#) to automate and access Microsoft System Center Configuration Manager Agent functions over WMI.</description>
+    <copyright>Copyright (c) 2018 by Roger Zander</copyright>
+    <tags>ConfigMgr SCCM SCCMCliCtr</tags>
+  </metadata>
+</package>

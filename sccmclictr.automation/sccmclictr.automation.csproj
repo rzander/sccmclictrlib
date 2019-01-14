@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>sccmclictr.automation</RootNamespace>
     <AssemblyName>sccmclictr.automation</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -30,6 +30,7 @@
     <DocumentationFile>bin\Debug\sccmclictr.automation.XML</DocumentationFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1;1587;1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -78,6 +79,7 @@
     <Compile Include="DCM.cs" />
     <Compile Include="DDRGen.cs" />
     <Compile Include="Health.cs" />
+    <Compile Include="LocationServices.cs" />
     <Compile Include="Monitoring.cs" />
     <Compile Include="Policy.cs" />
     <Compile Include="Inventory.cs" />
@@ -122,8 +124,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin\SignTool.exe" sign /n "Roger Zander" /t "http://timestamp.comodoca.com/authenticode" /q "$(TargetPath)"
-</PostBuildEvent>
+    <PostBuildEvent>if "$(ConfigurationName)"=="Debug" GOTO  end
+ "C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\Bin\SignTool.exe" sign /i "COMODO RSA Code Signing CA" /n "Roger Zander" /t "http://timestamp.comodoca.com/authenticode" /q "$(TargetPath)" 
+:end</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

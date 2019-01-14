@@ -1,5 +1,5 @@
 ﻿//SCCM Client Center Automation Library (SCCMCliCtr.automation)
-//Copyright (c) 2011 by Roger Zander
+//Copyright (c) 2018 by Roger Zander
 
 //This program is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version. 
 //This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details. 
@@ -362,6 +362,34 @@ namespace sccmclictr.automation.functions
             catch (Exception ex)
             {
                 Trace.TraceError("RestartComputer: " + ex.Message);
+            }
+
+            return 1;
+        }
+
+        public UInt32 GetMachinePolicy()
+        {
+            try
+            {
+                return UInt32.Parse(GetStringFromClassMethod(@"ROOT\ccm\ClientSDK:CCM_ClientUtilities", "GetMachinePolicy()", "ReturnValue"));
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError("GetMachinePolicy: " + ex.Message);
+            }
+
+            return 1;
+        }
+
+        public UInt32 GetUserPolicy()
+        {
+            try
+            {
+                return UInt32.Parse(GetStringFromClassMethod(@"ROOT\ccm\ClientSDK:CCM_ClientUtilities", "GetUserPolicy()", "ReturnValue"));
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError("GetUserPolicy: " + ex.Message);
             }
 
             return 1;
