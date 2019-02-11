@@ -270,7 +270,15 @@ namespace sccmclictr.automation.functions
                 this.ChannelID = WMIObject.Properties["ChannelID"].Value as String;
                 this.CM_DSLID = WMIObject.Properties["CM_DSLID"].Value as String;
                 this.EvidenceSource = WMIObject.Properties["EvidenceSource"].Value as String;
-                this.InstallDate = (WMIObject.Properties["InstallDate"].Value == null) ? "" : WMIObject.Properties["InstallDate"].Value.ToString();
+                try
+                {
+                    DateTime? dInstallDate = WMIObject.Properties["InstallDate"].Value as DateTime?;
+                    if(dInstallDate != null)
+                        this.InstallDate = ((DateTime)dInstallDate).ToString("u");
+                    else
+                        this.InstallDate = (WMIObject.Properties["InstallDate"].Value == null) ? "" : WMIObject.Properties["InstallDate"].Value.ToString();
+                }
+                catch { }
                 this.InstallDirectoryValidation = WMIObject.Properties["InstallDirectoryValidation"].Value as String;
                 this.InstalledLocation = WMIObject.Properties["InstalledLocation"].Value as String;
                 this.InstallSource = WMIObject.Properties["InstallSource"].Value as String;
