@@ -1397,6 +1397,8 @@ namespace sccmclictr.automation.functions
                 this.BulletinID = WMIObject.Properties["BulletinID"].Value as String;
                 this.ComplianceState = WMIObject.Properties["ComplianceState"].Value as UInt32?;
                 this.ExclusiveUpdate = WMIObject.Properties["ExclusiveUpdate"].Value as Boolean?;
+                this.MaxExecutionTime = WMIObject.Properties["MaxExecutionTime"].Value as UInt32?;
+                this.NotifyUser = WMIObject.Properties["NotifyUser"].Value as Boolean?;
                 this.OverrideServiceWindows = WMIObject.Properties["OverrideServiceWindows"].Value as Boolean?;
                 this.RebootOutsideServiceWindows = WMIObject.Properties["RebootOutsideServiceWindows"].Value as Boolean?;
                 string sRestartDeadline = WMIObject.Properties["RestartDeadline"].Value as string;
@@ -1406,6 +1408,14 @@ namespace sccmclictr.automation.functions
                 {
                     this.RestartDeadline = ManagementDateTimeConverter.ToDateTime(sRestartDeadline) as DateTime?;
                     this.RestartDeadline = ((DateTime)this.RestartDeadline).ToUniversalTime();
+                }
+                string sStartTime = WMIObject.Properties["StartTime"].Value as string;
+                if (string.IsNullOrEmpty(sStartTime))
+                    this.StartTime = null;
+                else
+                {
+                    this.StartTime = ManagementDateTimeConverter.ToDateTime(sStartTime) as DateTime?;
+                    this.StartTime = ((DateTime)this.StartTime).ToUniversalTime();
                 }
                 this.UpdateID = WMIObject.Properties["UpdateID"].Value as String;
                 this.URL = WMIObject.Properties["URL"].Value as String;
@@ -1446,6 +1456,9 @@ namespace sccmclictr.automation.functions
             /// <value>The exclusive update.</value>
             public Boolean? ExclusiveUpdate { get; set; }
 
+            public UInt32? MaxExecutionTime { get; set; }
+            public Boolean? NotifyUser { get; set; }
+
             /// <summary>
             /// Gets or sets the override service windows.
             /// </summary>
@@ -1464,6 +1477,8 @@ namespace sccmclictr.automation.functions
             /// <value>The restart deadline.</value>
             public DateTime? RestartDeadline { get; set; }
 
+            public DateTime? StartTime { get; set; }
+
             /// <summary>
             /// Gets or sets the update identifier.
             /// </summary>
@@ -1481,6 +1496,45 @@ namespace sccmclictr.automation.functions
             /// </summary>
             /// <value>The user UI experience.</value>
             public Boolean? UserUIExperience { get; set; }
+
+            /// <summary>
+            /// Transalated EvaluationState into text from MSDN (http://msdn.microsoft.com/en-us/library/jj874280.aspx)
+            /// </summary>
+            public string EvaluationStateText
+            {
+                get
+                {
+                    switch (EvaluationState)
+                    {
+                        case 0: return "ciJobStateNone";
+                        case 1: return "ciJobStateAvailable";
+                        case 2: return "ciJobStateSubmitted";
+                        case 3: return "ciJobStateDetecting";
+                        case 4: return "ciJobStatePreDownload";
+                        case 5: return "ciJobStateDownloading";
+                        case 6: return "ciJobStateWaitInstall";
+                        case 7: return "ciJobStateInstalling";
+                        case 8: return "ciJobStatePendingSoftReboot";
+                        case 9: return "ciJobStatePendingHardReboot";
+                        case 10: return "ciJobStateWaitReboot";
+                        case 11: return "ciJobStateVerifying";
+                        case 12: return "ciJobStateInstallComplete";
+                        case 13: return "ciJobStateError";
+                        case 14: return "ciJobStateWaitServiceWindow";
+                        case 15: return "ciJobStateWaitUserLogon";
+                        case 16: return "ciJobStateWaitUserLogoff";
+                        case 17: return "ciJobStateWaitJobUserLogon";
+                        case 18: return "ciJobStateWaitUserReconnect";
+                        case 19: return "ciJobStatePendingUserLogoff";
+                        case 20: return "ciJobStatePendingUpdate";
+                        case 21: return "ciJobStateWaitingRetry";
+                        case 22: return "ciJobStateWaitPresModeOff";
+                        case 23: return "ciJobStateWaitForOrchestration";
+                        default:
+                            return "Unknown state information.";
+                    }
+                }
+            }
             #endregion
 
             /// <summary>
