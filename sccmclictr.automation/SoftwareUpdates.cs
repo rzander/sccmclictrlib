@@ -1370,7 +1370,7 @@ namespace sccmclictr.automation.functions
         /// <summary>
         /// Source:ROOT\ccm\ClientSDK
         /// </summary>
-        public class CCM_SoftwareUpdate : softwaredistribution.CCM_SoftwareBase
+        public class CCM_SoftwareUpdate : softwaredistribution.CCM_SoftwareUpdate
         {
             internal baseInit oNewBase;
 
@@ -1382,7 +1382,7 @@ namespace sccmclictr.automation.functions
             /// <param name="RemoteRunspace">The remote runspace.</param>
             /// <param name="PSCode">The PowerShell code.</param>
             public CCM_SoftwareUpdate(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
-                : base(WMIObject)
+                : base(WMIObject, RemoteRunspace, PSCode)
             {
                 remoteRunspace = RemoteRunspace;
                 pSCode = PSCode;
