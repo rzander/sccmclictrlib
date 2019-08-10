@@ -1847,122 +1847,6 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// Source:ROOT\ccm\ClientSDK
-        /// </summary>
-        public class CCM_SoftwareUpdate : CCM_SoftwareBase
-        {
-            //Constructor
-            /// <summary>
-            /// Initializes a new instance of the <see cref="CCM_SoftwareUpdate"/> class.
-            /// </summary>
-            /// <param name="WMIObject">The WMI object.</param>
-            /// <param name="RemoteRunspace">The remote runspace.</param>
-            /// <param name="PSCode">The PowerShell code.</param>
-            public CCM_SoftwareUpdate(PSObject WMIObject, Runspace RemoteRunspace, TraceSource PSCode)
-                : base(WMIObject)
-            {
-                remoteRunspace = RemoteRunspace;
-                pSCode = PSCode;
-
-                this.__CLASS = WMIObject.Properties["__CLASS"].Value as string;
-                this.__NAMESPACE = WMIObject.Properties["__NAMESPACE"].Value as string;
-                this.__RELPATH = WMIObject.Properties["__RELPATH"].Value as string;
-                this.__INSTANCE = true;
-                this.WMIObject = WMIObject;
-                this.ArticleID = WMIObject.Properties["ArticleID"].Value as String;
-                this.BulletinID = WMIObject.Properties["BulletinID"].Value as String;
-                this.ComplianceState = WMIObject.Properties["ComplianceState"].Value as UInt32?;
-                this.ExclusiveUpdate = WMIObject.Properties["ExclusiveUpdate"].Value as Boolean?;
-                this.MaxExecutionTime = WMIObject.Properties["MaxExecutionTime"].Value as UInt32?;
-                this.NotifyUser = WMIObject.Properties["NotifyUser"].Value as Boolean?;
-                this.OverrideServiceWindows = WMIObject.Properties["OverrideServiceWindows"].Value as Boolean?;
-                this.RebootOutsideServiceWindows = WMIObject.Properties["RebootOutsideServiceWindows"].Value as Boolean?;
-                string sRestartDeadline = WMIObject.Properties["RestartDeadline"].Value as string;
-                if (string.IsNullOrEmpty(sRestartDeadline))
-                    this.RestartDeadline = null;
-                else
-                    this.RestartDeadline = ManagementDateTimeConverter.ToDateTime(sRestartDeadline) as DateTime?;
-                string sStartTime = WMIObject.Properties["StartTime"].Value as string;
-                if (string.IsNullOrEmpty(sStartTime))
-                    this.StartTime = null;
-                else
-                    this.StartTime = ManagementDateTimeConverter.ToDateTime(sStartTime) as DateTime?;
-                this.UpdateID = WMIObject.Properties["UpdateID"].Value as String;
-                this.URL = WMIObject.Properties["URL"].Value as String;
-                this.UserUIExperience = WMIObject.Properties["UserUIExperience"].Value as Boolean?;
-            }
-
-            #region Properties
-
-            internal string __CLASS { get; set; }
-            internal string __NAMESPACE { get; set; }
-            internal bool __INSTANCE { get; set; }
-            internal string __RELPATH { get; set; }
-            internal PSObject WMIObject { get; set; }
-            internal Runspace remoteRunspace;
-            internal TraceSource pSCode;
-
-#pragma warning disable 1591 // Disable warnings about missing XML comments
-
-            public String ArticleID { get; set; }
-            public String BulletinID { get; set; }
-            public UInt32? ComplianceState { get; set; }
-            public Boolean? ExclusiveUpdate { get; set; }
-            public UInt32? MaxExecutionTime { get; set; }
-            public Boolean? NotifyUser { get; set; }
-            public Boolean? OverrideServiceWindows { get; set; }
-            public Boolean? RebootOutsideServiceWindows { get; set; }
-            public DateTime? RestartDeadline { get; set; }
-            public DateTime? StartTime { get; set; }
-            public String UpdateID { get; set; }
-            public String URL { get; set; }
-            public Boolean? UserUIExperience { get; set; }
-
-#pragma warning restore 1591 // Enable warnings about missing XML comments
-
-            /// <summary>
-            /// Transalated EvaluationState into text from MSDN (http://msdn.microsoft.com/en-us/library/jj874280.aspx)
-            /// </summary>
-            public string EvaluationStateText
-            {
-                get
-                {
-                    switch (EvaluationState)
-                    {
-                        case 0: return "ciJobStateNone";
-                        case 1: return "ciJobStateAvailable";
-                        case 2: return "ciJobStateSubmitted";
-                        case 3: return "ciJobStateDetecting";
-                        case 4: return "ciJobStatePreDownload";
-                        case 5: return "ciJobStateDownloading";
-                        case 6: return "ciJobStateWaitInstall";
-                        case 7: return "ciJobStateInstalling";
-                        case 8: return "ciJobStatePendingSoftReboot";
-                        case 9: return "ciJobStatePendingHardReboot";
-                        case 10: return "ciJobStateWaitReboot";
-                        case 11: return "ciJobStateVerifying";
-                        case 12: return "ciJobStateInstallComplete";
-                        case 13: return "ciJobStateError";
-                        case 14: return "ciJobStateWaitServiceWindow";
-                        case 15: return "ciJobStateWaitUserLogon";
-                        case 16: return "ciJobStateWaitUserLogoff";
-                        case 17: return "ciJobStateWaitJobUserLogon";
-                        case 18: return "ciJobStateWaitUserReconnect";
-                        case 19: return "ciJobStatePendingUserLogoff";
-                        case 20: return "ciJobStatePendingUpdate";
-                        case 21: return "ciJobStateWaitingRetry";
-                        case 22: return "ciJobStateWaitPresModeOff";
-                        case 23: return "ciJobStateWaitForOrchestration";
-                        default:
-                            return "Unknown state information.";
-                    }
-                }
-            }
-            #endregion
-
-        }
-
-        /// <summary>
         /// Application Priorities
         /// </summary>
         public static class AppPriority
@@ -2331,9 +2215,9 @@ namespace sccmclictr.automation.functions
                                 break;
                             case 2:
                                 Type = "Software Update";
-                                _rawObject = new CCM_SoftwareUpdate(SWObject, RemoteRunspace, PSCode);
+                                _rawObject = new softwareupdates.CCM_SoftwareUpdate(SWObject, RemoteRunspace, PSCode);
                                 Icon = "Updates";
-                                AvailableAfter = ((CCM_SoftwareUpdate)_rawObject).StartTime;
+                                AvailableAfter = ((softwareupdates.CCM_SoftwareUpdate)_rawObject).StartTime;
                                 Name = SWObject.Properties["Name"].Value as string;
                                 int EvaluationState2 = int.Parse(SWObject.Properties["EvaluationState"].Value.ToString());
                                 switch (EvaluationState2)
