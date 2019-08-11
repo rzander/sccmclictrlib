@@ -1456,7 +1456,17 @@ namespace sccmclictr.automation.functions
             /// <value>The exclusive update.</value>
             public Boolean? ExclusiveUpdate { get; set; }
 
+
+            /// <summary>
+            /// Maximum time required for the software update to run.
+            /// </summary>
             public UInt32? MaxExecutionTime { get; set; }
+
+
+            /// <summary>
+            /// true if notifications for the software update are shown to the user; otherwise, false.
+            /// Ignored if UserUIExperiene is set to false.
+            /// </summary>
             public Boolean? NotifyUser { get; set; }
 
             /// <summary>
@@ -1477,6 +1487,10 @@ namespace sccmclictr.automation.functions
             /// <value>The restart deadline.</value>
             public DateTime? RestartDeadline { get; set; }
 
+
+            /// <summary>
+            /// Date and time when the software update is made available to the user.
+            /// </summary>
             public DateTime? StartTime { get; set; }
 
             /// <summary>
