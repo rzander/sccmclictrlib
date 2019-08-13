@@ -431,10 +431,37 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+            
+            /// <summary>
+            /// Look up the localized error message for an error code using SrsResources.dll. Currently always returns en-US result.
+            /// </summary>
+            /// <param name="errorID"></param>
+            /// <returns></returns>
+            private static string GetErrorMessage(string errorID)
+            {
+                string ErrorMessage = null;
 
-            internal static Assembly SrsResources;
-            internal static Type Localization;
-            internal static MethodInfo GetErrorMessage;
+                string SMSAdminUIPath = Environment.GetEnvironmentVariable("SMS_ADMIN_UI_PATH");
+                if (SMSAdminUIPath == null) { return null; }
+                DirectoryInfo SMSAdminUIBinDir = Directory.GetParent(SMSAdminUIPath);
+                string SrsResourcesPath = Path.Combine(SMSAdminUIBinDir.ToString(), "SrsResources.dll");
+                if (!(File.Exists(SrsResourcesPath))) { return null; }
+
+                try
+                {
+                    Assembly SrsResources = Assembly.LoadFile(SrsResourcesPath);
+                    Type Localization = SrsResources.GetType("SrsResources.Localization");
+                    MethodInfo GetErrorMessage = Localization.GetMethod("GetErrorMessage");
+                    // static string GetErrorMessage(string errorId, string language) 
+                    ErrorMessage = GetErrorMessage.Invoke(null, new object[] { errorID, "en-US" }).ToString();
+                }
+                catch (Exception e)
+                {
+                    //ErrorMessage = e.ToString();
+                }
+
+                return ErrorMessage;
+            }
 
 #pragma warning disable 1591 // Disable warnings about missing XML comments
 
@@ -484,30 +511,7 @@ namespace sccmclictr.automation.functions
 
                 this.Description = WMIObject.Properties["Description"].Value as string;
                 this.ErrorCode = WMIObject.Properties["ErrorCode"].Value as uint?;
-                try
-                {
-                    if (GetErrorMessage == null)
-                    {
-                        string SMSAdminUIPath = Environment.GetEnvironmentVariable("SMS_ADMIN_UI_PATH"); //null = no console
-                        DirectoryInfo SMSAdminUIBinDir = Directory.GetParent(SMSAdminUIPath);
-                        string SrsResourcesPath = Path.Combine(SMSAdminUIBinDir.ToString(), "SrsResources.dll");
-                        if (File.Exists(SrsResourcesPath))
-                        {
-                            SrsResources = Assembly.LoadFile(SrsResourcesPath);
-                            Localization = SrsResources.GetType("SrsResources.Localization");
-                            GetErrorMessage = Localization.GetMethod("GetErrorMessage");
-                        }
-                    }
-
-                    if (GetErrorMessage != null)
-                    {
-                        ErrorCodeText = GetErrorMessage.Invoke(null, new object[] { ErrorCode.ToString(), "en-US" }).ToString();
-                    }
-                }
-                catch (Exception e)
-                {
-                    ErrorCodeText = e.ToString();
-                }
+                ErrorCodeText = GetErrorMessage(ErrorCode.ToString());
                 this.EstimatedInstallTime = WMIObject.Properties["EstimatedInstallTime"].Value as uint?;
                 this.EvaluationState = WMIObject.Properties["EvaluationState"].Value as uint?;
                 this.FullName = WMIObject.Properties["FullName"].Value as string;
