@@ -432,6 +432,10 @@ namespace sccmclictr.automation.functions
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
 
+            internal static Assembly SrsResources;
+            internal static Type Localization;
+            internal static MethodInfo GetErrorMessage;
+
 #pragma warning disable 1591 // Disable warnings about missing XML comments
 
             public UInt32? ContentSize { get; set; }
@@ -482,9 +486,23 @@ namespace sccmclictr.automation.functions
                 this.ErrorCode = WMIObject.Properties["ErrorCode"].Value as uint?;
                 try
                 {
-                    Assembly SrsResources = Assembly.LoadFile(@"C:\\Program Files (x86)\\Microsoft Configuration Manager\\AdminConsole\bin\\SrsResources.dll");
-                    Type Localization = SrsResources.GetType("SrsResources.Localization");
-                    ErrorCodeText = Localization.GetMethod("GetErrorMessage").Invoke(null, new object[] { ErrorCode.ToString(), "en-US" }).ToString();
+                    if (GetErrorMessage == null)
+                    {
+                        string SMSAdminUIPath = Environment.GetEnvironmentVariable("SMS_ADMIN_UI_PATH"); //null = no console
+                        DirectoryInfo SMSAdminUIBinDir = Directory.GetParent(SMSAdminUIPath);
+                        string SrsResourcesPath = Path.Combine(SMSAdminUIBinDir.ToString(), "SrsResources.dll");
+                        if (File.Exists(SrsResourcesPath))
+                        {
+                            SrsResources = Assembly.LoadFile(SrsResourcesPath);
+                            Localization = SrsResources.GetType("SrsResources.Localization");
+                            GetErrorMessage = Localization.GetMethod("GetErrorMessage");
+                        }
+                    }
+
+                    if (GetErrorMessage != null)
+                    {
+                        ErrorCodeText = GetErrorMessage.Invoke(null, new object[] { ErrorCode.ToString(), "en-US" }).ToString();
+                    }
                 }
                 catch (Exception e)
                 {
