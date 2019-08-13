@@ -438,6 +438,7 @@ namespace sccmclictr.automation.functions
             public DateTime? Deadline { get; set; }
             public String Description { get; set; }
             public UInt32? ErrorCode { get; set; }
+            public String ErrorCodeText { get; set; }
             public UInt32? EstimatedInstallTime { get; set; }
             public UInt32? EvaluationState { get; set; }
             public String FullName { get; set; }
@@ -479,6 +480,16 @@ namespace sccmclictr.automation.functions
 
                 this.Description = WMIObject.Properties["Description"].Value as string;
                 this.ErrorCode = WMIObject.Properties["ErrorCode"].Value as uint?;
+                try
+                {
+                    Assembly SrsResources = Assembly.LoadFile(@"C:\\Program Files (x86)\\Microsoft Configuration Manager\\AdminConsole\bin\\SrsResources.dll");
+                    Type Localization = SrsResources.GetType("SrsResources.Localization");
+                    ErrorCodeText = Localization.GetMethod("GetErrorMessage").Invoke(null, new object[] { ErrorCode.ToString(), "en-US" }).ToString();
+                }
+                catch (Exception e)
+                {
+                    ErrorCodeText = e.ToString();
+                }
                 this.EstimatedInstallTime = WMIObject.Properties["EstimatedInstallTime"].Value as uint?;
                 this.EvaluationState = WMIObject.Properties["EvaluationState"].Value as uint?;
                 this.FullName = WMIObject.Properties["FullName"].Value as string;
