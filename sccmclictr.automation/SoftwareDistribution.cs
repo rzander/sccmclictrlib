@@ -431,6 +431,37 @@ namespace sccmclictr.automation.functions
             internal PSObject WMIObject { get; set; }
             internal Runspace remoteRunspace;
             internal TraceSource pSCode;
+            
+            /// <summary>
+            /// Look up the localized error message for an error code using SrsResources.dll. Currently always returns en-US result.
+            /// </summary>
+            /// <param name="errorID"></param>
+            /// <returns></returns>
+            private static string GetErrorMessage(string errorID)
+            {
+                string ErrorMessage = null;
+
+                string SMSAdminUIPath = Environment.GetEnvironmentVariable("SMS_ADMIN_UI_PATH");
+                if (SMSAdminUIPath == null) { return null; }
+                DirectoryInfo SMSAdminUIBinDir = Directory.GetParent(SMSAdminUIPath);
+                string SrsResourcesPath = Path.Combine(SMSAdminUIBinDir.ToString(), "SrsResources.dll");
+                if (!(File.Exists(SrsResourcesPath))) { return null; }
+
+                try
+                {
+                    Assembly SrsResources = Assembly.LoadFile(SrsResourcesPath);
+                    Type Localization = SrsResources.GetType("SrsResources.Localization");
+                    MethodInfo GetErrorMessage = Localization.GetMethod("GetErrorMessage");
+                    // static string GetErrorMessage(string errorId, string language) 
+                    ErrorMessage = GetErrorMessage.Invoke(null, new object[] { errorID, "en-US" }).ToString();
+                }
+                catch (Exception e)
+                {
+                    //ErrorMessage = e.ToString();
+                }
+
+                return ErrorMessage;
+            }
 
 #pragma warning disable 1591 // Disable warnings about missing XML comments
 
@@ -438,6 +469,7 @@ namespace sccmclictr.automation.functions
             public DateTime? Deadline { get; set; }
             public String Description { get; set; }
             public UInt32? ErrorCode { get; set; }
+            public String ErrorCodeText { get; set; }
             public UInt32? EstimatedInstallTime { get; set; }
             public UInt32? EvaluationState { get; set; }
             public String FullName { get; set; }
@@ -479,6 +511,7 @@ namespace sccmclictr.automation.functions
 
                 this.Description = WMIObject.Properties["Description"].Value as string;
                 this.ErrorCode = WMIObject.Properties["ErrorCode"].Value as uint?;
+                ErrorCodeText = GetErrorMessage(ErrorCode.ToString());
                 this.EstimatedInstallTime = WMIObject.Properties["EstimatedInstallTime"].Value as uint?;
                 this.EvaluationState = WMIObject.Properties["EvaluationState"].Value as uint?;
                 this.FullName = WMIObject.Properties["FullName"].Value as string;
