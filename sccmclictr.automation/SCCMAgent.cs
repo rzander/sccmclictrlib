@@ -116,7 +116,7 @@ namespace sccmclictr.automation
         /// <param name="hostname">target computername</param>
         public SCCMAgent(string hostname)
         {
-            initialize(hostname, null, null, 5985, true, false);
+            initialize(hostname, null, (System.Security.SecureString)null, 5985, true, false);
         }
 
         /// <summary>
@@ -183,6 +183,35 @@ namespace sccmclictr.automation
             Hostname = hostname;
             Username = username;
             Password = password;
+            System.Security.SecureString secpassword = new System.Security.SecureString();
+            WSManPort = wsManPort;
+
+            if (!string.IsNullOrEmpty(username))
+            {
+                foreach (char c in password.ToCharArray())
+                {
+                    secpassword.AppendChar(c);
+                }
+            }
+
+            initialize(hostname, username, secpassword, wsManPort, bConnect, Encryption);
+
+        }
+
+
+        /// <summary>
+        /// Connect to a remote computer by using WSMan
+        /// </summary>
+        /// <param name="hostname">target computername</param>
+        /// <param name="username">username for the connectio</param>
+        /// <param name="secpassword">SecureString password for the connection</param>
+        /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
+        /// <param name="bConnect">Only prepare the connection, connection must be initialized with 'reconnect'</param>
+        /// <param name="Encryption">Enable encryption'</param>
+        protected void initialize(string hostname, string username, System.Security.SecureString secpassword, int wsManPort, bool bConnect, bool Encryption)
+        {
+            Hostname = hostname;
+            Username = username;
             WSManPort = wsManPort;
 
             ipcconnected = false;
@@ -200,11 +229,6 @@ namespace sccmclictr.automation
             }
             else
             {
-                System.Security.SecureString secpassword = new System.Security.SecureString();
-                foreach (char c in password.ToCharArray())
-                {
-                    secpassword.AppendChar(c);
-                }
                 PSCredential psc = new PSCredential(username, secpassword);
                 if (!Encryption)
                     connectionInfo = new WSManConnectionInfo(new Uri(string.Format("http://{0}:{1}/wsman", hostname, wsManPort)), "http://schemas.microsoft.com/powershell/Microsoft.PowerShell", psc);
@@ -216,7 +240,7 @@ namespace sccmclictr.automation
             //Default Settings
             connectionInfo.AuthenticationMechanism = AuthenticationMechanism.Default;
             connectionInfo.ProxyAuthentication = AuthenticationMechanism.Negotiate;
-            
+
             //Set timeout to 1min
             connectionInfo.OpenTimeout = 60000;
             connectionInfo.OperationTimeout = 60000;
@@ -224,7 +248,7 @@ namespace sccmclictr.automation
             connectionInfo.CancelTimeout = 10000;
             connectionInfo.IdleTimeout = 60000;
 
-            if(bConnect)
+            if (bConnect)
                 connect();
 
             //Initialzie connection
