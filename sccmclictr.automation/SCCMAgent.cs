@@ -136,9 +136,33 @@ namespace sccmclictr.automation
         /// <param name="hostname">target computername</param>
         /// <param name="username">username for the connection</param>
         /// <param name="password">password for the connection</param>
+        public SCCMAgent(string hostname, string username, System.Security.SecureString password)
+        {
+            initialize(hostname, username, password, 5985, true, false);
+        }
+
+        /// <summary>
+        /// Connect to a remote SCCM Agent by using WSMan
+        /// </summary>
+        /// <param name="hostname">target computername</param>
+        /// <param name="username">username for the connection</param>
+        /// <param name="password">password for the connection</param>
         /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
         /// <param name="Connect">automatically connect after initializing</param>
         public SCCMAgent(string hostname, string username, string password, int wsManPort, bool Connect)
+        {
+            initialize(hostname, username, password, wsManPort, Connect, false);
+        }
+
+        /// <summary>
+        /// Connect to a remote SCCM Agent by using WSMan
+        /// </summary>
+        /// <param name="hostname">target computername</param>
+        /// <param name="username">username for the connection</param>
+        /// <param name="password">password for the connection</param>
+        /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
+        /// <param name="Connect">automatically connect after initializing</param>
+        public SCCMAgent(string hostname, string username, System.Security.SecureString password, int wsManPort, bool Connect)
         {
             initialize(hostname, username, password, wsManPort, Connect, false);
         }
@@ -158,6 +182,20 @@ namespace sccmclictr.automation
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="SCCMAgent"/> class.
+        /// </summary>
+        /// <param name="hostname">The hostname.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="wsManPort">The ws man port.</param>
+        /// <param name="Connect">if set to <c>true</c> [connect].</param>
+        /// <param name="encryption">if set to <c>true</c> [encryption].</param>
+        public SCCMAgent(string hostname, string username, System.Security.SecureString password, int wsManPort, bool Connect, bool encryption)
+        {
+            initialize(hostname, username, password, wsManPort, Connect, encryption);
+        }
+
+        /// <summary>
         /// Connect to a remote SCCM Agent by using WSMan
         /// </summary>
         /// <param name="hostname">target computername</param>
@@ -165,6 +203,18 @@ namespace sccmclictr.automation
         /// <param name="password">password for the connection</param>
         /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
         public SCCMAgent(string hostname, string username, string password, int wsManPort)
+        {
+            initialize(hostname, username, password, wsManPort, true, false);
+        }
+
+        /// <summary>
+        /// Connect to a remote SCCM Agent by using WSMan
+        /// </summary>
+        /// <param name="hostname">target computername</param>
+        /// <param name="username">username for the connection</param>
+        /// <param name="password">password for the connection</param>
+        /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
+        public SCCMAgent(string hostname, string username, System.Security.SecureString password, int wsManPort)
         {
             initialize(hostname, username, password, wsManPort, true, false);
         }
