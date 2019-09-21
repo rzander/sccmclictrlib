@@ -284,19 +284,9 @@ namespace sccmclictr.automation
         /// <param name="Encryption">Enable encryption'</param>
         protected void Initialize(string hostname, string username, string password, int wsManPort, bool bConnect, bool Encryption)
         {
-            Hostname = hostname;
-            Username = username;
-            Password = password;
             System.Security.SecureString secpassword = new System.Security.SecureString();
-            WSManPort = wsManPort;
 
-            if (!string.IsNullOrEmpty(username))
-            {
-                foreach (char c in password.ToCharArray())
-                {
-                    secpassword.AppendChar(c);
-                }
-            }
+            foreach (char c in password.ToCharArray()) secpassword.AppendChar(c);
 
             PSCredential credential = new PSCredential(username, secpassword);
 

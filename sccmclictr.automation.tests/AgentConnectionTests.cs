@@ -28,6 +28,30 @@ namespace sccmclictr.automation.tests
             }
         }
 
+
+        [TestMethod]
+        public void ConnectWithNoCredentials()
+        {
+            // Tests connecting with Kerberos, credential manager creds, etc.
+            // This failing is normal in a lot of situations
+            try
+            {
+                new SCCMAgent(hostname);
+            }
+            catch (Exception e)
+            {
+                if (e.Message.Equals("Unable to connect") && e.TargetSite.Name.Equals("connect"))
+                {
+                    // Assume test failed because of permissions/lack of credentials
+                    Assert.Inconclusive("Test may have failed to due lack of permissions");
+                }
+                else
+                {
+                    throw e;
+                }
+            }
+        }
+
         [TestMethod]
         public void ConnectWithStringPassword()
         {
