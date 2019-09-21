@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Ignore runsettings changes to prevent committing test credentials
+*.runsettings
+
 # User-specific files
 *.suo
 *.user

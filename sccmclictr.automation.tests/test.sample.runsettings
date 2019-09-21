@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <!-- Parameters used by tests at runtime -->
+  <TestRunParameters>
+    <Parameter name="hostname" value="PlaceholderHostrname" />
+    <Parameter name="username" value="Placeholder\Username" />
+    <Parameter name="password" value="PlaceholderPassword" />
+  </TestRunParameters>
+</RunSettings>
