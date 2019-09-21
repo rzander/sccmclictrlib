@@ -52,5 +52,20 @@ namespace sccmclictr.automation.tests
             
             new SCCMAgent(hostname, username, secPassword);
         }
+
+        [TestMethod]
+        public void ConnectWithPSCredential()
+        {
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            {
+                Assert.Inconclusive("No credential provided");
+            }
+
+            SecureString secPassword = new SecureString();
+            foreach (char c in password) secPassword.AppendChar(c);
+            PSCredential credential = new PSCredential(username, secPassword);
+
+            new SCCMAgent(hostname, credential);
+        }
     }
 }
