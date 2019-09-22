@@ -116,7 +116,7 @@ namespace sccmclictr.automation
         /// <param name="hostname">target computername</param>
         public SCCMAgent(string hostname)
         {
-            initialize(hostname, null, null, 5985, true, false);
+            Initialize(hostname, null, 5985, true, false);
         }
 
         /// <summary>
@@ -127,7 +127,30 @@ namespace sccmclictr.automation
         /// <param name="password">password for the connection</param>
         public SCCMAgent(string hostname, string username, string password)
         {
-            initialize(hostname, username, password, 5985, true, false);
+            Initialize(hostname, username, password, 5985, true, false);
+        }
+
+        /// <summary>
+        /// Connect to a remote SCCM Agent by using WSMan
+        /// </summary>
+        /// <param name="hostname">target computername</param>
+        /// <param name="username">username for the connection</param>
+        /// <param name="password">password for the connection</param>
+        public SCCMAgent(string hostname, string username, System.Security.SecureString password)
+        {
+            PSCredential credential = new PSCredential(username, password);
+
+            Initialize(hostname, credential, 5985, true, false);
+        }
+
+        /// <summary>
+        /// Connect to a remote SCCM Agent by using WSMan
+        /// </summary>
+        /// <param name="hostname">target computername</param>
+        /// <param name="credential">PSCredential used to connect</param>
+        public SCCMAgent(string hostname, PSCredential credential)
+        {
+            Initialize(hostname, credential, 5985, true, false);
         }
 
         /// <summary>
@@ -140,7 +163,34 @@ namespace sccmclictr.automation
         /// <param name="Connect">automatically connect after initializing</param>
         public SCCMAgent(string hostname, string username, string password, int wsManPort, bool Connect)
         {
-            initialize(hostname, username, password, wsManPort, Connect, false);
+            Initialize(hostname, username, password, wsManPort, Connect, false);
+        }
+
+        /// <summary>
+        /// Connect to a remote SCCM Agent by using WSMan
+        /// </summary>
+        /// <param name="hostname">target computername</param>
+        /// <param name="username">username for the connection</param>
+        /// <param name="password">password for the connection</param>
+        /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
+        /// <param name="Connect">automatically connect after initializing</param>
+        public SCCMAgent(string hostname, string username, System.Security.SecureString password, int wsManPort, bool Connect)
+        {
+            PSCredential credential = new PSCredential(username, password);
+
+            Initialize(hostname, credential, wsManPort, Connect, false);
+        }
+
+        /// <summary>
+        /// Connect to a remote SCCM Agent by using WSMan
+        /// </summary>
+        /// <param name="hostname">target computername</param>
+        /// <param name="credential">PSCredential used to connect</param>
+        /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
+        /// <param name="Connect">automatically connect after initializing</param>
+        public SCCMAgent(string hostname, PSCredential credential, int wsManPort, bool Connect)
+        {
+            Initialize(hostname, credential, wsManPort, Connect, false);
         }
 
         /// <summary>
@@ -154,7 +204,36 @@ namespace sccmclictr.automation
         /// <param name="encryption">if set to <c>true</c> [encryption].</param>
         public SCCMAgent(string hostname, string username, string password, int wsManPort, bool Connect, bool encryption)
         {
-            initialize(hostname, username, password, wsManPort, Connect, encryption);
+            Initialize(hostname, username, password, wsManPort, Connect, encryption);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SCCMAgent"/> class.
+        /// </summary>
+        /// <param name="hostname">The hostname.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="wsManPort">The ws man port.</param>
+        /// <param name="Connect">if set to <c>true</c> [connect].</param>
+        /// <param name="encryption">if set to <c>true</c> [encryption].</param>
+        public SCCMAgent(string hostname, string username, System.Security.SecureString password, int wsManPort, bool Connect, bool encryption)
+        {
+            PSCredential credential = new PSCredential(username, password);
+
+            Initialize(hostname, credential, wsManPort, Connect, encryption);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SCCMAgent"/> class.
+        /// </summary>
+        /// <param name="hostname">The hostname.</param>
+        /// <param name="credential">PSCredential used to connect</param>
+        /// <param name="wsManPort">The ws man port.</param>
+        /// <param name="Connect">if set to <c>true</c> [connect].</param>
+        /// <param name="encryption">if set to <c>true</c> [encryption].</param>
+        public SCCMAgent(string hostname, PSCredential credential, int wsManPort, bool Connect, bool encryption)
+        {
+            Initialize(hostname, credential, wsManPort, Connect, encryption);
         }
 
         /// <summary>
@@ -166,7 +245,32 @@ namespace sccmclictr.automation
         /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
         public SCCMAgent(string hostname, string username, string password, int wsManPort)
         {
-            initialize(hostname, username, password, wsManPort, true, false);
+            Initialize(hostname, username, password, wsManPort, true, false);
+        }
+
+        /// <summary>
+        /// Connect to a remote SCCM Agent by using WSMan
+        /// </summary>
+        /// <param name="hostname">target computername</param>
+        /// <param name="username">username for the connection</param>
+        /// <param name="password">password for the connection</param>
+        /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
+        public SCCMAgent(string hostname, string username, System.Security.SecureString password, int wsManPort)
+        {
+            PSCredential credential = new PSCredential(username, password);
+
+            Initialize(hostname, credential, wsManPort, true, false);
+        }
+
+        /// <summary>
+        /// Connect to a remote SCCM Agent by using WSMan
+        /// </summary>
+        /// <param name="hostname">target computername</param>
+        /// <param name="credential">PSCredential used to connect</param>
+        /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
+        public SCCMAgent(string hostname, PSCredential credential, int wsManPort)
+        {
+            Initialize(hostname, credential, wsManPort, true, false);
         }
 
         /// <summary>
@@ -178,19 +282,34 @@ namespace sccmclictr.automation
         /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
         /// <param name="bConnect">Only prepare the connection, connection must be initialized with 'reconnect'</param>
         /// <param name="Encryption">Enable encryption'</param>
-        protected void initialize(string hostname, string username, string password, int wsManPort, bool bConnect, bool Encryption)
+        protected void Initialize(string hostname, string username, string password, int wsManPort, bool bConnect, bool Encryption)
         {
-            Hostname = hostname;
-            Username = username;
-            Password = password;
-            WSManPort = wsManPort;
+            System.Security.SecureString secpassword = new System.Security.SecureString();
 
+            foreach (char c in password.ToCharArray()) secpassword.AppendChar(c);
+
+            PSCredential credential = new PSCredential(username, secpassword);
+
+            Initialize(hostname, credential, wsManPort, bConnect, Encryption);
+        }
+
+
+        /// <summary>
+        /// Connect to a remote computer by using WSMan
+        /// </summary>
+        /// <param name="hostname">target computername</param>
+        /// <param name="credential">PSCredential used to connect</param>
+        /// <param name="wsManPort">WSManagement Port (Default = 5985)</param>
+        /// <param name="bConnect">Only prepare the connection, connection must be initialized with 'reconnect'</param>
+        /// <param name="Encryption">Enable encryption'</param>
+        protected void Initialize(string hostname, PSCredential credential, int wsManPort, bool bConnect, bool Encryption)
+        {
             ipcconnected = false;
 
             PSCode = new TraceSource("PSCode");
             PSCode.Switch.Level = SourceLevels.All;
 
-            if (string.IsNullOrEmpty(username))
+            if (credential == null)
             {
                 if (!Encryption)
                     connectionInfo = new WSManConnectionInfo(new Uri(string.Format("http://{0}:{1}/wsman", hostname, wsManPort)));
@@ -200,23 +319,17 @@ namespace sccmclictr.automation
             }
             else
             {
-                System.Security.SecureString secpassword = new System.Security.SecureString();
-                foreach (char c in password.ToCharArray())
-                {
-                    secpassword.AppendChar(c);
-                }
-                PSCredential psc = new PSCredential(username, secpassword);
                 if (!Encryption)
-                    connectionInfo = new WSManConnectionInfo(new Uri(string.Format("http://{0}:{1}/wsman", hostname, wsManPort)), "http://schemas.microsoft.com/powershell/Microsoft.PowerShell", psc);
+                    connectionInfo = new WSManConnectionInfo(new Uri(string.Format("http://{0}:{1}/wsman", hostname, wsManPort)), "http://schemas.microsoft.com/powershell/Microsoft.PowerShell", credential);
                 else
-                    connectionInfo = new WSManConnectionInfo(new Uri(string.Format("https://{0}:{1}/wsman", hostname, wsManPort)), "http://schemas.microsoft.com/powershell/Microsoft.PowerShell", psc);
+                    connectionInfo = new WSManConnectionInfo(new Uri(string.Format("https://{0}:{1}/wsman", hostname, wsManPort)), "http://schemas.microsoft.com/powershell/Microsoft.PowerShell", credential);
 
             }
 
             //Default Settings
             connectionInfo.AuthenticationMechanism = AuthenticationMechanism.Default;
             connectionInfo.ProxyAuthentication = AuthenticationMechanism.Negotiate;
-            
+
             //Set timeout to 1min
             connectionInfo.OpenTimeout = 60000;
             connectionInfo.OperationTimeout = 60000;
@@ -224,7 +337,7 @@ namespace sccmclictr.automation
             connectionInfo.CancelTimeout = 10000;
             connectionInfo.IdleTimeout = 60000;
 
-            if(bConnect)
+            if (bConnect)
                 connect();
 
             //Initialzie connection
