@@ -537,24 +537,6 @@ namespace sccmclictr.automation.functions
         }
 
         /// <summary>
-        /// NAP Compliance Interval Enforcement
-        /// </summary>
-        /// <returns>false=Error</returns>
-        public bool NAPIntervalEnforcement()
-        {
-            try
-            {
-                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000071}'");
-            }
-            catch
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Hardware Inventory Collection Cycle
         /// </summary>
         /// <returns></returns>
@@ -716,24 +698,7 @@ namespace sccmclictr.automation.functions
             return true;
         }
 
-        /// <summary>
-        /// DCM policy
-        /// </summary>
-        /// <returns></returns>
-        public bool DCMPolicy()
-        {
-            try
-            {
-                base.CallClassMethod(@"ROOT\ccm:SMS_Client", "TriggerSchedule", "'{00000000-0000-0000-0000-000000000110}'");
-            }
-            catch
-            {
-                return false;
-            }
-
-            return true;
-        }
-
+        
         /// <summary>
         /// Send Unsent State Messages
         /// </summary>
