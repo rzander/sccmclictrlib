@@ -336,6 +336,7 @@ namespace sccmclictr.automation
             connectionInfo.OpenTimeout = 60000;
             connectionInfo.CancelTimeout = 10000;
             connectionInfo.IdleTimeout = 60000;
+            connectionInfo.NoMachineProfile = true;
 
             if (bConnect)
                 connect();
