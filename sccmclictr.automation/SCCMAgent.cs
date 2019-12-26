@@ -24,7 +24,7 @@ namespace sccmclictr.automation
         private string Password { get; set; }
         private string Hostname { get; set; }
         private int WSManPort { get; set; }
-        private Runspace remoteRunspace { get; set;}
+        private Runspace remoteRunspace { get; set; }
         private bool ipcconnected { get; set; }
 
         /// <summary>
@@ -46,12 +46,12 @@ namespace sccmclictr.automation
             Password = null;
             Hostname = null;
 
-            if(Client != null)
+            if (Client != null)
                 Client.Dispose();
 
             if (remoteRunspace != null)
                 remoteRunspace.Dispose();
-            
+
 
 
         }
@@ -70,7 +70,7 @@ namespace sccmclictr.automation
         /// </summary>
         public string TargetHostname
         {
-            get 
+            get
             {
                 try
                 {
@@ -86,7 +86,7 @@ namespace sccmclictr.automation
         /// <summary>
         /// TraceSource for all PowerShell Command
         /// </summary>
-        public TraceSource PSCode {get; set; }
+        public TraceSource PSCode { get; set; }
 
         /// <summary>
         /// True = Session to remote Host is Open
@@ -433,7 +433,7 @@ namespace sccmclictr.automation
         /// <summary>
         /// Connect the IPC$ Share if no integrated authentication is used
         /// </summary>
-        public bool ConnectIPC
+        public bool ConnectIPC_
         {
             get { return ipcconnected; }
             set
@@ -463,8 +463,33 @@ namespace sccmclictr.automation
                 }
 
             }
-        
 
+
+        }
+
+        public bool ConnectIPC(string username, string password)
+        {
+            try
+            {
+                Username = username;
+                Password = password;
+                //Check if a Username is defined
+                if (!string.IsNullOrEmpty(Username))
+                {
+                    //Connect IPC$ share with username and password
+                    connectIPC(Hostname, Username, Password);
+                }
+
+                ipcconnected = true;
+
+            }
+            catch
+            {
+                ipcconnected = false;
+                return false;
+            }
+
+            return true;
         }
 
         [DllImport("mpr.dll")]
@@ -478,6 +503,6 @@ namespace sccmclictr.automation
         /// The client
         /// </summary>
         public ccm Client;
-        
+
     }
 }
