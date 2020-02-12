@@ -284,6 +284,7 @@ namespace sccmclictr.automation
         /// <param name="Encryption">Enable encryption'</param>
         protected void Initialize(string hostname, string username, string password, int wsManPort, bool bConnect, bool Encryption)
         {
+            Hostname = hostname;
             System.Security.SecureString secpassword = new System.Security.SecureString();
 
             foreach (char c in password.ToCharArray()) secpassword.AppendChar(c);
@@ -304,6 +305,7 @@ namespace sccmclictr.automation
         /// <param name="Encryption">Enable encryption'</param>
         protected void Initialize(string hostname, PSCredential credential, int wsManPort, bool bConnect, bool Encryption)
         {
+            Hostname = hostname;
             ipcconnected = false;
 
             PSCode = new TraceSource("PSCode");
